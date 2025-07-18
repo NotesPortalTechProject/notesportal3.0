@@ -1,9 +1,12 @@
 'use client'
+import { signup } from "@/actions/auth-actions";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
+
 
 export default function SignupPage() {
     const [noOfSubjects, setNoOfSubjects] = useState(0);
+    const [formState,formAction] = useActionState(signup,{});
 
     function handleSubjectsChange(event) {
         const value = parseInt(event.target.value);
@@ -18,7 +21,7 @@ export default function SignupPage() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-100">
             <div className="bg-gray-800 bg-opacity-90 p-6 rounded-lg shadow-md w-full max-w-md">
                 <p className="text-2xl font-semibold mb-4 text-center">Sign Up</p>
-                <form className="flex flex-col gap-4">
+                <form className="flex flex-col gap-4" action={formAction}>
                     <div>
                         <label htmlFor="name" className="block mb-1">Name:</label>
                         <input type="text" name="name" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -31,7 +34,7 @@ export default function SignupPage() {
 
                     <div>
                         <label htmlFor="email" className="block mb-1">Email:</label>
-                        <input type="email" name="email" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" name="email" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
 
                     <div>
@@ -61,6 +64,15 @@ export default function SignupPage() {
                 <p className="mt-4 text-center">
                     slready have an account? <Link href={"/login"} className="text-blue-400 hover:underline">Login</Link>
                 </p>
+            </div>
+            <div>
+                {formState.errors && (
+                    <ul>
+                        {formState.errors.map((error,index)=>(
+                            <li key={index} className="text-red-400">{error}</li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );
