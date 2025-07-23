@@ -6,7 +6,7 @@ import { useActionState, useState } from "react";
 
 export default function SignupPage() {
     const [noOfSubjects, setNoOfSubjects] = useState(0);
-    const [formState,formAction] = useActionState(signup,{});
+    const [formState, formAction] = useActionState(signup, {});
 
     function handleSubjectsChange(event) {
         const value = parseInt(event.target.value);
@@ -23,8 +23,13 @@ export default function SignupPage() {
                 <p className="text-2xl font-semibold mb-4 text-center">Sign Up</p>
                 <form className="flex flex-col gap-4" action={formAction}>
                     <div>
-                        <label htmlFor="name" className="block mb-1">Name:</label>
-                        <input type="text" name="name" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <label htmlFor="name" className="block mb-1">First name:</label>
+                        <input type="text" name="firstname" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+
+                    <div>
+                        <label htmlFor="name" className="block mb-1">Last name:</label>
+                        <input type="text" name="lastname" required className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
 
                     <div>
@@ -62,13 +67,17 @@ export default function SignupPage() {
                     <button type="submit" className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition-colors">Submit</button>
                 </form>
                 <p className="mt-4 text-center">
-                    slready have an account? <Link href={"/login"} className="text-blue-400 hover:underline">Login</Link>
+                    already have an account? <Link href={"/login"} className="text-blue-400 hover:underline">Login</Link>
+                </p>
+                {/* TEMPORARY LINK */}
+                <p className="mt-4 text-center">
+                    <Link href={"/home/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3"} className="text-blue-400 hover:underline">HOME PAGE TESTING ROUTE</Link>
                 </p>
             </div>
             <div>
                 {formState.errors && (
                     <ul>
-                        {formState.errors.map((error,index)=>(
+                        {formState.errors.map((error, index) => (
                             <li key={index} className="text-red-400">{error}</li>
                         ))}
                     </ul>

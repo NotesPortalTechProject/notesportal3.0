@@ -6,7 +6,6 @@
   --font-poppins: 'Poppins', sans-serif;
 }
 
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -15,4 +14,49 @@ body {
 
 .font-poppins {
   font-family: var(--font-poppins), sans-serif;
+}
+
+.landing-page {
+  background-color: black;
+  background-size: cover;
+  background-position: center;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-button {
+  display: inline-block;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  color: white;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: white;
+  outline: none;
+}
+
+.glass-input:focus {
+  border-color: #3b82f6; /* Tailwind blue-500 */
+  background: rgba(255, 255, 255, 0.2);
 }
