@@ -2,11 +2,14 @@
 import { signup } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 
 export default function SignupPage() {
     const [noOfSubjects, setNoOfSubjects] = useState(0);
-    const [formState, formAction] = useActionState(signup, {});
+    const [formState, formAction] = useActionState(signup, {errors:[]});
+    const { pending } = useFormStatus();
+    
 
     function handleSubjectsChange(event) {
         const value = parseInt(event.target.value);
@@ -16,6 +19,7 @@ export default function SignupPage() {
             setNoOfSubjects(0);
         }
     }
+
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-100">
@@ -64,14 +68,14 @@ export default function SignupPage() {
                         </div>
                     ))}
 
-                    <button type="submit" className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition-colors">Submit</button>
+                    <button type="submit" className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition-colors" disabled={pending}>{pending ? 'Submitting Form...':'Sign Up'}</button>
                 </form>
                 <p className="mt-4 text-center">
                     already have an account? <Link href={"/login"} className="text-blue-400 hover:underline">Login</Link>
                 </p>
                 {/* TEMPORARY LINK */}
                 <p className="mt-4 text-center">
-                    <Link href={"/home/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3"} className="text-blue-400 hover:underline">HOME PAGE TESTING ROUTE</Link>
+                    <Link href={"/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3/home"} className="text-blue-400 hover:underline">HOME PAGE TESTING ROUTE</Link>
                 </p>
             </div>
             <div>

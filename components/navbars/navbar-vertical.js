@@ -1,12 +1,11 @@
-export default function VerticalNavbar() {
+import Link from "next/link";
+
+export default function VerticalNavbar({id}) {
     return (
         <div className="w-64 bg-gray-200 flex flex-col justify-between h-full">
             <div>
                 <nav className="flex flex-col p-4 space-y-2">
-                    <a href="#" className="hover:bg-gray-300 p-2 rounded">Dashboard</a>
-                    <a href="#" className="hover:bg-gray-300 p-2 rounded">Notes</a>
-                    <a href="#" className="hover:bg-gray-300 p-2 rounded">Assignments</a>
-                    <a href="#" className="hover:bg-gray-300 p-2 rounded">Groups</a>
+                    <Link href={`/${id}/home`}>Home</Link>
                 </nav>
             </div>
             <div className="p-4">

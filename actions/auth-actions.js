@@ -1,5 +1,8 @@
 'use server'
+import { getUserId } from "@/lib/data-fetch-functions";
+import sleep from "@/lib/sleep";
 import { supabase } from "@/lib/supabaseClient";
+import { redirect } from "next/navigation";
 
 // SIGNUP FUNCTION
 export async function signup(prevState, formData) {
@@ -14,6 +17,7 @@ export async function signup(prevState, formData) {
     let errors = [];
 
     // VALIDATION
+    console.log('VALIDATION')
     if (!firstname || firstname.length == 0 || firstname.length < 3) {
         errors.push('First name not defined or too small');
     }
@@ -50,20 +54,20 @@ export async function signup(prevState, formData) {
         errors.push('No of Subjects Error');
     }
 
-    const { usernameCheck} = await supabase.from('users').select('*').eq('username', username);
-    if (usernameCheck) {
+    const { data:usernameCheck, error:usernameError } = await supabase.from('users').select('*').eq('username', username);
+    if (usernameCheck && usernameCheck.length>0) {
         errors.push('Username already in use try something different')
     }
 
-    const emailIdCheck = await supabase.from('users').select('*').eq('email', emailid);
-    if (emailIdCheck) {
+    const { data:emailIdCheck,error:emailidError } = await supabase.from('users').select('*').eq('email', emailid);
+    if (emailIdCheck && emailIdCheck.length>0) {
         errors.push('Email Id already exists')
     }
 
     let subjectslist = [];
     for (let i = 0; i < nsubjects; i++) {
         let subjectcode = formData.get(`subject${i}`)
-        if (!subjectcode || subjectcode.length == 0 || subjectcode.length > 3) {
+        if (!subjectcode || subjectcode.length == 0 || subjectcode.length > 5) {
             errors.push('Subject code undefined or greater than 3 (length)')
             break
         }
@@ -77,7 +81,8 @@ export async function signup(prevState, formData) {
         return { errors };
     }
 
-    const { data } = await supabase.from('users').insert([
+    console.log('STARTING INSERT')
+    const { data , error } = await supabase.from('users').insert([
         {
             firstname: firstname,
             lastname: lastname,
@@ -87,6 +92,12 @@ export async function signup(prevState, formData) {
 
         }
     ])
+    if(error){
+        throw new error('An unexpected error occured'+error);
+    }
+    const userid = await getUserId(username)
+
+    redirect(`/${userid}/home`)
 }
 
 // LOGIN FUNCTION password

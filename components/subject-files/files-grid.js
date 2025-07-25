@@ -1,0 +1,23 @@
+export default function FilesGrid({ data }) {
+    if (data.length == 0) {
+        return (
+            <>
+                <p>Sorry we dont have any files right noww !!</p>
+                <p>Start uploading and share with everyone.</p>
+            </>
+        );
+    }
+    return (
+        <>
+            <div className="grid grid-cols-4 gap-4 p-4">
+                {data.map((file, index) => (
+                    <div key={index} className="border-2 border-black">
+                        <iframe src={file.filelink} />
+                        <p>{file.filename}</p>
+                        <p>{file.uploaded_by}</p>
+                    </div>
+                ))}
+            </div>
+        </>
+    );
+}
