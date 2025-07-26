@@ -1,6 +1,6 @@
 import { FiSearch, FiUpload } from "react-icons/fi";
 
-export default function HorizontalNavbar() {
+export default function HorizontalNavbar({id}) {
   return (
     <div className="w-full px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0d0b14] text-white border-b border-purple-500/30 shadow-md">
       

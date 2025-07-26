@@ -1,3 +1,5 @@
+import FileCard from "../file-card";
+
 export default function RecentFilesGrid({ data, weeks}) {
     if(data.length==0){
         return(
@@ -13,11 +15,7 @@ export default function RecentFilesGrid({ data, weeks}) {
             </div>
             <div className="grid grid-cols-4 gap-4 p-4">
                 {data.map((file, index) => (
-                    <div key={index} className="border-2 border-black">
-                        <iframe src={file.filelink} />
-                        <p>{file.filename}</p>
-                        <p>{file.uploaded_by}</p>
-                    </div>
+                    <FileCard file={file} key={index}/>
                 ))}
             </div>
         </>

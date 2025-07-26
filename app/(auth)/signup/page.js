@@ -34,7 +34,7 @@ export default function SignupPage() {
                 htmlFor="name"
                 className="block mb-2 text-sm text-purple-300 font-medium"
               >
-                Name
+                Firstname
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
@@ -43,7 +43,28 @@ export default function SignupPage() {
                 <input
                   type="text"
                   id="name"
-                  name="name"
+                  name="firstname"
+                  required
+                  className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="name"
+                className="block mb-2 text-sm text-purple-300 font-medium"
+              >
+                Lastname
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
+                  <FaUser />
+                </span>
+                <input
+                  type="text"
+                  id="name"
+                  name="lastname"
                   required
                   className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
@@ -127,7 +148,7 @@ export default function SignupPage() {
                 <input
                   type="password"
                   id="confirm_password"
-                  name="confirm_password"
+                  name="confirmpassword"
                   required
                   className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
                 />
@@ -148,7 +169,7 @@ export default function SignupPage() {
                 <input
                   type="number"
                   id="no_of_subjects"
-                  name="no_of_subjects"
+                  name="nsubjects"
                   value={noOfSubjects}
                   onChange={handleSubjectsChange}
                   required

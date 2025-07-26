@@ -6,8 +6,8 @@ export default async function HomePage({ params }) {
     const userId = await params.id
     return (
         <>
-            <p>Home Page</p>
             <div>
+                <p>My Subjects</p>
                 <Suspense fallback={<p>Fetching Subjects....</p>}>
                     <SubjectCardsDisplay id={userId} />
                 </Suspense>
