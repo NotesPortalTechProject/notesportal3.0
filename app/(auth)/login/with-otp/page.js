@@ -1,65 +1,90 @@
 'use client'
+import { useActionState } from "react";
 import { login_with_otp } from "@/actions/auth-actions";
 import Link from "next/link";
-import { useActionState } from "react";
+import { FaEnvelope, FaKey } from "react-icons/fa";
 
 export default function LoginWithOtpPage() {
-    const [formState, formAction] = useActionState(login_with_otp, {});
-    return (
-        <>
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-100">
-                <div className="bg-gray-800 bg-opacity-90 p-6 rounded-lg shadow-md w-full max-w-md">
-                    <p className="text-2xl font-semibold mb-4 text-center">Login Page</p>
-                    <p className="text-md font-light mb-4 "><Link href={'/login'}>login with password</Link></p>
-                    <form className="flex flex-col gap-4" action={formAction}>
-                        <div>
-                            <label htmlFor="email" className="block mb-1">Email Id:</label>
-                            <input
-                                type="text"
-                                name="email"
-                                placeholder="enter email here"
-                                required
-                                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+  const [formState, formAction] = useActionState(login_with_otp, {});
+  return (
+    <div className="bg-black min-h-screen w-full flex flex-col items-center justify-center px-4">
+      <div className="absolute inset-0 animate-pulse opacity-5 text-6xl pointer-events-none select-none">
+        <div className="absolute top-[10%] left-[15%]">📄</div>
+        <div className="absolute top-[40%] right-[20%]">📝</div>
+        <div className="absolute bottom-[20%] left-[30%]">📚</div>
+      </div>
 
-                        <div>
-                            <label htmlFor="otp" className="block mb-1">Otp:</label>
-                            <input
-                                type="text"
-                                name="otp"
-                                placeholder="enter otp here"
-                                required
-                                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+      <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-bold text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
+        Welcome to NotesPortal
+      </h1>
 
-                        <button
-                            type="submit"
-                            className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition-colors"
-                        >
-                            Submit
-                        </button>
+      <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6">
+        <div className="w-full max-w-lg animate-fade-in-up bg-black/50 backdrop-blur-md border border-purple-700 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col items-center justify-center">
+          <p className="text-right text-sm text-purple-500 underline underline-offset-4 mb-6">
+            <Link href="/login">Login with Password</Link>
+          </p>
 
-                        <div>
-                            {formState.errors && (
-                                <ul>
-                                    {formState.errors.map((error, index) => (
-                                        <li key={index} className="text-red-400">{error}</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    </form>
-
-                    <p className="mt-4 text-center">
-                        Don't have an account?{" "}
-                        <Link href={"/signup"} className="text-blue-400 hover:underline">
-                            Signup
-                        </Link>
-                    </p>
-                </div>
+          <form className="flex flex-col gap-6 w-full" action={formAction}>
+            <div>
+              <label htmlFor="email" className="block mb-2 text-sm text-purple-300 font-medium">
+                Email
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
+                  <FaEnvelope />
+                </span>
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                  className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+              </div>
             </div>
-        </>
-    );
+
+            <div>
+              <label htmlFor="otp" className="block mb-2 text-sm text-purple-300 font-medium">
+                OTP
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-3 flex items-center text-pink-400">
+                  <FaKey />
+                </span>
+                <input
+                  type="text"
+                  name="otp"
+                  placeholder="Enter OTP"
+                  required
+                  className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+            >
+              Submit
+            </button>
+
+            {formState.errors && (
+              <ul className="text-sm text-red-400 mt-2 space-y-1">
+                {formState.errors.map((error, index) => (
+                  <li key={index}>• {error}</li>
+                ))}
+              </ul>
+            )}
+          </form>
+
+          <p className="mt-6 text-center text-sm text-gray-300">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-blue-400 hover:underline">
+              Signup
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
