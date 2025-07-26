@@ -15,7 +15,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="bg-black min-h-screen w-full flex flex-col items-center justify-center px-4">
+    <div className="bg-black max-h-screen w-full flex flex-col items-center justify-start px-4 overflow-y-auto scrollbar-hide">
       <div className="absolute inset-0 animate-pulse opacity-5 text-6xl pointer-events-none select-none">
         <div className="absolute top-[10%] left-[15%]">📄</div>
         <div className="absolute top-[40%] right-[20%]">📝</div>
@@ -27,7 +27,7 @@ export default function SignupPage() {
       </h1>
 
       <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6">
-        <div className="w-full max-w-lg animate-fade-in-up bg-black/50 backdrop-blur-md border border-purple-700 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col items-center justify-center">
+        <div className="w-full max-w-lg animate-fade-in-up bg-black/50 backdrop-blur-md border border-purple-700 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col items-center justify-start overflow-y-auto max-h-[80vh] scrollbar-hide">
           <form className="flex flex-col gap-6 w-full" action={formAction}>
             <div>
               <label
@@ -194,7 +194,10 @@ export default function SignupPage() {
             <Link href="/login" className="text-blue-400 hover:underline">
               Login
             </Link>
-            <Link href="/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3/home" className="text-blue-400 hover:underline">
+            <Link
+              href="/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3/home"
+              className="text-blue-400 hover:underline"
+            >
               Test route
             </Link>
           </p>
