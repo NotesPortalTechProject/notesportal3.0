@@ -1,5 +1,6 @@
 'use server'
-import { getUserId } from "@/lib/data-fetch-functions";
+import { getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
+import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
 
@@ -80,6 +81,9 @@ export async function signup(prevState, formData) {
         return { errors };
     }
 
+    // HASHING PASSWORD
+    const hashedPassword = hashUserPassword(password);
+
     console.log('STARTING INSERT')
     const { data , error } = await supabase.from('users').insert([
         {
@@ -88,6 +92,7 @@ export async function signup(prevState, formData) {
             username: username,
             email:emailid,
             subjects:subjectslist,
+            password:hashedPassword
 
         }
     ])
@@ -114,6 +119,22 @@ export async function login_with_password(prevState, formData) {
     if (errors.length > 0) {
         return { errors };
     }
+
+    const {data,error} = await getUserDataByUsername(username)
+    if(error){
+        throw new Error('couldnt fetch user data some error occured')
+    }
+
+    const isValidPassword = verifyPassword(data.password,password)
+    if(!isValidPassword){
+        errors.push('incorrect credentials');
+    }
+
+    if(errors.length>0){
+        return {errors};
+    }
+
+    redirect(`/${data.id}/home`)
 }
 
 // LOGIN FUNCTION otp

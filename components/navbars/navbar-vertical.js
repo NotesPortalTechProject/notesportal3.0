@@ -10,7 +10,7 @@ export default function VerticalSidebar({ id }) {
 
         <nav className="flex flex-col gap-3 mt-6">
           <NavItem icon={<FiHome />} label="Home" id={id} endpoint={'home'}/>
-          <NavItem icon={<FiStar />} label="Favourites" id={id} endpoint={'favourites'}/>
+          <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint={'favorites'}/>
           <NavItem icon={<FiUpload />} label="Upload" id={id} endpoint={'upload'}/>
           <NavItem icon={<FiPlusCircle />} label="Add Subjects" id={id} endpoint={'addsubjects'}/>
           <NavItem icon={<FiDelete />} label="Remove Subjects" id={id} endpoint={'removesubjects'}/>

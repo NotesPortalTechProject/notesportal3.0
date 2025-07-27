@@ -15,7 +15,7 @@ export default async function HomePage({ params }) {
             <div>
                 <p>Recent Files</p>
                 <Suspense fallback={<p>fetching recent files....</p>}>
-                  <RecentFilesDisplay/>
+                  <RecentFilesDisplay id={userId} src={`/${userId}/home`}/>
                 </Suspense>
             </div>
         </>

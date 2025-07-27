@@ -1,4 +1,7 @@
-export default function FileCard({ file, index }) {
+import { IsFileinFav } from "@/actions/other-actions";
+import FavFormBtn from "./fav-from-btn";
+export default async function FileCard({ file, index, userid, src }) {
+    const isFav = await IsFileinFav(file.id,userid)
     return (
         <>
             <div
@@ -11,14 +14,19 @@ export default function FileCard({ file, index }) {
                         className="w-full h-48 rounded-lg border border-white/10"
                     />
                 </div>
+
+                <div className='w-full flex items-center justify-end'>
+                    <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src}/>
+                </div>
+
                 <h2
                     className="text-lg font-bold tracking-wide mb-1 truncate w-full"
                     title={file.filename}
                 >
                     {file.filename}
                 </h2>
-                <p className="text-sm text-gray-300 mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <p className="text-sm text-gray-300 mb-4 truncate">
+                    {file.description}
                 </p>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -32,4 +40,5 @@ export default function FileCard({ file, index }) {
             </div>
         </>
     );
+
 }
