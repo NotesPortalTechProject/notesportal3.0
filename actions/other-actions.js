@@ -1,7 +1,6 @@
 'use server'
 import { supabase } from "@/lib/supabaseClient"
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/dist/server/api-utils";
 
 export async function ToggleFiletoFavourites(fileid,userid,src) {
     const {data,error} = await supabase.from('users').select('favorites_new').eq('id',userid).single();
@@ -37,3 +36,15 @@ export async function IsFileinFav(fileid,userid) {
     const favFilesList = data.favorites_new || []
     return favFilesList.includes(fileid)
 }
+
+export async function EmailExists(email) {
+    const {data,error} = await supabase.from('users').select('email').eq('email',email).maybeSingle();
+    if(error){
+        throw new Error('Couldnt get email Id some error occured');
+    }
+    if(data){
+        return 0
+    }
+    return 1
+}
+

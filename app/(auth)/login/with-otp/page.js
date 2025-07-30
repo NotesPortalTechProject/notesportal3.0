@@ -1,11 +1,48 @@
 'use client'
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { login_with_otp } from "@/actions/auth-actions";
 import Link from "next/link";
 import { FaEnvelope, FaKey } from "react-icons/fa";
+import { EmailExists } from "@/actions/other-actions";
+import OtpTemplate from "@/lib/email-templates/otp-template";
+import { generateOtp } from "@/lib/gen-otp";
+
 
 export default function LoginWithOtpPage() {
   const [formState, formAction] = useActionState(login_with_otp, {});
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(" ");
+
+
+  async function handleSendOtp(formData) {
+    const userEmail = formData.get("email");
+    const doesNotExist = await EmailExists(userEmail);
+    const otp = generateOtp()
+    if (doesNotExist) {
+      setEmailError('No account associated with this Email Id')
+      setStep(1);
+      return
+    }
+    console.log('pappu')
+    setEmailError('');
+    setEmail(userEmail);
+    setStep(2);
+    console.log('pager')
+    const res = await fetch('/api/sendOtpMail', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: userEmail,
+        subject: 'OTP FOR LOGIN',
+        html: OtpTemplate(otp),
+        otp:otp
+      })
+    })
+    console.log('nalle')
+    console.log(res)
+  }
+
   return (
     <div className="bg-black min-h-screen w-full flex flex-col items-center justify-center px-4">
       <div className="absolute inset-0 animate-pulse opacity-5 text-6xl pointer-events-none select-none">
@@ -24,58 +61,91 @@ export default function LoginWithOtpPage() {
             <Link href="/login">Login with Password</Link>
           </p>
 
-          <form className="flex flex-col gap-6 w-full" action={formAction}>
-            <div>
-              <label htmlFor="email" className="block mb-2 text-sm text-purple-300 font-medium">
-                Email
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
-                  <FaEnvelope />
-                </span>
-                <input
-                  type="text"
-                  name="email"
-                  placeholder="Enter your email"
-                  required
-                  className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                />
+          {step === 1 && (
+            <form className="flex flex-col gap-6 w-full" action={handleSendOtp}>
+              <div>
+                <label htmlFor="email" className="block mb-2 text-sm text-purple-300 font-medium">
+                  Email
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
+                    <FaEnvelope />
+                  </span>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  />
+                </div>
               </div>
-            </div>
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+              >
+                Send OTP
+              </button>
+              {emailError && (
+                <p className="text-red-500">{emailError}</p>
+              )}
+            </form>
+          )}
 
-            <div>
-              <label htmlFor="otp" className="block mb-2 text-sm text-purple-300 font-medium">
-                OTP
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-3 flex items-center text-pink-400">
-                  <FaKey />
-                </span>
-                <input
-                  type="text"
-                  name="otp"
-                  placeholder="Enter OTP"
-                  required
-                  className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
-                />
+          {step === 2 && (
+            <form className="flex flex-col gap-6 w-full" action={formAction}>
+              <div>
+                <label htmlFor="email" className="block mb-2 text-sm text-purple-300 font-medium">
+                  Email
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-purple-400">
+                    <FaEnvelope />
+                  </span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    readOnly
+                    className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none"
+                  />
+                </div>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-            >
-              Submit
-            </button>
+              <div>
+                <label htmlFor="otp" className="block mb-2 text-sm text-purple-300 font-medium">
+                  OTP
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-pink-400">
+                    <FaKey />
+                  </span>
+                  <input
+                    type="text"
+                    name="otp"
+                    placeholder="Enter OTP"
+                    required
+                    className="w-full bg-[#2b2b30] border border-purple-700 text-white placeholder-gray-400 rounded-lg px-10 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
+                  />
+                </div>
+              </div>
 
-            {formState.errors && (
-              <ul className="text-sm text-red-400 mt-2 space-y-1">
-                {formState.errors.map((error, index) => (
-                  <li key={index}>• {error}</li>
-                ))}
-              </ul>
-            )}
-          </form>
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+              >
+                Submit
+              </button>
+
+              {formState.errors && (
+                <ul className="text-sm text-red-400 mt-2 space-y-1">
+                  {formState.errors.map((error, index) => (
+                    <li key={index}>• {error}</li>
+                  ))}
+                </ul>
+              )}
+            </form>
+          )}
 
           <p className="mt-6 text-center text-sm text-gray-300">
             Don't have an account?{" "}

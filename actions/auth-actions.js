@@ -1,5 +1,5 @@
 'use server'
-import { getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
+import { getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
@@ -151,5 +151,16 @@ export async function login_with_otp(prevState, formData) {
 
     if (errors.length > 0) {
         return { errors };
+    }
+
+    const storedOtp = await getStoredOtp(emailId)
+
+    if(otp.trim() !== storedOtp.trim()){
+        errors.push('Invalid Otp, Login attempted failed')
+    }
+
+    if(otp.trim()===storedOtp.trim()){
+        const userdata = await getUserDataByEmail(emailId);
+        redirect(`/${userdata.id}/home`)
     }
 }
