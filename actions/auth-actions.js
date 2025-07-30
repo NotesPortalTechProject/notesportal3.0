@@ -107,6 +107,7 @@ export async function signup(prevState, formData) {
 // LOGIN FUNCTION password
 export async function login_with_password(prevState, formData) {
     const username = formData.get('username')
+    console.log(username)
     const password = formData.get('password')
     let errors = [];
     if (!username || username.length == 0) {
@@ -115,15 +116,16 @@ export async function login_with_password(prevState, formData) {
     if (!password || password.length == 0) {
         errors.push('password not defined');
     }
-
+    console.log(username)
     if (errors.length > 0) {
         return { errors };
     }
 
-    const {data,error} = await getUserDataByUsername(username)
+    const {data,error} = await supabase.from('users').select('*').eq('username',username);
     if(error){
         throw new Error('couldnt fetch user data some error occured')
     }
+    console.log(data)
 
     const isValidPassword = verifyPassword(data.password,password)
     if(!isValidPassword){

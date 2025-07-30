@@ -1,5 +1,6 @@
 import RecentFilesDisplay from "@/components/recent-files/recent-files-display";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
+import { getUserDataByUsername } from "@/lib/data-fetch-functions";
 import { Suspense } from "react";
 
 export default async function HomePage({ params }) {
