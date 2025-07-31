@@ -162,6 +162,7 @@ export async function login_with_otp(prevState, formData) {
 
     if(otp.trim()===storedOtp.trim()){
         const userdata = await getUserDataByEmail(emailId);
+        await supabase.from("users").update({otp:null}).eq('email',emailId)
         redirect(`/${userdata.id}/home`)
     }
 }
