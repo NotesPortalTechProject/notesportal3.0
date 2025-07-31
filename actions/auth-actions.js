@@ -1,5 +1,5 @@
 'use server'
-import { getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
+import { getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId} from "@/lib/data-fetch-functions";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
@@ -107,7 +107,6 @@ export async function signup(prevState, formData) {
 // LOGIN FUNCTION password
 export async function login_with_password(prevState, formData) {
     const username = formData.get('username')
-    console.log(username)
     const password = formData.get('password')
     let errors = [];
     if (!username || username.length == 0) {
@@ -116,18 +115,14 @@ export async function login_with_password(prevState, formData) {
     if (!password || password.length == 0) {
         errors.push('password not defined');
     }
-    console.log(username)
+    const userdata = await getUserDataByUsername(username)
+    if(!userdata){
+        errors.push('Invalid username, user not found')
+    }
     if (errors.length > 0) {
         return { errors };
     }
-
-    const {data,error} = await supabase.from('users').select('*').eq('username',username);
-    if(error){
-        throw new Error('couldnt fetch user data some error occured')
-    }
-    console.log(data)
-
-    const isValidPassword = verifyPassword(data.password,password)
+    const isValidPassword = verifyPassword(userdata.password,password)
     if(!isValidPassword){
         errors.push('incorrect credentials');
     }
@@ -136,7 +131,7 @@ export async function login_with_password(prevState, formData) {
         return {errors};
     }
 
-    redirect(`/${data.id}/home`)
+    redirect(`/${userdata.id}/home`)
 }
 
 // LOGIN FUNCTION otp
@@ -149,6 +144,10 @@ export async function login_with_otp(prevState, formData) {
     }
     if (!otp || otp.length == 0) {
         errors.push('Otp not defined')
+    }
+    const userExists = await getUserDataByEmail(emailId)
+    if(!userExists){
+        errors.push('Invalid Email Id Error')
     }
 
     if (errors.length > 0) {
