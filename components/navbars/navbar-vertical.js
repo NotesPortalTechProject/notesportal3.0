@@ -24,7 +24,7 @@ export default function VerticalSidebar({ id }) {
             <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" />
           </nav>
         </div>
-        <div className="text-center text-xs text-white/50 mt-4">© 2025 NotesPortal</div>
+        {/* <div className="text-center text-xs text-white/50 mt-4">© 2025 NotesPortal</div> */}
       </div>
 
       {/* Mobile/Tablet Bottom Navbar */}
