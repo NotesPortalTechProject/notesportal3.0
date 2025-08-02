@@ -1,7 +1,7 @@
 'use client'
 import { useActionState, useState } from "react";
 import { login_with_otp } from "@/actions/auth-actions";
-import Link from "next/link";
+import Link from "next/link"; 
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { EmailExists } from "@/actions/other-actions";
 import OtpTemplate from "@/lib/email-templates/otp-template";
