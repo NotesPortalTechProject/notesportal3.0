@@ -8,8 +8,8 @@ export default function Home() {
       {/* Magnetic Background */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
         <MagnetLines
-          rows={20}
-          columns={35}
+          rows={40}
+          columns={40}
           lineColor="#a855f7"
           containerSize="100vw"
           lineWidth="0.4vmin"
