@@ -1,5 +1,5 @@
 "use client";
-import MagnetLines from "../components/MagnetLines";
+import MagnetLines from "../components/effects/MagnetLines";
 import Link from "next/link";
 
 export default function Home() {

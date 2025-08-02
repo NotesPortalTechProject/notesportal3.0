@@ -108,6 +108,7 @@ body {
   -ms-overflow-style: none; /* IE/Edge */
   scrollbar-width: none; /* Firefox */
 }
+/* MAGNETIC LINES */
 .magnetLines-container span {
   display: block;
   transform: rotate(var(--rotate, 0deg));
