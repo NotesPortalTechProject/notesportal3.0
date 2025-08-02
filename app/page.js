@@ -31,13 +31,14 @@ export default function Home() {
         <div className="mt-6 flex flex-col md:flex-row gap-3 md:gap-6 text-lg">
           <Link
             href="/signup"
-            className="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white border border-purple-300/30 shadow-md transition-all duration-200"
+            className="px-6 py-2 rounded-xl bg-purple-950/30 text-purple-100 border border-purple-300/20 shadow-inner transition-all duration-300 hover:bg-purple-900 hover:shadow-[0_0_16px_rgba(168,85,247,0.6)] hover:scale-105"
           >
             sign-up
           </Link>
+
           <Link
             href="/login"
-            className="px-6 py-2 rounded-xl bg-purple-900/30 hover:bg-purple-900 text-purple-100 border border-purple-300/20 shadow-inner transition-all duration-200"
+            className="px-6 py-2 rounded-xl bg-purple-950/30 text-purple-100 border border-purple-300/20 shadow-inner transition-all duration-300 hover:bg-purple-900 hover:shadow-[0_0_16px_rgba(168,85,247,0.6)] hover:scale-105"
           >
             login
           </Link>
