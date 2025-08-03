@@ -19,8 +19,6 @@ export default function VerticalSidebar({ id }) {
             <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" />
             <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" />
             <NavItem icon={<FiUpload />} label="Upload" id={id} endpoint="upload" />
-            <NavItem icon={<FiPlusCircle />} label="Add Subjects" id={id} endpoint="addsubjects" />
-            <NavItem icon={<FiDelete />} label="Remove Subjects" id={id} endpoint="removesubjects" />
             <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" />
           </nav>
         </div>

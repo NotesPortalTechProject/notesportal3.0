@@ -1,3 +1,4 @@
+import ResetPasswordModal from "@/components/password-managers/reset-password";
 import SetPasswordModal from "@/components/password-managers/set-password";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
 import { getUserData } from "@/lib/data-fetch-functions";
@@ -31,6 +32,9 @@ export default async function ProfilePage({ params }) {
         <div className="flex flex-wrap gap-4">
           {!userdata.password && (
             <SetPasswordModal id={userid}/>
+          )}
+          {userdata.password && (
+            <ResetPasswordModal id={userid}/>
           )}
         </div>
       </div>

@@ -160,6 +160,10 @@ export async function login_with_otp(prevState, formData) {
         errors.push('Invalid Otp, Login attempted failed')
     }
 
+    if (errors.length > 0) {
+        return { errors };
+    }
+
     if(otp.trim()===storedOtp.trim()){
         const userdata = await getUserDataByEmail(emailId);
         await supabase.from("users").update({otp:null}).eq('email',emailId)

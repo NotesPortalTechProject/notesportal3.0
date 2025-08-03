@@ -4,7 +4,7 @@ import { login_with_otp } from "@/actions/auth-actions";
 import Link from "next/link"; 
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { EmailExists } from "@/actions/other-actions";
-import OtpTemplate from "@/lib/email-templates/otp-template";
+import OtpTemplate from "@/lib/email-templates/otp-template-login";
 import { generateOtp } from "@/lib/gen-otp";
 
 
@@ -140,7 +140,7 @@ export default function LoginWithOtpPage() {
               {formState.errors && (
                 <ul className="text-sm text-red-400 mt-2 space-y-1">
                   {formState.errors.map((error, index) => (
-                    <li key={index}>• {error}</li>
+                    <li key={index}>{error}</li>
                   ))}
                 </ul>
               )}
