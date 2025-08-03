@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FiCompass, FiSearch, FiUpload, FiUser } from "react-icons/fi";
+import ProfileModal from "../profile-modal";
 export default function HorizontalNavbar({ id }) {
   return (
     <div className="w-full px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0d0b14] text-white border-b border-purple-500/30 shadow-md">
@@ -21,11 +22,7 @@ export default function HorizontalNavbar({ id }) {
       {/* FLEX GAP CHANGE KIA HAI */}
       <div className="flex gap-16 items-center">
         <Link href={`/${id}/aboutus`}>about us</Link>
-        <Link href={`/${id}/profile`}>
-          <button className="bg-[#170b22] border border-purple-500/40 hover:border-purple-400 text-white px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center" type="button">
-            <FiUser className="text-lg" /><p className="pl-2">Profile</p>
-          </button>
-        </Link>
+        <ProfileModal id={id}/>
       </div>
     </div>
   );
