@@ -4,6 +4,7 @@ import { setPasswordById } from "@/lib/data-push-functions";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { supabase } from "@/lib/supabaseClient"
 import { revalidatePath } from "next/cache";
+import { updateUserSubjectlist } from "@/lib/data-push-functions";
 
 export async function ToggleFiletoFavourites(fileid, userid, src) {
     const { data, error } = await supabase.from('users').select('favorites_new').eq('id', userid).single();
@@ -107,4 +108,9 @@ export async function ResetPassword(prevState, formData) {
     const hashedPassword = hashUserPassword(password);
     await setPasswordById(hashedPassword, userId);
     revalidatePath(`/${userId}/profile`)
+}
+
+export async function UpdateSubjects(id, sub_code) {
+    await updateUserSubjectlist(id, sub_code);
+    revalidatePath(`/${id}/home`);
 }
