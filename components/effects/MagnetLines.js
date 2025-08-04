@@ -4,7 +4,8 @@ import { useRef, useEffect } from "react";
 export default function MagnetLines({
   rows = 9,
   columns = 9,
-  containerSize = "100vmin",
+  containerWidth = "100vw",
+  containerHeight = "100vh",
   lineColor = "#efefef",
   lineWidth = "1vmin",
   lineHeight = "6vmin",
@@ -12,11 +13,26 @@ export default function MagnetLines({
   className = "",
   style = {},
 }) {
+
   const containerRef = useRef(null);
   const pointerRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const rafRef = useRef(null);
   const anglesRef = useRef([]);
   const centersRef = useRef([]);
+
+  const updateCenters = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const items = container.querySelectorAll("span");
+    centersRef.current = Array.from(items).map((item) => {
+      const rect = item.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+    });
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -25,14 +41,13 @@ export default function MagnetLines({
     const items = container.querySelectorAll("span");
     anglesRef.current = new Array(items.length).fill(baseAngle);
 
-    // Cache center positions once (assumes static layout)
-    centersRef.current = Array.from(items).map((item) => {
-      const rect = item.getBoundingClientRect();
-      return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
-      };
+    // Wait for layout before getting centers
+    const resizeObserver = new ResizeObserver(() => {
+      updateCenters();
     });
+
+    resizeObserver.observe(container);
+    updateCenters();
 
     const onPointerMove = (e) => {
       pointerRef.current.x = e.clientX;
@@ -41,7 +56,7 @@ export default function MagnetLines({
 
     const animate = () => {
       items.forEach((item, index) => {
-        const { x, y } = centersRef.current[index];
+        const { x, y } = centersRef.current[index] || { x: 0, y: 0 };
         const dx = pointerRef.current.x - x;
         const dy = pointerRef.current.y - y;
 
@@ -49,8 +64,8 @@ export default function MagnetLines({
 
         let currentAngle = anglesRef.current[index];
         let delta = targetAngle - currentAngle;
-        delta = ((delta + 180) % 360) - 180; // shortest path
-        currentAngle += delta * 0.1; // easing
+        delta = ((delta + 180) % 360) - 180;
+        currentAngle += delta * 0.1;
 
         anglesRef.current[index] = currentAngle;
         item.style.transform = `rotateZ(${currentAngle.toFixed(2)}deg)`;
@@ -65,8 +80,9 @@ export default function MagnetLines({
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
       cancelAnimationFrame(rafRef.current);
+      resizeObserver.disconnect();
     };
-  }, [baseAngle]);
+  }, [rows, columns, baseAngle]);
 
   const total = rows * columns;
   const spans = Array.from({ length: total }, (_, i) => (
@@ -89,14 +105,15 @@ export default function MagnetLines({
       ref={containerRef}
       className={`grid ${className}`}
       style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gridTemplateRows: `repeat(${rows}, 1fr)`,
-        width: containerSize,
-        height: containerSize,
-        pointerEvents: "none",
-        ...style,
-      }}
+  display: "grid",
+  gridTemplateColumns: `repeat(${columns}, 1fr)`,
+  gridTemplateRows: `repeat(${rows}, 1fr)`,
+  width: containerWidth,
+  height: containerHeight,
+  pointerEvents: "none",
+  ...style,
+}}
+
     >
       {spans}
     </div>
