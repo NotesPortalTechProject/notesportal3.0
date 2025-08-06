@@ -13,9 +13,8 @@ export default function MagnetLines({
   className = "",
   style = {},
 }) {
-
   const containerRef = useRef(null);
-  const pointerRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const pointerRef = useRef({ x: 0, y: 0 }); // initialized safely
   const rafRef = useRef(null);
   const anglesRef = useRef([]);
   const centersRef = useRef([]);
@@ -41,7 +40,14 @@ export default function MagnetLines({
     const items = container.querySelectorAll("span");
     anglesRef.current = new Array(items.length).fill(baseAngle);
 
-    // Wait for layout before getting centers
+    // center pointer at screen center after mount
+    if (typeof window !== "undefined") {
+      pointerRef.current = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      };
+    }
+
     const resizeObserver = new ResizeObserver(() => {
       updateCenters();
     });
@@ -105,15 +111,14 @@ export default function MagnetLines({
       ref={containerRef}
       className={`grid ${className}`}
       style={{
-  display: "grid",
-  gridTemplateColumns: `repeat(${columns}, 1fr)`,
-  gridTemplateRows: `repeat(${rows}, 1fr)`,
-  width: containerWidth,
-  height: containerHeight,
-  pointerEvents: "none",
-  ...style,
-}}
-
+        display: "grid",
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
+        width: containerWidth,
+        height: containerHeight,
+        pointerEvents: "none",
+        ...style,
+      }}
     >
       {spans}
     </div>
