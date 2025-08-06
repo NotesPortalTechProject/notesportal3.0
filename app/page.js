@@ -44,7 +44,7 @@ export default function Home() {
           columns={grid.columns}
           containerWidth={grid.width}
           containerHeight={grid.height}
-          lineColor="#8b5cf6"
+          lineColor="#fff"
           lineWidth="0.4vmin"
           lineHeight="6vmin"
           baseAngle={-10}

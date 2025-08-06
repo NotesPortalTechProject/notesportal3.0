@@ -1,11 +1,26 @@
 "use client";
 import SubjectCard from "../subject-card";
 import AddSubjectModal from "../edit-subjects/add-sub";
+import { RemoveSubject } from "@/actions/other-actions";
+import toast from "react-hot-toast";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SubjectCards({ subjects, id }) {
-  const handleRemove = (sub) => {
-    console.log("Remove subject:", sub);
-    // Add actual remove logic here
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleRemove = (subject, id) => {
+    startTransition(async () => {
+      try {
+        await RemoveSubject(id, subject);
+        toast.success(`Removed subject: ${subject}`);
+        router.refresh(); // 👈 refresh UI to fetch updated subjects
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to remove subject.");
+      }
+    });
   };
 
   return (
@@ -15,7 +30,7 @@ export default function SubjectCards({ subjects, id }) {
           key={index}
           subject={subject}
           id={id}
-          onRemove={handleRemove}
+          onRemove={handleRemove.bind(null, subject, id)}
         />
       ))}
       <AddSubjectModal id={id} />

@@ -5,6 +5,7 @@ import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { supabase } from "@/lib/supabaseClient"
 import { revalidatePath } from "next/cache";
 import { updateUserSubjectlist } from "@/lib/data-push-functions";
+import { getUserData } from "@/lib/data-fetch-functions";
 
 export async function ToggleFiletoFavourites(fileid, userid, src) {
     const { data, error } = await supabase.from('users').select('favorites_new').eq('id', userid).single();
@@ -113,4 +114,29 @@ export async function ResetPassword(prevState, formData) {
 export async function UpdateSubjects(id, sub_code) {
     await updateUserSubjectlist(id, sub_code);
     revalidatePath(`/${id}/home`);
+}
+
+export async function removeUserSubject(id, sub_code) {
+  const data = await getUserData(id);
+  if (!data) throw new Error("User data not found");
+
+  const usersubjectlist = JSON.parse(data.subjects || "[]");
+
+  if (!usersubjectlist.includes(sub_code)) {
+    throw new Error("Subject not found in your list");
+  }
+
+  const updatedList = usersubjectlist.filter((s) => s !== sub_code);
+
+  const { error } = await supabase
+    .from("users")
+    .update({ subjects: JSON.stringify(updatedList) })
+    .eq("id", id);
+
+  if (error) throw new Error("Failed to update subject list");
+}
+
+export async function RemoveSubject(id, sub_code) {
+  await removeUserSubject(id, sub_code);
+  revalidatePath(`/${id}/home`);
 }
