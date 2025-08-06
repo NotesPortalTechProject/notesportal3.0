@@ -148,7 +148,7 @@ export default function LoginWithOtpPage() {
           )}
 
           <p className="mt-6 text-center text-sm text-gray-300">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-blue-400 hover:underline">
               Signup
             </Link>
