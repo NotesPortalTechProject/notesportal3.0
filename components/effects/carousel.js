@@ -25,7 +25,6 @@ export default function Carousel({
   const containerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimatingWrap, setIsAnimatingWrap] = useState(false);
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleResize = () => {
@@ -84,7 +83,7 @@ export default function Carousel({
       } else {
         setCurrentIndex(i);
       }
-    }, 120); // Speed of animation step
+    }, 120);
   };
 
   const handleDragEnd = (_, info) => {
@@ -116,6 +115,11 @@ export default function Carousel({
     -(index - 1) * trackItemOffset,
   ];
 
+  // 🔧 FIX: Precompute rotateY transforms outside the map
+  const rotateYArray = items.map((_, index) =>
+    useTransform(x, range(index), [90, 0, -90])
+  );
+
   const dragProps = {
     dragConstraints: {
       left: -trackItemOffset * (items.length - 1),
@@ -142,7 +146,7 @@ export default function Carousel({
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
-          const rotateY = useTransform(x, range(index), [90, 0, -90]);
+          const rotateY = rotateYArray[index];
 
           return (
             <motion.div
