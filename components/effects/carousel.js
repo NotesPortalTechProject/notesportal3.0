@@ -36,7 +36,11 @@ export default function Carousel({
     rotateYRef.current = items.map((_, index) =>
       useTransform(
         x,
-        [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset],
+        [
+          -(index + 1) * trackItemOffset,
+          -index * trackItemOffset,
+          -(index - 1) * trackItemOffset,
+        ],
         [90, 0, -90]
       )
     );
@@ -150,7 +154,14 @@ export default function Carousel({
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
-          const rotateY = rotateYRef.current[index];
+          const currentX = x.get();
+          const center = -index * trackItemOffset;
+          const diff = currentX - center;
+          const clamped = Math.max(
+            -trackItemOffset,
+            Math.min(trackItemOffset, diff)
+          );
+          const rotateY = (clamped / trackItemOffset) * -90;
 
           return (
             <motion.div
