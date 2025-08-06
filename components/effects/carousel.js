@@ -116,9 +116,10 @@ export default function Carousel({
   ];
 
   // 🔧 FIX: Precompute rotateY transforms outside the map
-  const rotateYArray = items.map((_, index) =>
-    useTransform(x, range(index), [90, 0, -90])
-  );
+  const rotateYArray = [];
+  for (let i = 0; i < items.length; i++) {
+    rotateYArray.push(useTransform(x, range(i), [90, 0, -90]));
+  }
 
   const dragProps = {
     dragConstraints: {
@@ -191,9 +192,7 @@ export default function Carousel({
           <motion.div
             key={index}
             className={`h-2 w-2 rounded-full transition-colors duration-150 ${
-              currentIndex === index
-                ? "bg-purple-400"
-                : "bg-purple-800/30"
+              currentIndex === index ? "bg-purple-400" : "bg-purple-800/30"
             }`}
             animate={{
               scale: currentIndex === index ? 1.2 : 1,
