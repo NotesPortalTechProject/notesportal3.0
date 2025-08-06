@@ -8,6 +8,15 @@ const VELOCITY_THRESHOLD = 500;
 const GAP = 16;
 const SPRING_OPTIONS = { type: "spring", stiffness: 300, damping: 30 };
 
+// ✅ Custom Hook to safely use useTransform
+function useRotateY(x, index, offset) {
+  return useTransform(
+    x,
+    [-(index + 1) * offset, -index * offset, -(index - 1) * offset],
+    [90, 0, -90]
+  );
+}
+
 export default function Carousel({
   items = [],
   baseWidth = 300,
@@ -109,18 +118,6 @@ export default function Carousel({
     }
   };
 
-  const range = (index) => [
-    -(index + 1) * trackItemOffset,
-    -index * trackItemOffset,
-    -(index - 1) * trackItemOffset,
-  ];
-
-  // 🔧 FIX: Precompute rotateY transforms outside the map
-  const rotateYArray = [];
-  for (let i = 0; i < items.length; i++) {
-    rotateYArray.push(useTransform(x, range(i), [90, 0, -90]));
-  }
-
   const dragProps = {
     dragConstraints: {
       left: -trackItemOffset * (items.length - 1),
@@ -147,7 +144,7 @@ export default function Carousel({
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
-          const rotateY = rotateYArray[index];
+          const rotateY = useRotateY(x, index, trackItemOffset);
 
           return (
             <motion.div
@@ -155,7 +152,7 @@ export default function Carousel({
               className="shrink-0 flex flex-col justify-between bg-[#1a1a2e]/60 backdrop-blur-md rounded-2xl shadow-[0_0_16px_#a855f780] border border-[#a855f73d] cursor-grab active:cursor-grabbing"
               style={{
                 width: itemWidth,
-                rotateY: rotateY,
+                rotateY,
               }}
               transition={SPRING_OPTIONS}
             >
