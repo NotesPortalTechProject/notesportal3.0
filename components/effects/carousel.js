@@ -8,15 +8,6 @@ const VELOCITY_THRESHOLD = 500;
 const GAP = 16;
 const SPRING_OPTIONS = { type: "spring", stiffness: 300, damping: 30 };
 
-// ✅ Custom Hook to safely use useTransform
-function useRotateY(x, index, offset) {
-  return useTransform(
-    x,
-    [-(index + 1) * offset, -index * offset, -(index - 1) * offset],
-    [90, 0, -90]
-  );
-}
-
 export default function Carousel({
   items = [],
   baseWidth = 300,
@@ -30,11 +21,26 @@ export default function Carousel({
   const containerPadding = 16;
   const itemWidth = baseWidth - containerPadding * 2;
   const trackItemOffset = itemWidth + GAP;
+
   const x = useMotionValue(0);
   const containerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimatingWrap, setIsAnimatingWrap] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ✅ Store transforms in a ref array (not hooks inside map)
+  const rotateYRef = useRef([]);
+
+  // ✅ Initialize transforms once
+  useEffect(() => {
+    rotateYRef.current = items.map((_, index) =>
+      useTransform(
+        x,
+        [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset],
+        [90, 0, -90]
+      )
+    );
+  }, [items.length, x, trackItemOffset]);
 
   const handleResize = () => {
     if (containerRef.current) {
@@ -144,7 +150,7 @@ export default function Carousel({
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
-          const rotateY = useRotateY(x, index, trackItemOffset);
+          const rotateY = rotateYRef.current[index];
 
           return (
             <motion.div
