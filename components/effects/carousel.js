@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import Link from "next/link";
 
 const DRAG_BUFFER = 0;
@@ -27,24 +27,6 @@ export default function Carousel({
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimatingWrap, setIsAnimatingWrap] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // ✅ Store transforms in a ref array (not hooks inside map)
-  const rotateYRef = useRef([]);
-
-  // ✅ Initialize transforms once
-  useEffect(() => {
-    rotateYRef.current = items.map((_, index) =>
-      useTransform(
-        x,
-        [
-          -(index + 1) * trackItemOffset,
-          -index * trackItemOffset,
-          -(index - 1) * trackItemOffset,
-        ],
-        [90, 0, -90]
-      )
-    );
-  }, [items.length, x, trackItemOffset]);
 
   const handleResize = () => {
     if (containerRef.current) {
@@ -154,14 +136,9 @@ export default function Carousel({
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
-          const currentX = x.get();
-          const center = -index * trackItemOffset;
-          const diff = currentX - center;
-          const clamped = Math.max(
-            -trackItemOffset,
-            Math.min(trackItemOffset, diff)
-          );
-          const rotateY = (clamped / trackItemOffset) * -90;
+          const isActive = index === currentIndex;
+          const isLeft = index < currentIndex;
+          const isRight = index > currentIndex;
 
           return (
             <motion.div
@@ -169,7 +146,11 @@ export default function Carousel({
               className="shrink-0 flex flex-col justify-between bg-[#1a1a2e]/60 backdrop-blur-md rounded-2xl shadow-[0_0_16px_#a855f780] border border-[#a855f73d] cursor-grab active:cursor-grabbing"
               style={{
                 width: itemWidth,
-                rotateY,
+              }}
+              animate={{
+                rotateY: isActive ? 0 : isLeft ? 90 : -90,
+                opacity: isActive ? 1 : 0.5,
+                scale: isActive ? 1 : 0.95,
               }}
               transition={SPRING_OPTIONS}
             >
