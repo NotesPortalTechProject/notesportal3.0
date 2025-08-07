@@ -1,53 +1,43 @@
 "use client";
-import { useEffect, useState } from "react";
-import MagnetLines from "../components/effects/MagnetLines";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Particles from "../components/effects/particles"; // use correct path if different
 
 export default function Home() {
-  const [grid, setGrid] = useState({
-    rows: 20,
-    columns: 20,
+  const [dimensions, setDimensions] = useState({
     width: "100vw",
     height: "100vh",
   });
 
   useEffect(() => {
-    const calculateGrid = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      const cellWidth = 30;  // adjust for density
-      const cellHeight = 30;
-
-      const columns = Math.floor(width / cellWidth);
-      const rows = Math.floor(height / cellHeight);
-
-      setGrid({
-        columns,
-        rows,
-        width: `${width}px`,
-        height: `${height}px`,
+    const updateSize = () => {
+      setDimensions({
+        width: `${window.innerWidth}px`,
+        height: `${window.innerHeight}px`,
       });
     };
-
-    calculateGrid();
-    window.addEventListener("resize", calculateGrid);
-    return () => window.removeEventListener("resize", calculateGrid);
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
 
   return (
     <div className="w-full h-screen relative overflow-hidden bg-black text-purple-100">
-      {/* Magnetic Background */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center">
-        <MagnetLines
-          rows={grid.rows}
-          columns={grid.columns}
-          containerWidth={grid.width}
-          containerHeight={grid.height}
-          lineColor="#fff"
-          lineWidth="0.4vmin"
-          lineHeight="6vmin"
-          baseAngle={-10}
+      {/* Particle Background */}
+      <div className="absolute inset-0 z-0">
+        <Particles
+          particleCount={600} // Reduced to improve clarity and performance
+          particleSpread={12} // Tighter grouping
+          speed={0.15} // Slower, calming movement
+          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
+          moveParticlesOnHover={true}
+          particleHoverFactor={4} // Slightly stronger response on hover
+          alphaParticles={true}
+          particleBaseSize={320} // Slightly smaller
+          sizeRandomness={0.7} // Less jittery
+          cameraDistance={35} // Slightly farther back for smoother layout
+          disableRotation={false}
+          className="pointer-events-none"
         />
       </div>
 

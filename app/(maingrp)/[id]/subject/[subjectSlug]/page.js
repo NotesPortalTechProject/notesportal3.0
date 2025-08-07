@@ -1,15 +1,22 @@
 import FilesDisplay from "@/components/subject-files/files-display";
 import { Suspense } from "react";
+import Link from "next/link";
 
-export default async function IndividualSubjectPage({params}){
-    const subjectname = await params.subjectSlug;
-    const id = await params.id;
-    return(
-        <>
-        <p>My Subjects - {subjectname}</p>
-        <Suspense fallback={'Fetching files....'}>
-            <FilesDisplay subject={subjectname} id={id} src={`/${id}/subject/${subjectname}`}/>
-        </Suspense>
-        </>
-    );
+export default async function IndividualSubjectPage({ params }) {
+  const subjectname = params.subjectSlug;
+  const id = params.id;
+
+  return (
+    <>
+      <p className="text-lg font-semibold ml-8 mb-4">
+        <Link href={`/${id}/home`} className="text-purple-400 hover:underline">
+          My Subjects
+        </Link>{" "}
+         <span className="text-white">&gt; {subjectname}</span>
+      </p>
+      <Suspense fallback={"Fetching files...."}>
+        <FilesDisplay subject={subjectname} id={id} src={`/${id}/subject/${subjectname}`} />
+      </Suspense>
+    </>
+  );
 }

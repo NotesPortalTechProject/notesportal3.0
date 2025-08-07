@@ -9,7 +9,7 @@ export default function VerticalSidebar({ id }) {
   return (
     <>
       {/* Desktop Sidebar */}
-<div className="hidden lg:flex h-screen w-64 bg-[#1a1a1a] border-r border-purple-500/20 backdrop-blur-md text-white p-4 flex-col justify-between">
+<div className="hidden lg:flex h-screen w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col justify-between">
         <div>
           <nav className="flex flex-col gap-3 mt-6">
             <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
@@ -62,7 +62,7 @@ function BottomNavItem({ icon, label, id, endpoint, isFAB, pathname }) {
     <Link href={`/${id}/${endpoint}`}>
       <div
         className={`
-          relative flex flex-col items-center justify-center transition-all duration-150
+          relative flex  flex-col items-center justify-center transition-all duration-150
           ${
             isFAB
               ? `p-3 rounded-full -mt-8 z-10 ${

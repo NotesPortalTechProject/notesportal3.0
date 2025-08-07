@@ -2,8 +2,8 @@
 import { signup } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { motion } from "framer-motion";
 import { FaUser, FaLock, FaEnvelope, FaKey, FaListOl } from "react-icons/fa";
+import Particles from "@/components/effects/particles"; // ⬅️ Your existing component
 
 export default function SignupPage() {
   const [noOfSubjects, setNoOfSubjects] = useState(0);
@@ -15,11 +15,23 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="bg-black max-h-screen w-full flex flex-col items-center justify-start px-4 overflow-y-auto scrollbar-hide">
-      <div className="absolute inset-0 animate-pulse opacity-5 text-6xl pointer-events-none select-none">
-        <div className="absolute top-[10%] left-[15%]">📄</div>
-        <div className="absolute top-[40%] right-[20%]">📝</div>
-        <div className="absolute bottom-[20%] left-[30%]">📚</div>
+    <div className="relative bg-black max-h-full w-full flex flex-col items-center justify-start px-4 overflow-y-auto scrollbar-hide">
+      {/* ⬇️ Particle Background */}
+      <div className="absolute inset-0 z-0">
+        <Particles
+          particleCount={600} // Reduced to improve clarity and performance
+          particleSpread={12} // Tighter grouping
+          speed={0.15} // Slower, calming movement
+          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
+          moveParticlesOnHover={true}
+          particleHoverFactor={4} // Slightly stronger response on hover
+          alphaParticles={true}
+          particleBaseSize={320} // Slightly smaller
+          sizeRandomness={0.7} // Less jittery
+          cameraDistance={35} // Slightly farther back for smoother layout
+          disableRotation={false}
+          className="pointer-events-none"
+        />
       </div>
 
       <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-bold text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
@@ -30,10 +42,7 @@ export default function SignupPage() {
         <div className="w-full max-w-lg animate-fade-in-up bg-black/50 backdrop-blur-md border border-purple-700 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col items-center justify-start overflow-y-auto max-h-[80vh] scrollbar-hide">
           <form className="flex flex-col gap-6 w-full" action={formAction}>
             <div>
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="name" className="block mb-2 text-sm text-purple-300 font-medium">
                 Firstname
               </label>
               <div className="relative">
@@ -51,10 +60,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="name" className="block mb-2 text-sm text-purple-300 font-medium">
                 Lastname
               </label>
               <div className="relative">
@@ -72,10 +78,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="username"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="username" className="block mb-2 text-sm text-purple-300 font-medium">
                 Username
               </label>
               <div className="relative">
@@ -93,10 +96,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="email" className="block mb-2 text-sm text-purple-300 font-medium">
                 Email
               </label>
               <div className="relative">
@@ -114,10 +114,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="password" className="block mb-2 text-sm text-purple-300 font-medium">
                 Password
               </label>
               <div className="relative">
@@ -135,10 +132,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="confirm_password"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="confirm_password" className="block mb-2 text-sm text-purple-300 font-medium">
                 Confirm Password
               </label>
               <div className="relative">
@@ -156,10 +150,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="no_of_subjects"
-                className="block mb-2 text-sm text-purple-300 font-medium"
-              >
+              <label htmlFor="no_of_subjects" className="block mb-2 text-sm text-purple-300 font-medium">
                 Number of Subjects
               </label>
               <div className="relative">
@@ -177,6 +168,7 @@ export default function SignupPage() {
                 />
               </div>
             </div>
+
             {Array.from({ length: noOfSubjects }, (_, index) => (
               <div key={index}>
                 <label
@@ -217,7 +209,7 @@ export default function SignupPage() {
             </Link>
             <Link
               href="/4eae3ce9-a2ff-45c1-8a13-3f5bc9eddfb3/home"
-              className="text-blue-400 hover:underline"
+              className="text-blue-400 hover:underline ml-2"
             >
               Test route
             </Link>

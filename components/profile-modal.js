@@ -87,7 +87,7 @@ export default function ProfileDropdown({ id }) {
             {userdata ? (
               <div className="flex flex-col gap-4">
                 <div className="text-sm bg-white/5 border border-purple-500/10 p-3 rounded-xl shadow-sm">
-                  <p className="text-purple-300 mb-1">Hello, @{userdata.username}</p>
+                  <p className="text-purple-300 mb-1">Hello, {userdata.username}</p>
                   <p>{userdata.firstname} {userdata.lastname}</p>
                   <p className="text-white/70 text-sm">{userdata.email}</p>
                 </div>
