@@ -28,8 +28,8 @@ export default function LoginPage() {
         />
       </div>
       {/* Heading */}
-      <h1 className="z-20 text-3xl animate-fade-in-down sm:text-5xl font-bold text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
-        Welcome to NotesPortal
+      <h1 className="z-20 text-3xl animate-fade-in-down sm:text-5xl font-meidum text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
+        welcome to notesportal
       </h1>
 
       {/* Main Container */}

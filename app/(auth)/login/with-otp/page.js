@@ -60,8 +60,8 @@ export default function LoginWithOtpPage() {
 
       {/* ✅ content stays above particles */}
       <div className="relative z-10 w-full flex flex-col items-center justify-center">
-        <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-bold text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
-          Welcome to NotesPortal
+        <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
+          welcome to notesportal
         </h1>
 
         <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6">

@@ -95,7 +95,10 @@ export async function ResetPassword(prevState, formData) {
         errors.push('Passwords dont match try again');
     }
     if (password.length < 5) {
-        errors, push('Password length too small')
+        errors.push('Password length too small')
+    }
+        if (errors.length > 0) {
+        return { errors };
     }
     const currPass = await getCurrentPasswordById(userId)
     const arePasswordSame = verifyPassword(currPass, password)

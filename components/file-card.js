@@ -1,6 +1,7 @@
 import { IsFileinFav } from "@/actions/other-actions";
 import FavFormBtn from "./fav-from-btn";
-export default async function FileCard({ file, index, userid, src }) {
+import FileViewModal from "./subject-files/file-view-modal";
+export default async function FileCard({ file, index, userid, src}) {
     const isFav = await IsFileinFav(file.id,userid)
     return (
         <>
@@ -33,8 +34,8 @@ export default async function FileCard({ file, index, userid, src }) {
                         <div className="w-4 h-4 rounded-full bg-white/30" />
                         <span className="text-sm text-white/80">{file.uploaded_by}</span>
                     </div>
-                    <div className="text-purple-300 text-sm font-medium px-2 py-1 bg-white/5 rounded-md border border-purple-500/20">
-                        Open
+                    <div>
+                        <FileViewModal data={file}/>
                     </div>
                 </div>
             </div>

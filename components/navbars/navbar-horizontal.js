@@ -8,7 +8,7 @@ export default function HorizontalNavbar({ id }) {
       
       {/* Top Row: Logo and Profile (mobile-specific spacing) */}
       <div className="w-full flex items-center justify-between sm:justify-start sm:gap-16">
-        <div className="text-xl font-bold text-[#efefef]">notesportal</div>
+        <div className="text-2xl font-bold text-[#efefef]">notesportal</div>
         <div className="sm:hidden">
           <ProfileModal id={id} />
         </div>

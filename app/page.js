@@ -49,7 +49,7 @@ export default function Home() {
         <div className="relative bg-black/50 backdrop-blur-md border border-purple-400/10 shadow-[0_0_10px_rgba(139,92,246,0.2)] rounded-2xl p-6 md:p-8 text-center max-w-full before:absolute before:inset-0 before:rounded-2xl before:border before:border-purple-500/10 before:bg-gradient-to-tr before:from-purple-900/20 before:to-purple-600/10 before:blur-sm before:opacity-30 before:pointer-events-none">
           <div className="relative">
             <div className="absolute -inset-12 bg-purple-500/10 blur-2xl rounded-full pointer-events-none" />
-            <p className="relative text-5xl md:text-9xl font-semibold md:font-bold text-purple-200 tracking-tight drop-shadow-[0_0_4px_#8b5cf6]">
+            <p className="relative text-5xl md:text-9xl font-semibold md:font-bold text-purple-200 tracking-tight  text-white">
               notesportal
             </p>
           </div>
