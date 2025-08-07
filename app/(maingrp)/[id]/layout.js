@@ -8,7 +8,7 @@ export default function MainLayout({ children, params }) {
             <HorizontalNavbar id={userid}/>
             <div className="flex flex-1 overflow-hidden">
                 <VerticalNavbar id={userid}/>
-                <main className="flex-1 overflow-y-auto p-6 bg-[#0d0b14] scrollbar-thin scrollbar-thumb-purple-700/50 scrollbar-track-transparent">
+                <main className="flex-1 overflow-y-auto p-6 bg-[#1a1a1a] scrollbar-thin scrollbar-thumb-purple-700/50 scrollbar-track-transparent">
                     {children}
                 </main>
             </div>

@@ -10,7 +10,6 @@ const SPRING_OPTIONS = { type: "spring", stiffness: 300, damping: 30 };
 
 export default function Carousel({
   items = [],
-  baseWidth = 300,
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
@@ -18,10 +17,7 @@ export default function Carousel({
   round = false,
   onRemove,
 }) {
-  const containerPadding = 16;
-  const itemWidth = baseWidth - containerPadding * 2;
-  const trackItemOffset = itemWidth + GAP;
-
+  const trackItemOffset = 100 + GAP; // dummy value, won't be used since width is now 100%
   const x = useMotionValue(0);
   const containerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -30,7 +26,7 @@ export default function Carousel({
 
   const handleResize = () => {
     if (containerRef.current) {
-      x.set(-trackItemOffset * currentIndex);
+      x.set(-containerRef.current.offsetWidth * currentIndex);
     }
   };
 
@@ -112,7 +108,7 @@ export default function Carousel({
 
   const dragProps = {
     dragConstraints: {
-      left: -trackItemOffset * (items.length - 1),
+      left: -containerRef.current?.offsetWidth * (items.length - 1),
       right: 0,
     },
   };
@@ -120,19 +116,17 @@ export default function Carousel({
   return (
     <div
       ref={containerRef}
-      className="relative overflow-hidden p-2 w-full max-w-[360px] mx-auto"
+      className="relative overflow-hidden w-full p-2"
     >
       <motion.div
-        className="flex"
+        className="flex w-full gap-4"
         drag="x"
         {...dragProps}
         style={{
-          width: itemWidth,
-          gap: `${GAP}px`,
           x,
         }}
         onDragEnd={handleDragEnd}
-        animate={{ x: -(currentIndex * trackItemOffset) }}
+        animate={{ x: -(currentIndex * (containerRef.current?.offsetWidth || 0)) }}
         transition={SPRING_OPTIONS}
       >
         {items.map((item, index) => {
@@ -143,9 +137,9 @@ export default function Carousel({
           return (
             <motion.div
               key={index}
-              className="shrink-0 flex flex-col justify-between bg-[#1a1a2e]/60 backdrop-blur-md rounded-2xl shadow-[0_0_16px_#a855f780] border border-[#a855f73d] cursor-grab active:cursor-grabbing"
+              className="shrink-0 flex flex-col justify-between bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 backdrop-blur-md rounded-2xl border border-white/10 cursor-grab active:cursor-grabbing"
               style={{
-                width: itemWidth,
+                width: "100%",
               }}
               animate={{
                 rotateY: isActive ? 0 : isLeft ? 90 : -90,

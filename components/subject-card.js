@@ -2,52 +2,58 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, MoreHorizontal } from "lucide-react";
+import SpotlightCard from "./effects/spotlightcard"; // adjust path if needed
 
 export default function SubjectCard({ subject, onRemove, id }) {
   const [showOptions, setShowOptions] = useState(false);
   const router = useRouter();
 
   return (
-    <div
-      onClick={() => router.push(`/${id}/subject/${subject}`)}
-      className="relative w-full h-40 sm:h-48 max-w-[10rem] sm:max-w-sm flex flex-col justify-center items-center text-white font-medium text-base sm:text-lg rounded-2xl overflow-hidden 
-      bg-[url('/bg_3.jpg')] bg-cover bg-center bg-blend-overlay 
-      bg-gradient-to-b from-[#1a122d]/60 to-[#1a0a2d]/80 
-      backdrop-blur-lg border border-purple-500/10 
-      shadow-[0_0_10px_#a855f722] hover:shadow-[0_0_15px_#c084fcaa] 
-      transition-all duration-300 ease-in-out hover:scale-[1.015] will-change-transform"
+    <SpotlightCard
+      spotlightColor="rgba(168, 85, 247, 0.15)"
+      className="w-full h-36 sm:h-40 max-w-[13rem] sm:max-w-[15rem] cursor-pointer"
     >
-      {/* Dropdown Trigger (top right) */}
       <div
-        className="absolute top-2 right-2 z-50"
-        onClick={(e) => e.stopPropagation()}
+        onClick={() => router.push(`/${id}/subject/${subject}`)}
+        className="relative w-full h-full px-4 py-4 flex flex-col justify-center items-center rounded-3xl overflow-hidden group"
       >
-        <button
-          className="text-white/70 hover:text-white p-1 rounded-full bg-[#1a0a2d]/60 hover:bg-[#2a1a3d]/70 transition"
-          onClick={() => setShowOptions(!showOptions)}
+        {/* Dropdown */}
+        <div
+          className="absolute top-2 right-2 z-20"
+          onClick={(e) => e.stopPropagation()}
         >
-          <MoreHorizontal size={18} />
-        </button>
+          <button
+            className="text-white/60 hover:text-white p-1 rounded-full bg-white/5 hover:bg-white/10 transition"
+            onClick={() => setShowOptions(!showOptions)}
+          >
+            <MoreHorizontal size={18} />
+          </button>
 
-        {showOptions && (
-          <div className="absolute top-9 right-0 min-w-[7rem] sm:min-w-[8rem] md:min-w-[9rem] bg-[#1a0a2d]/90 backdrop-blur-md border border-purple-500/20 rounded-xl shadow-lg z-50 p-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowOptions(false);
-                onRemove?.(subject);
-              }}
-              className="flex items-center gap-2 w-full px-3 py-1.5 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 text-left rounded-xl transition-all duration-200 ease-in-out"
+          {showOptions && (
+            <div className="absolute top-9 right-0 min-w-[7rem] sm:min-w-[8rem] md:min-w-[9rem] 
+              bg-[#1a0a2d]/90 border border-purple-500/20 backdrop-blur-md rounded-xl z-30 p-1 
+              shadow-[0_0_6px_rgba(168,85,247,0.05)]"
             >
-              <Trash2 size={16} />
-              <span className="truncate">Remove</span>
-            </button>
-          </div>
-        )}
-      </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowOptions(false);
+                  onRemove?.(subject);
+                }}
+                className="flex items-center gap-2 w-full px-3 py-1.5 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 text-left rounded-lg transition-all"
+              >
+                <Trash2 size={16} />
+                <span className="truncate">Remove</span>
+              </button>
+            </div>
+          )}
+        </div>
 
-      {/* Subject Text */}
-      <p className="z-10">{subject}</p>
-    </div>
+        {/* Subject Name */}
+        <p className="z-10 text-white-300 text-base sm:text-lg font-medium text-center tracking-tight leading-snug">
+          {subject}
+        </p>
+      </div>
+    </SpotlightCard>
   );
 }

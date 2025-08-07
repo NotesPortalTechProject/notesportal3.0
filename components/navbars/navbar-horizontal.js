@@ -3,10 +3,10 @@ import { FiCompass, FiSearch, FiUpload, FiUser } from "react-icons/fi";
 import ProfileModal from "../profile-modal";
 export default function HorizontalNavbar({ id }) {
   return (
-    <div className="w-full px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0d0b14] text-white border-b border-purple-500/30 shadow-md">
+    <div className="w-full px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1a1a1a] border-b border-purple-500/20 text-white">
 
       {/* Logo */}
-      <div className="text-xl font-bold text-purple-300">NotesPortal</div>
+      <div className="text-xl font-bold text-[#efefef]">notesportal</div>
 
       {/* Search Bar */}
       {/* <div className="w-full sm:flex-1 relative">
