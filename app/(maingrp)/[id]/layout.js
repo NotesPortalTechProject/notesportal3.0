@@ -1,8 +1,8 @@
 import HorizontalNavbar from "@/components/navbars/navbar-horizontal";
 import VerticalNavbar from "@/components/navbars/navbar-vertical";
 
-export default function MainLayout({ children, params }) {
-  const userid = params.id
+export default async function MainLayout({ children, params }) {
+  const userid = await params.id;
     return (
         <div className="flex flex-col h-screen bg-[#0d0b14] text-white">
             <HorizontalNavbar id={userid}/>

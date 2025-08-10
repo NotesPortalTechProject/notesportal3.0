@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/actions/auth-actions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiHome, FiUpload, FiUser, FiStar } from "react-icons/fi";
@@ -16,6 +17,11 @@ export default function VerticalSidebar({ id }) {
             <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
             <NavItem icon={<FiUpload />} label="Upload" id={id} endpoint="upload" pathname={pathname} />
             <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
+            <div>
+              <form action={logout}>
+                <button type="submit">logout</button>
+              </form>
+            </div>
           </nav>
         </div>
       </div>

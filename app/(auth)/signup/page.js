@@ -193,7 +193,7 @@ export default function SignupPage() {
               Signup
             </button>
 
-            {formState.errors && (
+            {formState?.errors?.length > 0 && (
               <ul className="text-sm text-red-400 mt-2 space-y-1">
                 {formState.errors.map((error, index) => (
                   <li key={index}>• {error}</li>

@@ -1,6 +1,7 @@
-'use server'
-import { getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId} from "@/lib/data-fetch-functions";
+'use server';
+import { checkAccountExistsUsername, getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
+import { createSession, deleteSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
 
@@ -16,157 +17,105 @@ export async function signup(prevState, formData) {
 
     let errors = [];
 
-    // VALIDATION
-    console.log('VALIDATION')
-    if (!firstname || firstname.length == 0 || firstname.length < 3) {
-        errors.push('First name not defined or too small');
-    }
+    if (!firstname || firstname.length < 3) errors.push('First name too short');
+    if (!lastname || lastname.length < 3) errors.push('Last name too short');
+    if (/\d/.test(firstname)) errors.push('First name cannot contain numbers');
+    if (/\d/.test(lastname)) errors.push('Last name cannot contain numbers');
+    if (!username || username.length < 3) errors.push('Username too short');
+    if (!emailid || !emailid.includes('@')) errors.push('Invalid email');
+    if (!password || password.trim().length < 8) errors.push('Password too short');
+    if (password !== confirmpassword) errors.push('Passwords don’t match');
+    if (!nsubjects || nsubjects == 0) errors.push('No subjects provided');
 
-    if (!lastname || lastname.length == 0 || lastname.length < 3) {
-        errors.push('Last name not defined or too small')
-    }
+    const { data: usernameCheck } = await supabase.from('users').select('*').eq('username', username);
+    if (usernameCheck?.length > 0) errors.push('Username already exists');
 
-    if (/\d/.test(firstname)) {
-        errors.push('firstname cannot contain a numerical value')
-    }
-
-    if (/\d/.test(lastname)) {
-        errors.push('lastname cannnot contain numerical values')
-    }
-
-    if (!username || username.length == 0 || username.length < 3) {
-        errors.push('Username not defined or too small');
-    }
-
-    if (!emailid || emailid.length == 0 || !emailid.includes('@')) {
-        errors.push('Email id not defined or invalid');
-    }
-
-    if (!password || password.trim().length < 8) {
-        errors.push('Password not defined or too small');
-    }
-
-    if (password != confirmpassword) {
-        errors.push('Passwords dont match');
-    }
-
-    if (!nsubjects || nsubjects == 0) {
-        errors.push('No of Subjects Error');
-    }
-
-    const { data:usernameCheck, error:usernameError } = await supabase.from('users').select('*').eq('username', username);
-    if (usernameCheck && usernameCheck.length>0) {
-        errors.push('Username already in use try something different')
-    }
-
-    const { data:emailIdCheck,error:emailidError } = await supabase.from('users').select('*').eq('email', emailid);
-    if (emailIdCheck && emailIdCheck.length>0) {
-        errors.push('Email Id already exists')
-    }
+    const { data: emailCheck } = await supabase.from('users').select('*').eq('email', emailid);
+    if (emailCheck?.length > 0) errors.push('Email already exists');
 
     let subjectslist = [];
     for (let i = 0; i < nsubjects; i++) {
-        let subjectcode = formData.get(`subject${i}`)
-        if (!subjectcode || subjectcode.length == 0 || subjectcode.length > 5) {
-            errors.push('Subject code undefined or greater than 3 (length)')
-            break
+        let subjectcode = formData.get(`subject${i}`);
+        if (!subjectcode || subjectcode.length > 5) {
+            errors.push('Invalid subject code');
+            break;
         }
-        if (/\d/.test(subjectcode)) {
-            errors.push('Subject code should not contain integer value')
-        }
-        subjectslist.push(formData.get(`subject${i}`))
+        if (/\d/.test(subjectcode)) errors.push('Subject code cannot contain numbers');
+        subjectslist.push(subjectcode);
     }
 
-    if (errors.length > 0) {
-        return { errors };
-    }
+    if (errors.length > 0) return { errors };
 
-    // HASHING PASSWORD
     const hashedPassword = hashUserPassword(password);
 
-    console.log('STARTING INSERT')
-    const { data , error } = await supabase.from('users').insert([
-        {
-            firstname: firstname,
-            lastname: lastname,
-            username: username,
-            email:emailid,
-            subjects:subjectslist,
-            password:hashedPassword
+    const { error } = await supabase.from('users').insert([{
+        firstname,
+        lastname,
+        username,
+        email: emailid,
+        subjects: subjectslist,
+        password: hashedPassword
+    }]);
+    if (error) throw new Error('Unexpected error: ' + error);
 
-        }
-    ])
-    if(error){
-        throw new error('An unexpected error occured'+error);
-    }
-    const userid = await getUserId(username)
+    const userid = await getUserId(username);
 
+    await createSession(userid);
     redirect(`/${userid}/home`)
 }
 
 // LOGIN FUNCTION password
 export async function login_with_password(prevState, formData) {
-    const username = formData.get('username')
-    const password = formData.get('password')
+    const username = formData.get('username');
+    const password = formData.get('password');
     let errors = [];
-    if (!username || username.length == 0) {
-        errors.push('username not defined');
-    }
-    if (!password || password.length == 0) {
-        errors.push('password not defined');
-    }
-    const userdata = await getUserDataByUsername(username)
-    if(!userdata){
-        errors.push('Invalid username, user not found')
-    }
-    if (errors.length > 0) {
-        return { errors };
-    }
-    const isValidPassword = verifyPassword(userdata.password,password)
-    if(!isValidPassword){
-        errors.push('incorrect credentials');
-    }
 
-    if(errors.length>0){
-        return {errors};
-    }
+    if (!username) errors.push('Username required');
+    if (!password) errors.push('Password required');
 
+
+    const checkifUserExistsByUsername = await checkAccountExistsUsername(username);
+    if (!checkifUserExistsByUsername) {
+        errors.push('No account associated with this username')
+    }
+    if (errors.length > 0) return { errors };
+    const userdata = await getUserDataByUsername(username);
+
+    const isValidPassword = verifyPassword(userdata.password, password);
+    if (!isValidPassword) errors.push('Incorrect credentials');
+
+    if (errors.length > 0) return { errors };
+
+    await createSession(userdata.id);
     redirect(`/${userdata.id}/home`)
 }
 
 // LOGIN FUNCTION otp
 export async function login_with_otp(prevState, formData) {
-    const emailId = formData.get('email')
-    const otp = formData.get('otp')
+    const emailId = formData.get('email');
+    const otp = formData.get('otp');
     let errors = [];
-    if (!emailId || emailId.length == 0 || !emailId.includes('@')) {
-        errors.push('Email id not defined or invalid')
-    }
-    if (!otp || otp.length == 0) {
-        errors.push('Otp not defined')
-    }
-    const userExists = await getUserDataByEmail(emailId)
-    if(!userExists){
-        errors.push('Invalid Email Id Error')
-    }
 
-    if (errors.length > 0) {
-        return { errors };
-    }
+    if (!emailId || !emailId.includes('@')) errors.push('Invalid email');
+    if (!otp) errors.push('OTP required');
 
-    const storedOtp = await getStoredOtp(emailId)
+    const userExists = await getUserDataByEmail(emailId);
+    if (!userExists) errors.push('Email not found');
 
-    if(otp.trim() !== storedOtp.trim()){
-        errors.push('Invalid Otp, Login attempted failed')
-    }
+    if (errors.length > 0) return { errors };
 
-    if (errors.length > 0) {
-        return { errors };
-    }
+    const storedOtp = await getStoredOtp(emailId);
+    if (otp.trim() !== storedOtp.trim()) errors.push('Invalid OTP');
 
-    if(otp.trim()===storedOtp.trim()){
-        const userdata = await getUserDataByEmail(emailId);
-        await supabase.from("users").update({otp:null}).eq('email',emailId)
-        redirect(`/${userdata.id}/home`)
-    }
+    if (errors.length > 0) return { errors };
+
+    await supabase.from("users").update({ otp: null }).eq('email', emailId);
+
+    await createSession(userExists.id);
+    redirect(`/${userExists.id}/home`)
+}
+
+export async function logout() {
+    await deleteSession();
+    redirect("/");
 }
