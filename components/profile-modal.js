@@ -2,6 +2,7 @@
 import { FiUser } from "react-icons/fi";
 import { useState, useRef, useEffect } from 'react';
 import Link from "next/link";
+import LoadingDots from "./loadingDots";
 
 export default function ProfileDropdown({ id }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +111,7 @@ export default function ProfileDropdown({ id }) {
                 </Link>
               </div>
             ) : (
-              <p className="text-white/70 text-sm">Loading...</p>
+              <LoadingDots text="fetching information"/>
             )}
           </div>
         </>

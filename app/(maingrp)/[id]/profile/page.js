@@ -1,13 +1,13 @@
 import ResetPasswordModal from "@/components/password-managers/reset-password";
 import SetPasswordModal from "@/components/password-managers/set-password";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
-import { getUserData } from "@/lib/data-fetch-functions";
+import { getMyFiles, getUserData } from "@/lib/data-fetch-functions";
 
 export default async function ProfilePage({ params }) {
   const userid = await params.id;
   const userdata = await getUserData(userid);
   const subjectlist = JSON.parse(userdata.subjects);
-
+  const myFilesList = await getMyFiles(userid);
   return (
     <div className="px-6 py-8 space-y-10">
       {/* Header */}
@@ -39,6 +39,13 @@ export default async function ProfilePage({ params }) {
         <div className="flex flex-wrap gap-4">
           {!userdata.password && <SetPasswordModal id={userid} />}
           {userdata.password && <ResetPasswordModal id={userid} />}
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <div className="w-32 h-32 flex flex-col items-center justify-center rounded-full bg-white/10 border border-white/20 text-white text-center space-y-1 shadow-md">
+          <p className="text-sm text-white/80">My Files</p>
+          <p className="text-4xl font-extrabold">{myFilesList.length}</p>
         </div>
       </div>
 

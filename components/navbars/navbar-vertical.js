@@ -2,7 +2,8 @@
 import { logout } from "@/actions/auth-actions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiHome, FiUpload, FiUser, FiStar } from "react-icons/fi";
+import { FiHome, FiUpload, FiUser, FiStar, FiFile } from "react-icons/fi";
+import UploadFileModal from "../upload-file-modal";
 
 export default function VerticalSidebar({ id }) {
   const pathname = usePathname();
@@ -10,12 +11,20 @@ export default function VerticalSidebar({ id }) {
   return (
     <>
       {/* Desktop Sidebar */}
-<div className="hidden lg:flex h-screen w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col justify-between">
+      <div className="hidden lg:flex h-screen w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col justify-between">
         <div>
           <nav className="flex flex-col gap-3 mt-6">
             <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
             <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
-            <NavItem icon={<FiUpload />} label="Upload" id={id} endpoint="upload" pathname={pathname} />
+            <UploadFileModal id={id}>
+              <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent">
+                <div className="text-lg text-purple-400">
+                  <FiUpload />
+                </div>
+                <span className="font-medium tracking-wide">Upload</span>
+              </div>
+            </UploadFileModal>
+            <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
             <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
             <div>
               <form action={logout}>
@@ -30,7 +39,15 @@ export default function VerticalSidebar({ id }) {
       <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-between items-center bg-black/40 backdrop-blur-md border-t border-purple-500/20 text-white px-4 py-2 shadow-[0_0_10px_rgba(168,85,247,0.1)] lg:hidden">
         <BottomNavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
         <BottomNavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
-        <BottomNavItem icon={<FiUpload />} label="Upload" id={id} endpoint="upload" isFAB pathname={pathname} />
+        <UploadFileModal id={id}>
+          <div className="relative flex flex-col items-center justify-center p-3 rounded-full -mt-8 z-10 bg-purple-500 text-white">
+            <div className="text-xl sm:text-2xl text-white">
+              <FiUpload />
+            </div>
+            <span className="hidden sm:block text-xs mt-1">Upload</span>
+          </div>
+        </UploadFileModal>
+        <BottomNavItem icon={<FiFile />} label="Files" id={id} endpoint="myfiles" pathname={pathname} />
         <BottomNavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
       </div>
     </>
@@ -45,10 +62,9 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
       <div
         className={`
           group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2
-          ${
-            active
-              ? "bg-white/5 text-purple-300 border-purple-500"
-              : "hover:bg-white/5 text-white/80 hover:text-white border-transparent"
+          ${active
+            ? "bg-white/5 text-purple-300 border-purple-500"
+            : "hover:bg-white/5 text-white/80 hover:text-white border-transparent"
           }
         `}
       >
@@ -69,18 +85,15 @@ function BottomNavItem({ icon, label, id, endpoint, isFAB, pathname }) {
       <div
         className={`
           relative flex  flex-col items-center justify-center transition-all duration-150
-          ${
-            isFAB
-              ? `p-3 rounded-full -mt-8 z-10 ${
-                  active
-                    ? "bg-purple-500 text-white"
-                    : "bg-purple-600 text-white/80 hover:scale-105"
-                }`
-              : `px-2 py-1 border-t-2 ${
-                  active
-                    ? "text-purple-300 font-semibold border-purple-500"
-                    : "text-white/70 hover:text-white border-transparent"
-                }`
+          ${isFAB
+            ? `p-3 rounded-full -mt-8 z-10 ${active
+              ? "bg-purple-500 text-white"
+              : "bg-purple-600 text-white/80 hover:scale-105"
+            }`
+            : `px-2 py-1 border-t-2 ${active
+              ? "text-purple-300 font-semibold border-purple-500"
+              : "text-white/70 hover:text-white border-transparent"
+            }`
           }
         `}
       >

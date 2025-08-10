@@ -16,7 +16,6 @@ export default function HorizontalNavbar({ id }) {
 
       {/* Desktop/Tablet Row: About Us + Profile */}
       <div className="hidden sm:flex gap-16 items-center">
-        <Link href={`/${id}/aboutus`}>about us</Link>
         <ProfileModal id={id} />
       </div>
     </div>

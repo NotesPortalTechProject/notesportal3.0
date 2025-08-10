@@ -1,4 +1,5 @@
 import FavFilesDisplay from "@/components/fav-files/fav-files-display";
+import LoadingDots from "@/components/loadingDots";
 import { Suspense } from "react";
 
 export default async function FavouritesPage({params}){
@@ -6,7 +7,7 @@ export default async function FavouritesPage({params}){
     return(
         <>
         <p>Favorite Files</p>
-        <Suspense>
+        <Suspense fallback={<LoadingDots text="fetching favorite files"/>}>
             <FavFilesDisplay userid={userid} src={`/${userid}/favorites`}/>
         </Suspense>
         </>

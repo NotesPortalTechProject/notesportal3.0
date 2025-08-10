@@ -143,3 +143,7 @@ export async function RemoveSubject(id, sub_code) {
   await removeUserSubject(id, sub_code);
   revalidatePath(`/${id}/home`);
 }
+
+export async function uploadFile(prevState,formData) {
+    
+}
