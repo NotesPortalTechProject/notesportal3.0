@@ -1,6 +1,7 @@
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const fileUrl = searchParams.get("url");
+  const filename = searchParams.get("name") || "file";
 
   if (!fileUrl) {
     return new Response("Missing file URL", { status: 400 });
@@ -13,14 +14,14 @@ export async function GET(req) {
       return new Response(`Error fetching file: ${res.status}`, { status: res.status });
     }
 
-    // Get original content type or fallback
-    const contentType = res.headers.get("content-type") || "application/pdf";
+    const contentType = res.headers.get("content-type") || "application/octet-stream";
     const buffer = await res.arrayBuffer();
 
     return new Response(buffer, {
       status: 200,
       headers: {
         "Content-Type": contentType,
+        "Content-Disposition": `inline; filename="${filename}"`,
         "Cache-Control": "public, max-age=31536000"
       }
     });
