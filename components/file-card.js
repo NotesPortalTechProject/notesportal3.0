@@ -11,7 +11,7 @@ export default async function FileCard({ file, index, userid, src}) {
                 className="rounded-2xl bg-gradient-to-b from-[#222] to-purple-900/60 p-4 shadow-lg border border-white/10 backdrop-blur-md text-white"
             >
                 <div className="overflow-hidden rounded-xl mb-4">
-                    <FileIframe filelink={file.filelink} />
+                    <FileIframe filelink={file.filelink} filename={file.filename} />
                 </div>
 
                 <div className='w-full flex items-center justify-end'>

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function FileIframe({ filelink }) {
+export default function FileIframe({ filelink, filename }) {
   const [iframeSrc, setIframeSrc] = useState(filelink);
 
   useEffect(() => {
@@ -9,11 +9,11 @@ export default function FileIframe({ filelink }) {
     const isMobile = /android|ipad|iphone|ipod/i.test(ua);
 
     if (isMobile) {
-      setIframeSrc(`/api/file-proxy?url=${encodeURIComponent(filelink)}`);
+      setIframeSrc(`/api/file-proxy?url=${encodeURIComponent(filelink)}&name=${encodeURIComponent(filename)}`);
     } else {
       setIframeSrc(filelink);
     }
-  }, [filelink]);
+  }, [filelink, filename]);
 
   return (
     <iframe

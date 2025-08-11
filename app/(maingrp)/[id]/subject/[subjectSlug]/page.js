@@ -1,6 +1,7 @@
 import FilesDisplay from "@/components/subject-files/files-display";
 import { Suspense } from "react";
 import Link from "next/link";
+import LoadingDots from "@/components/loadingDots";
 
 export default async function IndividualSubjectPage({ params }) {
   const subjectname = params.subjectSlug;
@@ -14,7 +15,7 @@ export default async function IndividualSubjectPage({ params }) {
         </Link>{" "}
          <span className="text-white">&gt; {subjectname}</span>
       </p>
-      <Suspense fallback={"Fetching files...."}>
+      <Suspense fallback={<LoadingDots text="Fetching files"/>}>
         <FilesDisplay subject={subjectname} id={id} src={`/${id}/subject/${subjectname}`} />
       </Suspense>
     </>
