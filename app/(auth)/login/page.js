@@ -3,7 +3,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { login_with_password } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState } from "react";
-import Particles from "@/components/effects/particles"; // Make sure this path is correct
+import Particles from "@/components/effects/particles";
 
 export default function LoginPage() {
   const [formState, formAction] = useActionState(login_with_password, {});
@@ -13,29 +13,30 @@ export default function LoginPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={600} // Reduced to improve clarity and performance
-          particleSpread={12} // Tighter grouping
-          speed={0.15} // Slower, calming movement
-          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
+          particleCount={600}
+          particleSpread={12}
+          speed={0.15}
+          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
           moveParticlesOnHover={true}
-          particleHoverFactor={4} // Slightly stronger response on hover
+          particleHoverFactor={4}
           alphaParticles={true}
-          particleBaseSize={320} // Slightly smaller
-          sizeRandomness={0.7} // Less jittery
-          cameraDistance={35} // Slightly farther back for smoother layout
+          particleBaseSize={320}
+          sizeRandomness={0.7}
+          cameraDistance={35}
           disableRotation={false}
           className="pointer-events-none"
         />
       </div>
+
       {/* Heading */}
-      <h1 className="z-20 text-3xl animate-fade-in-down sm:text-5xl font-meidum text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
+      <h1 className="z-20 text-3xl animate-fade-in-down sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
         welcome to notesportal
       </h1>
 
       {/* Main Container */}
       <div className="z-20 w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6">
         {/* Login Form Card */}
-        <div className="w-full max-w-lg animate-fade-in-up bg-black/50 backdrop-blur-md border border-purple-700 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col items-center justify-center">
+        <div className="w-full max-w-lg animate-fade-in-up bg-black/20 backdrop-blur-md border border-purple-500/30 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.4)] flex flex-col items-center justify-center">
           <p className="text-right text-sm text-purple-500 underline underline-offset-4 mb-6">
             <Link href="/login/with-otp">Login with OTP</Link>
           </p>
@@ -85,7 +86,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
             >
               Submit
             </button>

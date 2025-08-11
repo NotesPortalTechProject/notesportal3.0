@@ -5,11 +5,10 @@ import { motion } from 'framer-motion';
 
 export default function LoadingDots({ text = 'Loading' }) {
   const bounceTransition = {
-    y: {
-      duration: 0.6,
-      repeat: Infinity,
-      ease: 'easeInOut',
-    },
+    repeat: Infinity,
+    repeatType: 'mirror',
+    duration: 0.6,
+    ease: 'easeInOut',
   };
 
   return (
@@ -18,18 +17,18 @@ export default function LoadingDots({ text = 'Loading' }) {
       <div className="flex space-x-2">
         <motion.span
           className="w-2.5 h-2.5 bg-neutral-300 rounded-full opacity-70"
-          transition={bounceTransition}
-          animate={{ y: ['0%', '-50%', '0%'] }}
+          animate={{ y: [0, -6, 0] }}
+          transition={{ ...bounceTransition, delay: 0 }}
         />
         <motion.span
           className="w-2.5 h-2.5 bg-neutral-300 rounded-full opacity-70"
-          transition={{ ...bounceTransition, delay: 0.2 }}
-          animate={{ y: ['0%', '-50%', '0%'] }}
+          animate={{ y: [0, -6, 0] }}
+          transition={{ ...bounceTransition, delay: 0.15 }}
         />
         <motion.span
           className="w-2.5 h-2.5 bg-neutral-300 rounded-full opacity-70"
-          transition={{ ...bounceTransition, delay: 0.4 }}
-          animate={{ y: ['0%', '-50%', '0%'] }}
+          animate={{ y: [0, -6, 0] }}
+          transition={{ ...bounceTransition, delay: 0.3 }}
         />
       </div>
     </div>
