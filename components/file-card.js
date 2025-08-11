@@ -1,6 +1,7 @@
 import { IsFileinFav } from "@/actions/other-actions";
 import FavFormBtn from "./fav-from-btn";
 import FileViewModal from "./subject-files/file-view-modal";
+import FileIframe from "./file-iframe";
 export default async function FileCard({ file, index, userid, src}) {
     const isFav = await IsFileinFav(file.id,userid)
     return (
@@ -10,10 +11,7 @@ export default async function FileCard({ file, index, userid, src}) {
                 className="rounded-2xl bg-gradient-to-b from-[#222] to-purple-900/60 p-4 shadow-lg border border-white/10 backdrop-blur-md text-white"
             >
                 <div className="overflow-hidden rounded-xl mb-4">
-                    <iframe
-                        src={file.filelink}
-                        className="w-full h-48 rounded-lg border border-white/10"
-                    />
+                    <FileIframe filelink={file.filelink} />
                 </div>
 
                 <div className='w-full flex items-center justify-end'>
