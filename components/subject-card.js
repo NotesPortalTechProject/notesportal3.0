@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, MoreHorizontal } from "lucide-react";
-import SpotlightCard from "./effects/spotlightcard"; // adjust path if needed
+import SpotlightCard from "./effects/spotlightcard";
 
 export default function SubjectCard({ subject, onRemove, id }) {
   const [showOptions, setShowOptions] = useState(false);
@@ -17,7 +17,6 @@ export default function SubjectCard({ subject, onRemove, id }) {
         onClick={() => router.push(`/${id}/subject/${subject}`)}
         className="relative w-full h-full px-4 py-4 flex flex-col justify-center items-center rounded-3xl overflow-hidden group"
       >
-        {/* Dropdown */}
         <div
           className="absolute top-2 right-2 z-20"
           onClick={(e) => e.stopPropagation()}
@@ -49,7 +48,6 @@ export default function SubjectCard({ subject, onRemove, id }) {
           )}
         </div>
 
-        {/* Subject Name */}
         <p className="z-10 text-white-300 text-base sm:text-lg font-medium text-center tracking-tight leading-snug">
           {subject}
         </p>

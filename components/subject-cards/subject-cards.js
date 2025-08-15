@@ -34,7 +34,6 @@ export default function SubjectCards({ subjects, id }) {
     });
   };
 
-  // Prepare carousel items no matter what (hooks are above this)
   const carouselItems = subjects.map((subject, index) => ({
     title: subject,
     description: "Click to view or remove subject",
@@ -43,7 +42,6 @@ export default function SubjectCards({ subjects, id }) {
     href: `/${id}/subject/${subject}`,
   }));
 
-  // Now do rendering safely
   if (subjects.length === 0) {
     return (
       <div className="text-center text-white mt-10">
@@ -55,21 +53,19 @@ export default function SubjectCards({ subjects, id }) {
 
   if (isMobile) {
     return (
-      <div className="w-full px-2 pt-4">
-        <div className="flex justify-center">
-          <Carousel
-            key={subjects.length}
-            items={carouselItems}
-            baseWidth={Math.min(window.innerWidth - 32, 340)}
-            autoplay={false}
-            pauseOnHover={true}
-            loop={true}
-            round={false}
-            onRemove={handleRemove}
-          />
-        </div>
-        <div className="mt-4 flex justify-center">
-          <AddSubjectModal id={id} />
+      <div className="w-full px-2 pt-4 flex flex-col">
+        <Carousel
+          key={subjects.length}
+          items={carouselItems}
+          baseWidth={Math.min(window.innerWidth - 32, 340)}
+          autoplay={false}
+          pauseOnHover={true}
+          loop={true}
+          round={false}
+          onRemove={handleRemove}
+        />
+        <div className="mt-6 px-4">
+          <AddSubjectModal id={id} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700" />
         </div>
       </div>
     );
@@ -78,14 +74,9 @@ export default function SubjectCards({ subjects, id }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 sm:p-6">
       {subjects.map((subject, index) => (
-        <SubjectCard
-          key={index}
-          subject={subject}
-          id={id}
-          onRemove={() => handleRemove(subject)}
-        />
+        <SubjectCard key={index} subject={subject} id={id} onRemove={() => handleRemove(subject)} />
       ))}
-      <AddSubjectModal id={id} />
+      <AddSubjectModal id={id} buttonClass="w-full h-36 sm:h-40 text-4xl" />
     </div>
   );
 }
