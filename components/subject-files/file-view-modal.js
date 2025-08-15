@@ -6,38 +6,33 @@ import toast from "react-hot-toast";
 export default function FileViewModal({ data }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
 
     function copyToClipboard(text) {
         if (typeof navigator !== "undefined" && navigator.clipboard) {
-            navigator.clipboard.writeText(text)
-                .then(() => { toast.success('link copied to clipboard'); })
-                .catch(() => { toast.error('failed to copy'); });
+            navigator.clipboard.writeText(text).then(() => { toast.success('link copied to clipboard'); }).catch(() => { toast.error('failed to copy'); });
         }
     }
 
     function downloadFile(filename) {
         const url = `/api/download?url=${encodeURIComponent(data.filelink)}&name=${encodeURIComponent(filename)}`;
-        const link = document.createElement('a');
-        link.href = url;
-        link.click();
+        const link = document.createElement('a'); link.href = url; link.click();
     }
 
-    useEffect(() => {
-        setIsMounted(true);
-        if (typeof navigator !== "undefined") {
-            setIsMobile(/Mobi|Android/i.test(navigator.userAgent));
-        }
-    }, []);
+    useEffect(() => { setIsMounted(true); }, []);
 
     const modalContent = (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
             <div className="w-full max-w-6xl h-[90%] rounded-xl shadow-lg flex flex-col md:flex-row gap-4 overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20">
                 <div className="flex-1 h-full">
-                    {isMobile
-                        ? <div className="flex items-center justify-center h-full text-white/70 px-4 text-center">open in new tab to check exact details</div>
-                        : <embed src={data.filelink} type="application/pdf" className="w-full h-full rounded-lg" />
-                    }
+                    <div className="md:hidden h-full flex items-center justify-center p-6">
+                        <div className="w-full h-full rounded-xl border border-white/15 bg-white/[0.06] flex flex-col items-center justify-center text-center px-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mb-3 opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8zm0 2.8L18.2 9H14zM8 13h8v2H8zm0 4h8v2H8zM8 9h4v2H8z"/></svg>
+                            <p className="text-white/80 font-medium">open in new tab to check exact details</p>
+                        </div>
+                    </div>
+                    <div className="hidden md:block w-full h-full">
+                        <embed src={data.filelink} type="application/pdf" className="w-full h-full rounded-lg" />
+                    </div>
                 </div>
 
                 <div className="w-full md:w-[30%] h-full flex flex-col p-5 rounded-lg text-white">
