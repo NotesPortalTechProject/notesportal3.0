@@ -2,37 +2,48 @@
 import { logout } from "@/actions/auth-actions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiHome, FiUpload, FiUser, FiStar, FiFile } from "react-icons/fi";
+import { FiHome, FiUpload, FiUser, FiStar, FiFile, FiLogOut } from "react-icons/fi";
 import UploadFileModal from "../upload-file-modal";
 
 export default function VerticalSidebar({ id }) {
   const pathname = usePathname();
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex h-screen w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col justify-between">
-        <div>
-          <nav className="flex flex-col gap-3 mt-6">
-            <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
-            <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
-            <UploadFileModal id={id}>
-              <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent">
-                <div className="text-lg text-purple-400">
-                  <FiUpload />
-                </div>
-                <span className="font-medium tracking-wide">Upload</span>
+      <div className="hidden lg:flex h-max-sc w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col">
+        {/* Nav links scroll if too long */}
+        <nav className="flex flex-col gap-3 mt-6 overflow-y-auto flex-1">
+          <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
+          <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
+
+          <UploadFileModal id={id}>
+            <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent">
+              <div className="text-lg text-purple-400">
+                <FiUpload />
               </div>
-            </UploadFileModal>
-            <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
-            <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-            <div>
-              <form action={logout}>
-                <button type="submit">logout</button>
-              </form>
+              <span className="font-medium tracking-wide">Upload</span>
             </div>
-          </nav>
-        </div>
+          </UploadFileModal>
+
+          <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
+          <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
+        </nav>
+
+        {/* Logout at bottom */}
+        <button
+          onClick={handleLogout}
+          className="mb-0 group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent"
+        >
+          <div className="text-lg text-purple-400 group-hover:text-purple-300">
+            <FiLogOut />
+          </div>
+          <span className="font-medium tracking-wide">Logout</span>
+        </button>
       </div>
 
       {/* Mobile Bottom Nav */}
@@ -49,6 +60,7 @@ export default function VerticalSidebar({ id }) {
         </UploadFileModal>
         <BottomNavItem icon={<FiFile />} label="Files" id={id} endpoint="myfiles" pathname={pathname} />
         <BottomNavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
+        <BottomNavItem icon={<FiLogOut />} label="Logout" id={id} endpoint="logout" pathname={pathname} onClick={handleLogout} />
       </div>
     </>
   );
@@ -60,8 +72,7 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
   return (
     <Link href={`/${id}/${endpoint}`}>
       <div
-        className={`
-          group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2
+        className={`group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2
           ${active
             ? "bg-white/5 text-purple-300 border-purple-500"
             : "hover:bg-white/5 text-white/80 hover:text-white border-transparent"
@@ -78,24 +89,26 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
 }
 
 // ========== Mobile Bottom NavItem ==========
-function BottomNavItem({ icon, label, id, endpoint, isFAB, pathname }) {
+function BottomNavItem({ icon, label, id, endpoint, pathname, onClick }) {
   const active = pathname.includes(`/${id}/${endpoint}`);
-  return (
+  return onClick ? (
+    <div
+      onClick={onClick}
+      className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${
+        active ? "text-purple-300 font-semibold border-purple-500" : "text-white/70 hover:text-white border-transparent"
+      } cursor-pointer`}
+    >
+      <div className={`text-xl sm:text-2xl ${active ? "text-purple-300" : "text-purple-400"}`}>
+        {icon}
+      </div>
+      <span className="hidden sm:block text-xs mt-1">{label}</span>
+    </div>
+  ) : (
     <Link href={`/${id}/${endpoint}`}>
       <div
-        className={`
-          relative flex  flex-col items-center justify-center transition-all duration-150
-          ${isFAB
-            ? `p-3 rounded-full -mt-8 z-10 ${active
-              ? "bg-purple-500 text-white"
-              : "bg-purple-600 text-white/80 hover:scale-105"
-            }`
-            : `px-2 py-1 border-t-2 ${active
-              ? "text-purple-300 font-semibold border-purple-500"
-              : "text-white/70 hover:text-white border-transparent"
-            }`
-          }
-        `}
+        className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${
+          active ? "text-purple-300 font-semibold border-purple-500" : "text-white/70 hover:text-white border-transparent"
+        }`}
       >
         <div className={`text-xl sm:text-2xl ${active ? "text-purple-300" : "text-purple-400"}`}>
           {icon}
