@@ -37,16 +37,35 @@ export default function AddSubjectModal({ id, buttonClass }) {
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className={`rounded-2xl shadow-lg flex flex-col items-center justify-center text-purple-700 font-bold hover:scale-[1.03] transition-all ${buttonClass || "w-full h-28 sm:h-32 text-3xl"} border-2 border-purple-700`}
+        className={`
+          w-full h-28 sm:h-32 flex flex-col items-center justify-center 
+          rounded-2xl border-2 border-dashed border-white/30
+          backdrop-blur-md bg-white/5 text-white font-medium shadow-sm
+          transition-all duration-200 hover:bg-white/10 hover:shadow-md hover:scale-[1.03]
+          ${buttonClass || ""}
+        `}
       >
-        <span>+</span>
-        <span className="text-sm font-light">add subject</span>
+        <span className="text-4xl sm:text-5xl font-bold text-white">+</span>
+        <span className="text-sm font-light text-white/80 mt-1">
+          add subject
+        </span>
       </button>
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => { setIsOpen(false); setErrorState(""); }} />
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => {
+                setIsOpen(false);
+                setErrorState("");
+              }}
+            />
             <motion.div
               className="relative z-50 w-[20rem] sm:w-[22rem] p-5 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white"
               initial={{ scale: 0.9, opacity: 0 }}
@@ -55,8 +74,16 @@ export default function AddSubjectModal({ id, buttonClass }) {
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-purple-300">Add Subject</h2>
-                <button onClick={() => { setIsOpen(false); setErrorState(""); }} className="text-xs font-medium bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition">
+                <h2 className="text-base font-semibold text-purple-300">
+                  Add Subject
+                </h2>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setErrorState("");
+                  }}
+                  className="text-xs font-medium bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition"
+                >
                   Close
                 </button>
               </div>
@@ -69,10 +96,17 @@ export default function AddSubjectModal({ id, buttonClass }) {
                   className="bg-white/5 border border-purple-500/10 p-3 text-white placeholder-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm"
                 />
                 <input type="text" name="id" value={id} readOnly hidden />
-                <button type="submit" className="w-full py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40] hover:shadow-[0_0_5px_#c084fcaa] transition-all hover:scale-105">
+                <button
+                  type="submit"
+                  className="w-full py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40] transition-all hover:scale-105"
+                >
                   Add
                 </button>
-                {errorstate && <p className="text-red-500 text-xs text-center">{errorstate}</p>}
+                {errorstate && (
+                  <p className="text-red-500 text-xs text-center">
+                    {errorstate}
+                  </p>
+                )}
               </form>
             </motion.div>
           </motion.div>
