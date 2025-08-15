@@ -1,8 +1,9 @@
 'use client';
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiLogOut } from "react-icons/fi";
 import { useState, useRef, useEffect } from 'react';
 import Link from "next/link";
 import LoadingDots from "./loadingDots";
+import { logout } from "@/actions/auth-actions";
 
 export default function ProfileDropdown({ id }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,11 @@ export default function ProfileDropdown({ id }) {
     const top = rect.bottom + 12;
 
     setPosition({ top, left });
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -72,7 +78,7 @@ export default function ProfileDropdown({ id }) {
             className="absolute z-50 w-[90vw] max-w-[320px] p-5 rounded-2xl
               backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
               border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white
-              overflow-y-auto max-h-[80vh]"
+              overflow-y-auto max-h-[80vh] flex flex-col"
             style={{ top: position.top, left: position.left }}
           >
             <div className="flex items-center justify-between mb-4">
@@ -86,7 +92,7 @@ export default function ProfileDropdown({ id }) {
             </div>
 
             {userdata ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 flex-1">
                 <div className="text-sm bg-white/5 border border-purple-500/10 p-3 rounded-xl shadow-sm">
                   <p className="text-purple-300 mb-1">Hello, {userdata.username}</p>
                   <p>{userdata.firstname} {userdata.lastname}</p>
@@ -109,6 +115,17 @@ export default function ProfileDropdown({ id }) {
                 >
                   Visit Profile Page →
                 </Link>
+
+                {/* Logout button at the bottom */}
+                <button
+                  onClick={handleLogout}
+                  className="lg:hidden m-auto group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent"
+                >
+                  <div className="text-lg text-purple-400 group-hover:text-purple-300">
+                    <FiLogOut />
+                  </div>
+                  <span className="font-medium tracking-wide">Logout</span>
+                </button>
               </div>
             ) : (
               <LoadingDots text="fetching information"/>
