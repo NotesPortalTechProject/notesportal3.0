@@ -1,5 +1,5 @@
 'use server';
-import { checkAccountExistsUsername, getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
+import { checkAccountExistsEmail, checkAccountExistsUsername, getStoredOtp, getUserDataByEmail, getUserDataByUsername, getUserId } from "@/lib/data-fetch-functions";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { createSession, deleteSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
@@ -66,21 +66,32 @@ export async function signup(prevState, formData) {
 
 // LOGIN FUNCTION password
 export async function login_with_password(prevState, formData) {
-    const username = formData.get('username');
+    const userNameorEmail = formData.get('username');
     const password = formData.get('password');
     let errors = [];
 
-    if (!username) errors.push('Username required');
+    if (!userNameorEmail) errors.push('Username required');
     if (!password) errors.push('Password required');
-
-
-    const checkifUserExistsByUsername = await checkAccountExistsUsername(username);
-    if (!checkifUserExistsByUsername) {
-        errors.push('No account associated with this username')
+    let userExists = false;
+    let inpt = '';
+    if (userNameorEmail.includes('@')) {
+        userExists = await checkAccountExistsEmail(userNameorEmail);
+        inpt = 'email'
+    } else {
+        userExists = await checkAccountExistsUsername(userNameorEmail);
+        inpt = 'username'
+    }
+    if (!userExists) {
+        errors.push('No account associated with this username or email');
     }
     if (errors.length > 0) return { errors };
-    const userdata = await getUserDataByUsername(username);
-
+    let userdata;
+    if (inpt === 'username') {
+        userdata = await getUserDataByUsername(userNameorEmail);
+    }
+    else{
+        userdata = await getUserDataByEmail(userNameorEmail)
+    }
     const isValidPassword = verifyPassword(userdata.password, password);
     if (!isValidPassword) errors.push('Incorrect credentials');
 
