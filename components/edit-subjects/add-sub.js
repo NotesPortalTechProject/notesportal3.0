@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { UpdateSubjects } from "@/actions/other-actions";
 import toast from "react-hot-toast";
 
-export default function AddSubjectModal({ id, buttonClass }) {
+export default function AddSubjectModal({ id }) {
   const [isOpen, setIsOpen] = useState(false);
   const [errorstate, setErrorState] = useState("");
 
@@ -34,16 +34,16 @@ export default function AddSubjectModal({ id, buttonClass }) {
 
   return (
     <>
+      {/* Add Subject Button */}
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className={`
-          w-full h-28 sm:h-32 flex flex-col items-center justify-center 
-          rounded-2xl border-2 border-dashed border-white/30
-          backdrop-blur-md bg-white/5 text-white font-medium shadow-sm
-          transition-all duration-200 hover:bg-white/10 hover:shadow-md hover:scale-[1.03]
-          ${buttonClass || ""}
-        `}
+        className="
+        w-full h-24 sm:h-28 md:h-40 md:w-full lg:w-full  flex flex-col items-center justify-center
+        rounded-2xl border-2 border-dashed border-white/30
+        backdrop-blur-md bg-[#1a1a1a]/60 text-white font-medium shadow-sm
+        transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
+      "
       >
         <span className="text-4xl sm:text-5xl font-bold text-white">+</span>
         <span className="text-sm font-light text-white/80 mt-1">
@@ -59,6 +59,7 @@ export default function AddSubjectModal({ id, buttonClass }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            {/* Backdrop */}
             <div
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               onClick={() => {
@@ -66,8 +67,14 @@ export default function AddSubjectModal({ id, buttonClass }) {
                 setErrorState("");
               }}
             />
+
+            {/* Modal */}
             <motion.div
-              className="relative z-50 w-[20rem] sm:w-[22rem] p-5 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white"
+              className="
+                relative z-50 w-[20rem] sm:w-[22rem] p-5 rounded-2xl 
+                backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
+                border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white
+              "
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -93,12 +100,19 @@ export default function AddSubjectModal({ id, buttonClass }) {
                   name="sub_code"
                   type="text"
                   placeholder="Enter subject name"
-                  className="bg-white/5 border border-purple-500/10 p-3 text-white placeholder-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm"
+                  className="
+                    bg-[#1a1a1a]/40 border border-purple-500/10 p-3 text-white
+                    placeholder-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm
+                  "
                 />
                 <input type="text" name="id" value={id} readOnly hidden />
                 <button
                   type="submit"
-                  className="w-full py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40] transition-all hover:scale-105"
+                  className="
+                    w-full py-2 text-sm font-semibold rounded-xl text-white
+                    bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40]
+                    transition-all hover:scale-105
+                  "
                 >
                   Add
                 </button>
