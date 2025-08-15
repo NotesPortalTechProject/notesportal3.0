@@ -1,20 +1,18 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useEffect, useState as useClientState } from "react";
 import toast from "react-hot-toast";
 
 export default function FileViewModal({ data }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isMounted, setIsMounted] = useClientState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     function copyToClipboard(text) {
         if (typeof navigator !== "undefined" && navigator.clipboard) {
             navigator.clipboard.writeText(text)
                 .then(() => { toast.success('link copied to clipboard'); })
                 .catch(() => { toast.error('failed to copy'); });
-        } else {
-            console.error("Clipboard API not supported in this environment.");
         }
     }
 
@@ -25,17 +23,23 @@ export default function FileViewModal({ data }) {
         link.click();
     }
 
-    useEffect(() => { setIsMounted(true); }, []);
+    useEffect(() => {
+        setIsMounted(true);
+        if (typeof navigator !== "undefined") {
+            setIsMobile(/Mobi|Android/i.test(navigator.userAgent));
+        }
+    }, []);
 
     const modalContent = (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
             <div className="w-full max-w-6xl h-[90%] rounded-xl shadow-lg flex flex-col md:flex-row gap-4 overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20">
-                {/* Left: PDF preview */}
                 <div className="flex-1 h-full">
-                    <embed src={data.filelink} type="application/pdf" className="w-full h-full rounded-lg" />
+                    {isMobile
+                        ? <div className="flex items-center justify-center h-full text-white/70 px-4 text-center">open in new tab to check exact details</div>
+                        : <embed src={data.filelink} type="application/pdf" className="w-full h-full rounded-lg" />
+                    }
                 </div>
 
-                {/* Right: Info + Actions */}
                 <div className="w-full md:w-[30%] h-full flex flex-col p-5 rounded-lg text-white">
                     <div className="flex justify-end mb-4">
                         <button onClick={() => setIsOpen(false)} className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-3 py-1 rounded-md transition-all">Close</button>
