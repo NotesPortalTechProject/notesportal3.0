@@ -69,7 +69,7 @@ export default function AddSubjectModal({ id, buttonClass }) {
                   className="bg-white/5 border border-purple-500/10 p-3 text-white placeholder-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm"
                 />
                 <input type="text" name="id" value={id} readOnly hidden />
-                <button type="submit" className="w-full py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40] hover:shadow-[0_0_25px_#c084fcaa] transition-all hover:scale-105">
+                <button type="submit" className="w-full py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40] hover:shadow-[0_0_5px_#c084fcaa] transition-all hover:scale-105">
                   Add
                 </button>
                 {errorstate && <p className="text-red-500 text-xs text-center">{errorstate}</p>}
