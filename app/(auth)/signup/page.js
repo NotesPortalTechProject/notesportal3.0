@@ -19,16 +19,16 @@ export default function SignupPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={950}
-          particleSpread={10}
-          speed={0.12}
-          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
-          moveParticlesOnHover
-          particleHoverFactor={3.5}
-          alphaParticles
-          particleBaseSize={480}
-          sizeRandomness={0.6}
-          cameraDistance={40}
+          particleCount={600} // Reduced to improve clarity and performance
+          particleSpread={12} // Tighter grouping
+          speed={0.15} // Slower, calming movement
+          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
+          moveParticlesOnHover={true}
+          particleHoverFactor={4} // Slightly stronger response on hover
+          alphaParticles={true}
+          particleBaseSize={320} // Slightly smaller
+          sizeRandomness={0.7} // Less jittery
+          cameraDistance={35} // Slightly farther back for smoother layout
           disableRotation={false}
           className="pointer-events-none"
         />
@@ -36,38 +36,13 @@ export default function SignupPage() {
 
       <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6 z-10">
         {/* Title */}
-        <h1 className="z-20 text-3xl sm:text-5xl font-medium text-white sm:mt-8 mt-4 tracking-tight px-6 py-3 text-center border border-white/20 rounded-lg shadow-lg bg-white/10 backdrop-blur-xl relative overflow-hidden">
+        <h1 className="z-20 text-3xl sm:text-5xl font-medium text-white sm:mt-8 mt-4 tracking-tight px-6 py-3 text-center relative overflow-hidden rounded-2xl shadow-[0_0_12px_rgba(168,85,247,0.3)] bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20">
           <span className="relative z-10">signup to notesportal</span>
-          {/* Static glare overlay */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%)",
-              }}
-            />
-          </div>
         </h1>
 
-        {/* Glassmorphism Card */}
         <div
-          className="relative w-full max-w-lg bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg p-8 rounded-2xl flex flex-col items-center justify-start overflow-y-auto max-h-[78vh] scrollbar-hide"
-          style={{
-            marginBottom: "1rem", // lifts up from bottom
-            transform: "scale(0.97)", // slightly smaller
-          }}
+          className="relative w-full max-w-lg p-8  flex flex-col items-center justify-start overflow-y-auto max-h-[76vh] scrollbar-hide rounded-2xl shadow-[0_0_12px_rgba(168,85,247,0.3)] bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20"          
         >
-          {/* Static glare overlay */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%)",
-              }}
-            />
-          </div>
 
           {/* Form */}
           <form className="flex flex-col gap-6 w-full relative z-10" action={formAction}>
