@@ -43,30 +43,30 @@ export default function LoginWithOtpPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={600}
-          particleSpread={12}
-          speed={0.15}
+          particleCount={950}
+          particleSpread={10}
+          speed={0.12}
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
-          moveParticlesOnHover={true}
-          particleHoverFactor={4}
-          alphaParticles={true}
-          particleBaseSize={320}
-          sizeRandomness={0.7}
-          cameraDistance={35}
+          moveParticlesOnHover
+          particleHoverFactor={3.5}
+          alphaParticles
+          particleBaseSize={480}
+          sizeRandomness={0.6}
+          cameraDistance={40}
           disableRotation={false}
           className="pointer-events-none"
         />
       </div>
 
       {/* Heading */}
-      <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.5)] bg-gradient-to-tr from-black via-gray-900 to-purple-900">
+      <h1 className="text-3xl animate-fade-in-down sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-4 py-2 text-center border border-purple-600 rounded-lg shadow-sm bg-black/90">
         welcome to notesportal
       </h1>
 
       {/* Main Container */}
       <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6 relative z-10">
         {/* Form Card */}
-        <div className="w-full max-w-lg animate-fade-in-up bg-black/20 backdrop-blur-md border border-purple-500/30 p-8 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.4)] flex flex-col items-center justify-center">
+        <div className="w-full max-w-lg animate-fade-in-up bg-black/80 backdrop-blur-md border border-purple-500/30 p-8 rounded-xl shadow-sm flex flex-col items-center justify-center">
           <p className="text-right text-sm text-purple-500 underline underline-offset-4 mb-6">
             <Link href="/login">Login with Password</Link>
           </p>
@@ -95,7 +95,7 @@ export default function LoginWithOtpPage() {
               </div>
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
               >
                 Send OTP
               </button>
@@ -149,7 +149,7 @@ export default function LoginWithOtpPage() {
 
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
               >
                 Submit
               </button>
