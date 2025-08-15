@@ -144,6 +144,42 @@ export async function RemoveSubject(id, sub_code) {
   revalidatePath(`/${id}/home`);
 }
 
-export async function uploadFile(prevState,formData) {
-    
+export async function uploadFile(prevState, formData) {
+    const subjectcode = formData.get('subjectcode')?.trim();
+    const file = formData.get('file');
+    let filename = formData.get('filename')?.trim();
+    const filedescription = formData.get('description')?.trim();
+
+    let errors = [];
+
+    if (!subjectcode) {
+        errors.push('Subject Code is required');
+    } else if (!/^[A-Za-z]{2,4}$/.test(subjectcode)) {
+        errors.push('Subject Code must contain only letters and be 2-4 characters long');
+    }
+
+    if (!file) {
+        errors.push('Please select a file');
+    } else if (!file.name.toLowerCase().endsWith('.pdf')) {
+        errors.push('Only PDF files are allowed');
+    }
+
+    if (!filename) {
+        errors.push('Filename is required');
+    } else if (!/^[A-Za-z0-9_]+$/.test(filename)) {
+        errors.push('Filename can only contain letters, numbers, and underscores');
+    } else {
+        filename = filename + '.pdf';
+    }
+
+    if (!filedescription) {
+        errors.push('File description is required');
+    } else if (filedescription.length < 30 || filedescription.length > 35) {
+        errors.push('File description must be 30–35 characters long');
+    }
+
+    if (errors.length > 0) {
+        return { success: false, errors };
+    }
+
 }
