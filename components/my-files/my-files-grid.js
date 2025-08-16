@@ -15,39 +15,34 @@ export default function MyFilesGrid({ data, userid, src }) {
   }
 
   return (
-    <div className="w-full px-6">
+    <div className="w-full px-4 sm:px-6 flex flex-col flex-1">
       {/* Toggle Buttons */}
-      <div className="flex justify-end mb-4 space-x-2">
+      <div className="flex justify-end mb-4 space-x-2 sm:space-x-4">
         <button
           onClick={() => setViewMode("grid")}
-          className={`p-2 rounded-lg transition-all duration-300 ${
-            viewMode === "grid"
-              ? "bg-purple-700 text-white"
-              : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
-          }`}
+          className={`transition-transform duration-300 transform hover:scale-110
+            p-2 sm:p-3 rounded-lg 
+            ${viewMode === "grid" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
         >
-          <FiGrid size={20} />
+          <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
         <button
           onClick={() => setViewMode("list")}
-          className={`p-2 rounded-lg transition-all duration-300 ${
-            viewMode === "list"
-              ? "bg-purple-700 text-white"
-              : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
-          }`}
+          className={`transition-transform duration-300 transform hover:scale-110
+            p-2 sm:p-3 rounded-lg
+            ${viewMode === "list" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
         >
-          <FiList size={20} />
+          <FiList className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </div>
 
-      {/* Files */}
+      {/* Files Container */}
       <div
-        className={`${
+        className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
           viewMode === "grid"
             ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             : "flex flex-col gap-4"
-        } overflow-auto scrollbar-hide`}
-        style={{ maxHeight: "70vh" }}
+        }`}
       >
         {data.map((file, index) => (
           <FileCardWrapper
