@@ -60,7 +60,6 @@ export default function VerticalSidebar({ id }) {
         </UploadFileModal>
         <BottomNavItem icon={<FiFile />} label="Files" id={id} endpoint="myfiles" pathname={pathname} />
         <BottomNavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-        <BottomNavItem icon={<FiLogOut />} label="Logout" id={id} endpoint="logout" pathname={pathname} onClick={handleLogout} />
       </div>
     </>
   );
