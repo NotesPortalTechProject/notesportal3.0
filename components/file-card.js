@@ -32,7 +32,7 @@ function MobileFileCard({ file, index, userid, src }) {
       <div className="rounded-xl border border-white/15 bg-white/[0.06] p-4 h-20 flex flex-col items-center justify-center text-center">
         <p className="text-white/80 font-medium">Click open to view</p>
       </div>
-      <div className="w-full flex items-center justify-end">
+      <div className="w-full flex items-center justify-end mt-4">
         <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
       </div>
       <h2 className="text-lg font-bold tracking-wide mb-1 truncate w-full">{file.filename}</h2>
@@ -54,7 +54,7 @@ function DesktopFileCard({ file, index, userid, src }) {
   return (
     <div key={index} className="rounded-2xl bg-gradient-to-b from-[#222] to-purple-900/60 p-4 shadow-lg border border-white/10 backdrop-blur-md text-white">
       <div className="overflow-hidden rounded-xl mb-4">
-        <iframe src={file.filelink} title={file.filename} className="w-full h-45 rounded-xl border-0" loading="lazy" />
+        <iframe src={file.filelink} title={file.filename} className="w-full h-40 rounded-xl border-0" loading="lazy" />
       </div>
       <div className="w-full flex items-center justify-end">
         <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
