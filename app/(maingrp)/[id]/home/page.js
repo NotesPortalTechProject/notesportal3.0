@@ -9,13 +9,13 @@ export default async function HomePage({ params }) {
     return (
         <>
             <div >
-                <p>My Subjects</p>
+                <p className="px-6">My Subjects</p>
                 <Suspense fallback={<LoadingDots text="fetching your subjects"/>}>
                     <SubjectCardsDisplay id={userId} />
                 </Suspense>
             </div>
             <div>
-                <p>Recent Files</p>
+                <p className="mt-2 md:mt-0 px-6">Recent Files</p>
                 <Suspense fallback={<LoadingDots text="fetching recent files"/>}>
                   <RecentFilesDisplay id={userId} src={`/${userId}/home`}/>
                 </Suspense>

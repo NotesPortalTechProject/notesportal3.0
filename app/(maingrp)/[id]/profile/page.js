@@ -9,7 +9,7 @@ export default async function ProfilePage({ params }) {
   const subjectlist = JSON.parse(userdata.subjects);
   const myFilesList = await getMyFiles(userid);
   return (
-    <div className="px-6 py-8 space-y-10">
+    <div className="px-6 py-8 space-y-10 ">
       {/* Header */}
       <div className="border-b border-white/20 pb-4">
         <h1 className="text-4xl font-bold tracking-tight text-white">My Profile</h1>
