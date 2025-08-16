@@ -180,7 +180,9 @@ export default function SignupPage() {
                 />
               </div>
             </div>
-
+            <div>
+              <p className="text-sm text-white mt-2 space-y-1">add subject codes as per your timetable</p>
+            </div>
             {/* Subject Inputs */}
             {Array.from({ length: noOfSubjects }, (_, index) => (
               <div key={index}>
