@@ -149,13 +149,13 @@ export default function Home() {
 
               {/* Social Banner */}
               <div className="flex items-center justify-center gap-4 mt-2 bg-purple-900/20 rounded-xl px-4 py-2 w-full">
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
                   <FaLinkedin size={20} />
                 </a>
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
                   <FaGithub size={20} />
                 </a>
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a href={member.insta} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
                   <FaInstagram size={20} />
                 </a>
               </div>
