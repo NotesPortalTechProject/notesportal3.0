@@ -36,7 +36,7 @@ export default function SubjectCards({ subjects, id }) {
 
   const carouselItems = subjects.map((subject, index) => ({
     title: subject,
-    description: "Click to view or remove subject",
+    description: "Click to view subject",
     id: index,
     icon: <span className="text-xs text-white font-bold">{subject[0]}</span>,
     href: `/${id}/subject/${subject}`,

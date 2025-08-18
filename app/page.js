@@ -26,10 +26,34 @@ export default function Home() {
   }, []);
 
   const teamMembers = [
-    { name: "Arya Chawan", img: "/avatar/Arya_Chawan.png",linkedin:"https://www.linkedin.com/in/arya-chawan-99b127303/",insta:"https://www.instagram.com/aryachawann/",github:"https://github.com/aryachawan"},
-    { name: "Arhaan Bhiwandkar", img: "/avatar/Arhaan_Bhiwandkar.jpeg",linkedin:"https://www.linkedin.com/in/arhaan-bhiwandkar-583aaa233/",insta:"https://www.instagram.com/arhaanbhiwandkar/",github:"https://github.com/ArhaanB24"},
-    { name: "Bevin Johnson", img: "/avatar/Bevin_Johnson.jpg",linkedin:"https://www.linkedin.com/in/bevinjhsn",insta:"https://www.instagram.com/bevin_one77/",github:"https://github.com/BevinJ"},
-    { name: "Sharvil Gharkar", img: "/avatar/Sharvil_Gharkar.jpg",linkedin:"https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",insta:"https://www.instagram.com/sharvilgharkar_/",github:"https://github.com/Sharvil0769"},
+    {
+      name: "Arya Chawan",
+      img: "/avatar/Arya_Chawan.png",
+      linkedin: "https://www.linkedin.com/in/arya-chawan-99b127303/",
+      insta: "https://www.instagram.com/aryachawann/",
+      github: "https://github.com/aryachawan",
+    },
+    {
+      name: "Arhaan Bhiwandkar",
+      img: "/avatar/Arhaan_Bhiwandkar.jpeg",
+      linkedin: "https://www.linkedin.com/in/arhaan-bhiwandkar-583aaa233/",
+      insta: "https://www.instagram.com/arhaanbhiwandkar/",
+      github: "https://github.com/ArhaanB24",
+    },
+    {
+      name: "Bevin Johnson",
+      img: "/avatar/Bevin_Johnson.jpg",
+      linkedin: "https://www.linkedin.com/in/bevinjhsn",
+      insta: "https://www.instagram.com/bevin_one77/",
+      github: "https://github.com/BevinJ",
+    },
+    {
+      name: "Sharvil Gharkar",
+      img: "/avatar/Sharvil_Gharkar.jpg",
+      linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",
+      insta: "https://www.instagram.com/sharvilgharkar_/",
+      github: "https://github.com/Sharvil0769",
+    },
   ];
 
   const scrollToSection = (ref) => {
@@ -43,7 +67,7 @@ export default function Home() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={600}
+          particleCount={900}
           particleSpread={12}
           speed={0.15}
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
@@ -92,14 +116,14 @@ export default function Home() {
         <div className="mt-6 flex flex-col md:flex-row gap-3 md:gap-6 text-lg">
           <Link
             href="/signup"
-            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:-rotate-1"
+            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:-rotate-1 flex items-center justify-center text-center"
           >
             Sign Up
           </Link>
 
           <Link
             href="/login"
-            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:rotate-1"
+            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:rotate-1 flex items-center justify-center text-center"
           >
             Login
           </Link>
@@ -114,7 +138,14 @@ export default function Home() {
           About Us
         </h2>
         <p className="text-left text-purple-200 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-          NotesPortal is a handy web-based platform 📚 where students can easily share and access study materials ✨. You can upload your notes under specific subject codes 📝 so that everyone can find them quickly 🔍. All uploaded files are available to users, who can view 👀, download ⬇️, or save their favorites ⭐ for easy access later. You can also add or remove subjects 🎯 to keep things personal and organized. Made for students by students 🤝, NotesPortal makes studying and sharing notes simple, fast, and convenient.
+          NotesPortal is a handy web-based platform 📚 where students can easily
+          share and access study materials ✨. You can upload your notes under
+          specific subject codes 📝 so that everyone can find them quickly 🔍.
+          All uploaded files are available to users, who can view 👀, download
+          ⬇️, or save their favorites ⭐ for easy access later. You can also add
+          or remove subjects 🎯 to keep things personal and organized. Made for
+          students by students 🤝, NotesPortal makes studying and sharing notes
+          simple, fast, and convenient.
         </p>
       </div>
 
@@ -149,13 +180,28 @@ export default function Home() {
 
               {/* Social Banner */}
               <div className="flex items-center justify-center gap-4 mt-2 bg-purple-900/20 rounded-xl px-4 py-2 w-full">
-                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-100 hover:text-purple-300"
+                >
                   <FaLinkedin size={20} />
                 </a>
-                <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-100 hover:text-purple-300"
+                >
                   <FaGithub size={20} />
                 </a>
-                <a href={member.insta} target="_blank" rel="noopener noreferrer" className="text-purple-100 hover:text-purple-300">
+                <a
+                  href={member.insta}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-100 hover:text-purple-300"
+                >
                   <FaInstagram size={20} />
                 </a>
               </div>
@@ -163,7 +209,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }
