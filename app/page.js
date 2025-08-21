@@ -26,10 +26,10 @@ export default function Home() {
   }, []);
 
   const teamMembers = [
-    { name: "Arya Chawan", img: "/avatar/Arya_Chawan.png",linkedin:"https://www.linkedin.com/in/arya-chawan-99b127303/",insta:"https://www.instagram.com/aryachawann/",github:"https://github.com/aryachawan"},
-    { name: "Arhaan Bhiwandkar", img: "/avatar/Arhaan_Bhiwandkar.jpeg",linkedin:"https://www.linkedin.com/in/arhaan-bhiwandkar-583aaa233/",insta:"https://www.instagram.com/arhaanbhiwandkar/",github:"https://github.com/ArhaanB24"},
-    { name: "Bevin Johnson", img: "/avatar/Bevin_Johnson.jpg",linkedin:"https://www.linkedin.com/in/bevinjhsn",insta:"https://www.instagram.com/bevin_one77/",github:"https://github.com/BevinJ"},
-    { name: "Sharvil Gharkar", img: "/avatar/Sharvil_Gharkar.jpg",linkedin:"https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",insta:"https://www.instagram.com/sharvilgharkar_/",github:"https://github.com/Sharvil0769"},
+    { name: "Arya Chawan", img: "/avatar/Arya_Chawan.png", linkedin: "https://www.linkedin.com/in/arya-chawan-99b127303/", insta: "https://www.instagram.com/aryachawann/", github: "https://github.com/aryachawan" },
+    { name: "Arhaan Bhiwandkar", img: "/avatar/Arhaan_Bhiwandkar.jpeg", linkedin: "https://www.linkedin.com/in/arhaan-bhiwandkar-583aaa233/", insta: "https://www.instagram.com/arhaanbhiwandkar/", github: "https://github.com/ArhaanB24" },
+    { name: "Bevin Johnson", img: "/avatar/Bevin_Johnson.jpg", linkedin: "https://www.linkedin.com/in/bevinjhsn", insta: "https://www.instagram.com/bevin_one77/", github: "https://github.com/BevinJ" },
+    { name: "Sharvil Gharkar", img: "/avatar/Sharvil_Gharkar.jpg", linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/", insta: "https://www.instagram.com/sharvilgharkar_/", github: "https://github.com/Sharvil0769" },
   ];
 
   const scrollToSection = (ref) => {
@@ -113,8 +113,8 @@ export default function Home() {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 text-center">
           About Us
         </h2>
-        <p className="text-left text-purple-200 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-          NotesPortal is a handy web-based platform 📚 where students can easily share and access study materials ✨. You can upload your notes under specific subject codes 📝 so that everyone can find them quickly 🔍. All uploaded files are available to users, who can view 👀, download ⬇️, or save their favorites ⭐ for easy access later. You can also add or remove subjects 🎯 to keep things personal and organized. Made for students by students 🤝, NotesPortal makes studying and sharing notes simple, fast, and convenient.
+        <p className="text-justify text-purple-200 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed px-4 sm:px-0 py-2 sm:py-0">
+          NotesPortal is a web-based platform where students can easily share and access study materials. You can upload your notes under specific subject codes, making it simple for everyone to find what they need. All uploaded files are available to users, who can view, download, or save them to their favorites for quick access later. You can also add or remove subjects to keep everything personalized and organized. Built by students for students, NotesPortal makes studying and sharing notes simple, fast, and convenient.
         </p>
       </div>
 
