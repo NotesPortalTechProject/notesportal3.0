@@ -36,6 +36,7 @@ export default function UploadFileModal({ children, id }) {
           <button
             onClick={() => setIsOpen(false)}
             className="text-sm sm:text-base font-medium bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg transition"
+            disabled={true}
           >
             Close
           </button>
