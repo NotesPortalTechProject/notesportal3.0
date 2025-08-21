@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const DRAG_BUFFER = 0;
 const VELOCITY_THRESHOLD = 500;
@@ -17,12 +17,13 @@ export default function Carousel({
   round = false,
   onRemove,
 }) {
-  const trackItemOffset = 100 + GAP; // dummy value, won't be used since width is now 100%
+  const trackItemOffset = 100 + GAP;
   const x = useMotionValue(0);
   const containerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimatingWrap, setIsAnimatingWrap] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   const handleResize = () => {
     if (containerRef.current) {
@@ -114,17 +115,12 @@ export default function Carousel({
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="relative overflow-hidden w-full p-2"
-    >
+    <div ref={containerRef} className="relative overflow-hidden w-full p-2">
       <motion.div
         className="flex w-full gap-4"
         drag="x"
         {...dragProps}
-        style={{
-          x,
-        }}
+        style={{ x }}
         onDragEnd={handleDragEnd}
         animate={{ x: -(currentIndex * (containerRef.current?.offsetWidth || 0)) }}
         transition={SPRING_OPTIONS}
@@ -137,10 +133,9 @@ export default function Carousel({
           return (
             <motion.div
               key={index}
-              className="shrink-0 flex flex-col justify-between bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 backdrop-blur-md rounded-2xl border border-white/10 cursor-grab active:cursor-grabbing"
-              style={{
-                width: "100%",
-              }}
+              onClick={() => router.push(item.href || "#")} // ✅ Whole card clickable
+              className="shrink-0 flex flex-col justify-between bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 backdrop-blur-md rounded-2xl border border-white/10 cursor-pointer active:cursor-grabbing"
+              style={{ width: "100%" }}
               animate={{
                 rotateY: isActive ? 0 : isLeft ? 90 : -90,
                 opacity: isActive ? 1 : 0.5,
@@ -154,17 +149,19 @@ export default function Carousel({
                 </div>
               </div>
               <div className="p-4 block">
-                <Link href={item.href || "#"}>
-                  <div className="font-bold text-base text-purple-200 mb-1 truncate">
-                    {item.title}
-                  </div>
-                  <p className="text-xs text-white/70 leading-snug">
-                    {item.description}
-                  </p>
-                </Link>
+                <div className="font-bold text-base text-purple-200 mb-1 truncate">
+                  {item.title}
+                </div>
+                <p className="text-xs text-white/70 leading-snug">
+                  {item.description}
+                </p>
+
                 {onRemove && (
                   <button
-                    onClick={() => onRemove(item.title)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // ✅ prevent navigation when removing
+                      onRemove(item.title);
+                    }}
                     className="mt-3 w-full text-xs text-red-400 border border-red-400/30 rounded-md px-2 py-1 bg-red-500/10"
                   >
                     Remove Subject
@@ -176,6 +173,7 @@ export default function Carousel({
         })}
       </motion.div>
 
+      {/* Dots */}
       <div className="mt-4 flex justify-center gap-2">
         {items.map((_, index) => (
           <motion.div
@@ -183,9 +181,7 @@ export default function Carousel({
             className={`h-2 w-2 rounded-full transition-colors duration-150 ${
               currentIndex === index ? "bg-purple-400" : "bg-purple-800/30"
             }`}
-            animate={{
-              scale: currentIndex === index ? 1.2 : 1,
-            }}
+            animate={{ scale: currentIndex === index ? 1.2 : 1 }}
             onClick={() => setCurrentIndex(index)}
             transition={{ duration: 0.15 }}
           />

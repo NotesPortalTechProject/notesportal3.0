@@ -41,7 +41,8 @@ export async function signup(prevState, formData) {
             break;
         }
         if (/\d/.test(subjectcode)) errors.push('Subject code cannot contain numbers');
-        subjectslist.push(subjectcode);
+
+        subjectslist.push(subjectcode.toUpperCase());
     }
 
     if (errors.length > 0) return { errors };

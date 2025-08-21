@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">📘 NotesPortal</h1>
 
-## Getting Started
+<p align="center">
+  <b>A collaborative note-sharing platform built by students, for students.</b><br/>
+  Access, upload, and share notes with ease — organized by subject codes.  
+</p>
 
-First, run the development server:
+<p align="center">
+  🔗 <a href="https://test.notesportal.tech" target="_blank"><b>Visit NotesPortal</b></a>
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🎨 About NotesPortal  
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+NotesPortal is designed to make **academic resources accessible, organized, and collaborative**.  
+Students can contribute by uploading their notes, and others can view, download, and manage content effortlessly.  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Built with a focus on **simplicity, speed, and usability**, NotesPortal ensures that knowledge flows freely between learners.  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Features  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 📂 **Upload & Share Notes** – Anyone can contribute their notes.  
+- 🔎 **Subject Code Access** – Quick and organized retrieval by subject code.  
+- 📥 **View & Download** – Fast and reliable access to study materials.  
+- ⭐ **Favorites Section** – Save frequently used notes in one place.  
+- 📚 **Manage Subjects** – Add or remove subjects based on your needs.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend:** Next.js  
+- **Backend & Database:** Supabase  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 👥 Founders  
+
+**Arya Chawan · Arhaan Bhiwandkar · Bevin Johnson · Sharvil Gharkar**  
+
+---
+
+## 🎯 Vision  
+
+To empower students with a **centralized hub of academic resources**,  
+fostering collaboration and smarter learning within the student community.  
+
+---
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-NotesPortal-purple?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Supabase-Powered-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Student-Collaboration-6C63FF?style=for-the-badge" />
+</p>
