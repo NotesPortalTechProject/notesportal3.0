@@ -9,7 +9,6 @@ export default function UploadFileModal({ children, id }) {
   const [isMounted, setIsMounted] = useState(false);
   const [formState, formAction] = useActionState(uploadFile, {});
 
-  // Local state to persist input values
   const [subjectcode, setSubjectcode] = useState('');
   const [filename, setFilename] = useState('');
   const [description, setDescription] = useState('');

@@ -50,7 +50,7 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
         }`}
         style={{ maxHeight: "calc(100vh - 250px)" }} // adaptive height for screen
       >
-        {data.map((file, index) => (
+        {data.slice(0,7).map((file, index) => (
           <FileCardWrapper
             key={index}
             file={file}
