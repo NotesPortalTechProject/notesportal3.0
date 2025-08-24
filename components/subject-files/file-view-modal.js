@@ -15,7 +15,9 @@ export default function FileViewModal({ data }) {
 
     function downloadFile(filename) {
         const url = `/api/download?url=${encodeURIComponent(data.filelink)}&name=${encodeURIComponent(filename)}`;
-        const link = document.createElement('a'); link.href = url; link.click();
+        const link = document.createElement('a');
+        link.href = url;
+        link.click();
     }
 
     useEffect(() => { setIsMounted(true); }, []);

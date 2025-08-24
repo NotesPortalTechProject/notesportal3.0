@@ -174,12 +174,15 @@ export async function uploadFile(prevState, formData) {
 
     if (!filedescription) {
         errors.push('File description is required');
-    } else if (filedescription.length < 30 || filedescription.length > 35) {
-        errors.push('File description must be 30–35 characters long');
+    } 
+    else if (filedescription.length < 5) {
+        errors.push('File description must atleast be 5 characters long');
     }
 
     if (errors.length > 0) {
         return { success: false, errors };
     }
+
+    console.log(file)
 
 }
