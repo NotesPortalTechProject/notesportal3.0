@@ -93,7 +93,7 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
       {viewMode === "grid" && (
         <div className="flex flex-col w-full">
           <div className="overflow-hidden rounded-xl mb-4">
-            <iframe src={file.filelink} title={file.filename} className="w-full h-40 rounded-xl border-0" loading="lazy" />
+            <iframe src={file.filelink} title={file.filename} className="w-full h-35 rounded-xl border-0" loading="lazy" />
           </div>
 
           <div className="flex justify-end mb-2">

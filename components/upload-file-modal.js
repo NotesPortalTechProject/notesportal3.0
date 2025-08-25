@@ -106,7 +106,7 @@ export default function UploadFileModal({ children, id }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} type="button" className="contents">
+      <button onClick={() => setIsOpen(true)} type="button" className="contents" disabled={true}>
         {children}
       </button>
       {isMounted && isOpen && createPortal(modalContent, document.body)}
