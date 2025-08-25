@@ -3,6 +3,7 @@
 import { uploadFile } from '@/actions/other-actions';
 import { useState, useEffect, useActionState } from 'react';
 import { createPortal } from 'react-dom';
+import LoadingDots from './loadingDots';
 
 export default function UploadFileModal({ children, id }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,6 @@ export default function UploadFileModal({ children, id }) {
           <button
             onClick={() => setIsOpen(false)}
             className="text-sm sm:text-base font-medium bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg transition"
-            disabled={true}
           >
             Close
           </button>
@@ -104,12 +104,41 @@ export default function UploadFileModal({ children, id }) {
     </>
   );
 
+  const modalContent2 = (
+    <>
+      <div
+        className="fixed inset-0 z-40 backdrop-blur-sm bg-black/50"
+        onClick={() => setIsOpen(false)}
+      />
+      <div
+        className="fixed top-1/2 left-1/2 z-50 w-[92vw] sm:w-[500px] max-w-[95vw] p-8 rounded-3xl
+        backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
+        border border-white/5 shadow-[0_0_40px_rgba(168,85,247,0.1)] text-white
+        -translate-x-1/2 -translate-y-1/2"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-purple-300">Upload File</h2>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-sm sm:text-base font-medium bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg transition"
+          >
+            Close
+          </button>
+        </div>
+        <LoadingDots text='' />
+        <div className='w-full flex flex-col items-center align-left'>
+          <p className='text-lg'>work in progress, coming soon </p>
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <>
-      <button onClick={() => setIsOpen(true)} type="button" className="contents" disabled={true}>
+      <button onClick={() => setIsOpen(true)} type="button" className="contents">
         {children}
       </button>
-      {isMounted && isOpen && createPortal(modalContent, document.body)}
+      {isMounted && isOpen && createPortal(modalContent2, document.body)}
     </>
   );
 }
