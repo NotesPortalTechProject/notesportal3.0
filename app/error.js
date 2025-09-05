@@ -16,7 +16,7 @@ export default function GlobalError({ error, reset }) {
                         rounded-2xl p-8 max-w-lg w-[90%] text-center">
           <h1 className="text-3xl font-bold text-purple-300 mb-4">Something went wrong</h1>
           <p className="text-sm text-white/80 mb-6">
-            {error?.message || "An unexpected error occurred."}
+          An unexpected error occured
           </p>
           <button
             onClick={() => reset()}

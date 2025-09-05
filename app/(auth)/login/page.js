@@ -13,8 +13,8 @@ export default function LoginPage() {
       {/* Background particles */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={600} // Reduced to improve clarity and performance
-          particleSpread={12} // Tighter grouping
+          particleCount={300} // Reduced to improve clarity and performance
+          particleSpread={15} // Tighter grouping
           speed={0.15} // Slower, calming movement
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
           moveParticlesOnHover={true}
