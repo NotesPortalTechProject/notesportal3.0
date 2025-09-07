@@ -32,19 +32,36 @@ export async function POST(req) {
             return NextResponse.json({ error: "Duplicate! file already exists" }, { status: 409 });
         }
 
+        const tempfilename = `${subjectcode}_${filename}`
+        const fileType = file.type
+        let tempfileType;
+
+        if(fileType.includes("pdf")){
+            tempfileType="pdf";
+        }else if(fileType.includes("msword")){
+            tempfileType="doc";
+        }else if(fileType.includes("wordprocessingml.document")){
+            tempfileType="docx";
+        }else if(fileType.includes("ms-powerpoint")){
+            tempfileType="ppt";
+        }else if(fileType.includes("presentationml.presentation")){
+            tempfileType="pptx";
+        }else{
+            tempfileType="other";
+        }
+
         await s3.send(
             new PutObjectCommand({
                 Bucket: process.env.R2_BUCKET,
-                Key: filename,
+                Key: `${tempfilename}.${tempfileType}`,
                 Body: fileBuffer,
                 ContentType: file.type
             })
         );
 
-        const filelink = `${process.env.CLOUDFARE_PUBLIC_URL}/${filename}`;
-        const tempfilename = `${subjectcode}_${filename}`
+        const filelink = `${process.env.CLOUDFARE_PUBLIC_URL}/${tempfilename}.${tempfileType}`;
         const { error: insertError } = await supabase.from("notes").insert([
-            { filename:tempfilename, subjectname: subjectcode, filetype: file.type, filelink, uploaded_by:username, description, hash: fileHash }
+            { filename:tempfilename, subjectname: subjectcode, filetype: tempfileType, filelink, uploaded_by:username, description, hash: fileHash }
         ]);
 
         if (insertError) {

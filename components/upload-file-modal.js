@@ -1,11 +1,10 @@
 'use client';
-
-import { uploadFile } from '@/actions/other-actions';
-import { useState, useEffect, useActionState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import LoadingDots from './loadingDots';
 
-export default function UploadFileModal({ children, id }) {
+
+export default function UploadFileModal({ children, id,subjectlist}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -17,9 +16,10 @@ export default function UploadFileModal({ children, id }) {
   const [errors, setError] = useState([]);
   const [success, setSuccess] = useState();
 
+
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+  });
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -32,7 +32,9 @@ export default function UploadFileModal({ children, id }) {
     if (!filename.trim()) tempErrors.push('Filename is required');
     if (!description.trim()) tempErrors.push('Description is required');
     if (description.length < 10) tempErrors.push('Please write a larger description');
-    if (!file) tempErrors.push('Please select a file')
+    if (!file) tempErrors.push('Please select a file');
+    if (!/^[A-Za-z]+$/.test(subjectcode.trim())) tempErrors.push('Subject code can contain letters only');
+
     const allowedTypes = [
       "application/pdf",
       "application/msword",
@@ -40,7 +42,9 @@ export default function UploadFileModal({ children, id }) {
       "application/vnd.ms-powerpoint",
       "application/vnd.openxmlformats-officedocument.presentationml.presentation"
     ];
-    if (!allowedTypes.includes(file.type)) tempErrors.push('Only PDF, DOC, DOCX, PPT, and PPTX files are allowed');
+    if (file && !allowedTypes.includes(file.type)) {
+      tempErrors.push('Only PDF, DOC, DOCX, PPT, and PPTX files are allowed');
+    }
 
     if (tempErrors.length > 0) {
       setError(tempErrors);
@@ -67,13 +71,11 @@ export default function UploadFileModal({ children, id }) {
       setSubjectcode('');
       setDescription('');
       setFilename('');
-      setFile(null)
       setFile(null);
     } else {
-      setError(["Something went wrong"]);
+      setError(["Something went wrong or resource already exists"]);
     }
   }
-
 
   const modalContent = (
     <>
@@ -82,41 +84,47 @@ export default function UploadFileModal({ children, id }) {
         onClick={() => setIsOpen(false)}
       />
       <div
-        className="fixed top-1/2 left-1/2 z-50 w-[92vw] sm:w-[500px] max-w-[95vw] p-8 rounded-3xl
+        className="fixed top-1/2 left-1/2 z-50 w-[90vw] sm:w-[420px] max-w-[95vw] p-6 rounded-2xl
         backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
-        border border-white/5 shadow-[0_0_40px_rgba(168,85,247,0.1)] text-white
+        border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.1)] text-white
         -translate-x-1/2 -translate-y-1/2"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold text-purple-300">Upload File</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-purple-300">Upload File</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-sm sm:text-base font-medium bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg transition"
+            className="text-xs sm:text-sm font-medium bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition"
           >
             Close
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm sm:text-base">
           <input type="text" name="id" value={id} readOnly hidden />
 
           <input
             type="text"
             name="subjectcode"
+            list="subjects"
             value={subjectcode}
             onChange={(e) => setSubjectcode(e.target.value)}
             placeholder="Enter subject code"
             required
-            className="bg-white/5 border border-purple-500/20 rounded-lg px-4 py-3 text-base sm:text-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="bg-white/5 border border-purple-500/20 rounded-md px-3 py-2 text-sm sm:text-base text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
+          <datalist id="subjects">
+            {subjectlist.map((subj, idx) => (
+              <option key={idx} value={subj} />
+            ))}
+          </datalist>
 
           <input
             type="file"
             name="file"
             required
-            accept=".pdf,.doc,.docx,.ppt,.pptx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            accept=".pdf,.doc,.docx,.ppt,.pptx"
             onChange={(e) => setFile(e.target.files[0])}
-            className="text-white text-base sm:text-lg file:mr-3 file:px-4 file:py-2 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
+            className="text-sm sm:text-base text-white file:mr-2 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
           />
 
           <input
@@ -126,7 +134,7 @@ export default function UploadFileModal({ children, id }) {
             onChange={(e) => setFilename(e.target.value)}
             placeholder="Enter a suitable filename"
             required
-            className="bg-white/5 border border-purple-500/20 rounded-lg px-4 py-3 text-base sm:text-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="bg-white/5 border border-purple-500/20 rounded-md px-3 py-2 text-sm sm:text-base text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <input
@@ -136,24 +144,25 @@ export default function UploadFileModal({ children, id }) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter a suitable description"
             required
-            className="bg-white/5 border border-purple-500/20 rounded-lg px-4 py-3 text-base sm:text-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="bg-white/5 border border-purple-500/20 rounded-md px-3 py-2 text-sm sm:text-base text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <button
             type="submit"
-            className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold text-base sm:text-lg transition"
+            className="bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-md font-semibold text-sm sm:text-base transition"
+            disabled={loading}
           >
-            {loading ? "Uploading..." : "Submit"}
+            {loading ? <LoadingDots text='Uploading' /> : "Submit"}
           </button>
 
           {success && (
-            <div className="bg-green-500/10 border border-green-500/50 rounded-lg p-3 mt-3 text-green-400">
+            <div className="bg-green-500/10 border border-green-500/50 rounded-md p-2 mt-2 text-green-400 text-sm">
               {success}
             </div>
           )}
 
           {errors?.length > 0 && (
-            <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 mt-3 text-red-400">
+            <div className="bg-red-500/10 border border-red-500/50 rounded-md p-2 mt-2 text-red-400 text-sm">
               <ul className="list-disc list-inside space-y-1">
                 {errors?.map((err, idx) => (
                   <li key={idx}>{err}</li>

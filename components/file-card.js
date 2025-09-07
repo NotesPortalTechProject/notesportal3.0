@@ -4,6 +4,49 @@ import { IsFileinFav } from "@/actions/other-actions";
 import FavFormBtn from "./fav-from-btn";
 import FileViewModal from "./subject-files/file-view-modal";
 import { FiFileText } from "react-icons/fi";
+import { FaFilePdf, FaFileWord, FaFilePowerpoint } from "react-icons/fa";
+
+function FilePreview({ file,isMobile }) {
+
+  if (file.filetype === "pdf" && !isMobile) {
+    return (
+      <iframe
+        src={file.filelink}
+        title={file.filename}
+        className="w-full h-36 rounded-xl border-0"
+        loading="lazy"
+      />
+    );
+  }
+
+  let Icon;
+  switch (file.filetype) {
+    case "doc":
+      Icon = FaFileWord;
+      break;
+    case "docx":
+      Icon = FaFileWord;
+      break;
+    case "ppt":
+      Icon = FaFilePowerpoint;
+      break;
+    case "pptx":
+      Icon = FaFilePowerpoint;
+      break;
+    case "pdf":
+      Icon = FaFilePdf;
+      break;
+    default:
+      Icon = FiFileText;
+      break;
+  }
+
+  return (
+    <div className="flex items-center justify-center w-full h-36 rounded-xl border border-white/15 bg-[#1e1e1e]">
+      <Icon className="text-5xl text-purple-400" />
+    </div>
+  );
+}
 
 export default function FileCardWrapper({ file, index, userid, src, viewMode = "grid" }) {
   const [isMobile, setIsMobile] = useState(null);
@@ -31,24 +74,33 @@ function MobileFileCard({ file, userid, src, viewMode, isFav }) {
   return (
     <div
       key={file.id}
-      className={`rounded-2xl p-4 shadow-lg border border-white/10 backdrop-blur-md text-white transition-all duration-300
-        ${viewMode === "grid"
-          ? "bg-gradient-to-b from-[#222] to-purple-900/60"
-          : "bg-gradient-to-r from-[#222] to-purple-900/50 flex flex-row items-center justify-between p-3"
+      className={`rounded-2xl p-4 
+  backdrop-blur-xl 
+  bg-gradient-to-r from-purple-200/20 via-purple-500/15 to-purple-900/20
+  border border-white/10 
+  shadow-[0_0_25px_rgba(0,0,0,0.4),0_0_15px_rgba(168,85,247,0.25)]
+  hover:shadow-[0_0_35px_rgba(0,0,0,0.6),0_0_25px_rgba(168,85,247,0.45)]
+  hover:border-purple-400/40
+  transition-all duration-300
+  text-white
+  ${viewMode === "grid"
+          ? "flex flex-col"
+          : "flex flex-row items-center justify-between p-3"
         }`}
+
     >
       {/* Grid view */}
       {viewMode === "grid" && (
         <div className="flex flex-col w-full">
-          <div className="rounded-xl border border-white/15 p-4 mb-4 flex items-center justify-center">
-            <p className="text-white/80 font-medium truncate w-full text-center">Click open to view</p>
+          <div className="mb-4">
+            <FilePreview file={file} isMobile={true}/>
           </div>
 
           <div className="flex justify-end mb-2">
             <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
           </div>
 
-          <h2 className="text-lg font-bold tracking-wide mb-1 truncate">{file.filename}</h2>
+          <h2 className="text-lg font-medium tracking-wide mb-1 truncate">{file.filename}</h2>
           <p className="text-sm text-gray-300 mb-4 truncate">{file.description}</p>
 
           <div className="flex items-center justify-between">
@@ -83,17 +135,25 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
   return (
     <div
       key={file.id}
-      className={`rounded-2xl p-4 shadow-lg border border-white/10 backdrop-blur-md text-white transition-all duration-300
-        ${viewMode === "grid"
-          ? "bg-gradient-to-b from-[#222] to-purple-900/60"
-          : "bg-gradient-to-r from-[#222] to-purple-900/50 flex flex-row items-center justify-between p-3"
+      className={`rounded-2xl p-4 
+  backdrop-blur-xl 
+  bg-gradient-to-r from-purple-200/20 via-purple-500/15 to-purple-900/20
+  border border-white/10 
+  shadow-[0_0_25px_rgba(0,0,0,0.4),0_0_15px_rgba(168,85,247,0.25)]
+  hover:shadow-[0_0_35px_rgba(0,0,0,0.6),0_0_25px_rgba(168,85,247,0.45)]
+  hover:border-purple-400/40
+  transition-all duration-300
+  text-white
+  ${viewMode === "grid"
+          ? "flex flex-col"
+          : "flex flex-row items-center justify-between p-3"
         }`}
     >
       {/* Grid view */}
       {viewMode === "grid" && (
         <div className="flex flex-col w-full">
-          <div className="overflow-hidden rounded-xl mb-4">
-            <iframe src={file.filelink} title={file.filename} className="w-full h-35 rounded-xl border-0" loading="lazy" />
+          <div className="mb-4">
+            <FilePreview file={file} isMobile={false}/>
           </div>
 
           <div className="flex justify-end mb-2">

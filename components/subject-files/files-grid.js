@@ -17,34 +17,35 @@ export default function FilesGrid({ data, id, src }) {
 
   return (
     <div className="w-full px-4 sm:px-6 flex flex-col flex-1">
-      {/* Toggle Buttons */}
-      <div className="flex justify-end mb-4 space-x-2 sm:space-x-4">
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`transition-transform duration-300 transform hover:scale-110
-            p-2 sm:p-3 rounded-lg 
-            ${viewMode === "grid" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
-        >
-          <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-        <button
-          onClick={() => setViewMode("list")}
-          className={`transition-transform duration-300 transform hover:scale-110
-            p-2 sm:p-3 rounded-lg
-            ${viewMode === "list" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
-        >
-          <FiList className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+        <p className="text-white/80 text-left">{data.length} files available</p>
+        <div className="flex justify-center sm:justify-end space-x-2 sm:space-x-3">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${viewMode === "grid"
+              ? "bg-purple-700 text-white"
+              : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
+              }`}
+          >
+            <FiGrid className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${viewMode === "list"
+              ? "bg-purple-700 text-white"
+              : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
+              }`}
+          >
+            <FiList className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
       </div>
-
-      {/* Files Container */}
       <div
-        className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
-          viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            : "flex flex-col gap-4"
-        }`}
-        style={{ maxHeight: "calc(100vh - 200px)" }} // Adaptive height
+        className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${viewMode === "grid"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          : "flex flex-col gap-4"
+          }`}
+        style={{ maxHeight: "calc(100vh - 200px)" }}
       >
         {data.map((file, index) => (
           <FileCardWrapper

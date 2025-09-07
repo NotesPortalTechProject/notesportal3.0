@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { FiHome, FiUpload, FiUser, FiStar, FiFile, FiLogOut } from "react-icons/fi";
 import UploadFileModal from "../upload-file-modal";
 
-export default function VerticalSidebar({ id }) {
+export default function VerticalSidebar({ id,subjectlist}) {
   const pathname = usePathname();
 
   const handleLogout = () => {
@@ -21,7 +21,7 @@ export default function VerticalSidebar({ id }) {
           <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
           <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
 
-          <UploadFileModal id={id}>
+          <UploadFileModal id={id} subjectlist={subjectlist}>
             <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent">
               <div className="text-lg text-purple-400">
                 <FiUpload />
@@ -50,7 +50,7 @@ export default function VerticalSidebar({ id }) {
       <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-between items-center bg-black/40 backdrop-blur-md border-t border-purple-500/20 text-white px-4 py-2 shadow-[0_0_10px_rgba(168,85,247,0.1)] lg:hidden">
         <BottomNavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
         <BottomNavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
-        <UploadFileModal id={id}>
+        <UploadFileModal id={id} subjectlist={subjectlist}>
           <div className="relative flex flex-col items-center justify-center p-3 rounded-full -mt-8 z-10 bg-purple-500 text-white">
             <div className="text-xl sm:text-2xl text-white">
               <FiUpload />

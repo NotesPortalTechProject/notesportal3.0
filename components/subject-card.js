@@ -14,7 +14,7 @@ export default function SubjectCard({ subject, onRemove, id }) {
       className="w-full h-36 sm:h-40 max-w-[13rem] sm:max-w-[15rem] cursor-pointer"
     >
       <div
-        onClick={() => router.push(`/${id}/subject/${subject}`)}
+        onClick={() => router.push(`/${id}/subject/${subject}/all`)}
         className="relative w-full h-full px-4 py-4 flex flex-col justify-center items-center rounded-3xl overflow-hidden group"
       >
         <div
