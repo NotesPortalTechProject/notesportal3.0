@@ -67,8 +67,15 @@ export default function FileCardWrapper({ file, index, userid, src, viewMode = "
 
 function GlassCard({ children, viewMode }) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl ${viewMode === "grid" ? "p-4" : "p-3"}`}>
-      {/* Purple frosted glass base */}
+    <div
+      className={`relative overflow-hidden rounded-2xl ${
+        viewMode === "grid" ? "p-4" : "p-3"
+      }`}
+    >
+      {/* Gradient background (black to purple) */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a] to-[#5b21b6]" />
+
+      {/* Purple frosted glass overlay */}
       <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]" />
 
       {/* Subtle purple-blue gradient for depth */}
