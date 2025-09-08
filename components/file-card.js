@@ -37,7 +37,7 @@ function FilePreview({ file, isMobile }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
+    <div className="flex items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-600/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
       <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
     </div>
   );
@@ -72,14 +72,14 @@ function GlassCard({ children, viewMode }) {
         viewMode === "grid" ? "p-4" : "p-3"
       }`}
     >
-      {/* Darker black → purple gradient */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#3b0a45]" />
+      {/* Deep Purple Gradient (like screenshot) */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#2a0a3d] via-[#3b0a45] to-[#4c1d95]" />
 
       {/* Purple frosted glass overlay */}
-      <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]" />
+      <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.2)]" />
 
       {/* Subtle darker purple/indigo gradient */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-700/20 via-transparent to-indigo-800/10" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-800/20 via-transparent to-indigo-900/10" />
 
       {/* Reflection light streak fixed at diagonal */}
       <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rotate-12 bg-gradient-to-r from-purple-400/20 via-purple-200/5 to-transparent opacity-30 pointer-events-none" />
