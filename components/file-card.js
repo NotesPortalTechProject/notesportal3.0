@@ -74,21 +74,10 @@ function GlassCard({ children, viewMode }) {
       {/* Subtle purple-blue gradient for depth */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/20 via-transparent to-indigo-500/10" />
 
-      {/* Reflection light streak with purple hue */}
-      <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rotate-12 bg-gradient-to-r from-purple-400/30 via-purple-200/5 to-transparent opacity-40 animate-[shine_6s_linear_infinite] pointer-events-none" />
+      {/* Reflection light streak fixed at diagonal */}
+      <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rotate-12 bg-gradient-to-r from-purple-400/30 via-purple-200/5 to-transparent opacity-40 pointer-events-none" />
 
       <div className="relative z-10">{children}</div>
-
-      <style jsx>{`
-        @keyframes shine {
-          0% {
-            transform: translateX(-100%) rotate(12deg);
-          }
-          100% {
-            transform: translateX(100%) rotate(12deg);
-          }
-        }
-      `}</style>
     </div>
   );
 }
