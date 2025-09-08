@@ -18,8 +18,8 @@ export default async function IndividualSubjectPage({ params }) {
         <span className="text-white">&gt; {subjectname}</span>
       </p>
 
-      {/* Filetype buttons container aligned with file card width */}
-      <div className="max-w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] mx-auto flex items-center gap-3 mt-2 mb-2 px-2 overflow-x-auto scrollbar-hide">
+      {/* Filetype buttons container aligned with file card width, left aligned */}
+      <div className="w-full pr-4 max-w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] flex items-center gap-3 mt-2 mb-2 ml-4 overflow-x-auto scrollbar-hide">
         {filetypesList.map((ft, idx) => (
           <Link
             key={idx}
