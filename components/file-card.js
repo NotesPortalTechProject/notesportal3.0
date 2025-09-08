@@ -72,17 +72,17 @@ function GlassCard({ children, viewMode }) {
         viewMode === "grid" ? "p-4" : "p-3"
       }`}
     >
-      {/* Gradient background (black to purple) */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#1a1a1a] via-[#1a1a1a] to-[#5b21b6]" />
+      {/* Darker black → purple gradient */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#3b0a45]" />
 
       {/* Purple frosted glass overlay */}
       <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]" />
 
-      {/* Subtle purple-blue gradient for depth */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/20 via-transparent to-indigo-500/10" />
+      {/* Subtle darker purple/indigo gradient */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-700/20 via-transparent to-indigo-800/10" />
 
       {/* Reflection light streak fixed at diagonal */}
-      <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rotate-12 bg-gradient-to-r from-purple-400/30 via-purple-200/5 to-transparent opacity-40 pointer-events-none" />
+      <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] rotate-12 bg-gradient-to-r from-purple-400/20 via-purple-200/5 to-transparent opacity-30 pointer-events-none" />
 
       <div className="relative z-10">{children}</div>
     </div>
