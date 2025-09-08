@@ -18,7 +18,7 @@ export default async function IndividualSubjectPage({ params }) {
         <span className="text-white">&gt; {subjectname}</span>
       </p>
 
-      {/* Filetype buttons with gradient + glass reflection */}
+      {/* Filetype buttons with subtle glass effect */}
       <div className="w-full md:w-1/2 flex items-center gap-3 mt-2 mb-2 px-4 overflow-x-auto scrollbar-hide">
         {filetypesList.map((ft, idx) => (
           <Link
@@ -28,17 +28,17 @@ export default async function IndividualSubjectPage({ params }) {
           >
             <div
               className={`relative overflow-hidden rounded-xl px-4 py-2 text-sm md:text-base font-medium transition-all
-                backdrop-blur-lg
+                backdrop-blur-md
                 ${
                   filetype === ft
-                    ? "bg-gradient-to-r from-[#2a0a3d] via-[#4b0e63] to-[#2a0a3d] text-white border border-purple-400/40 shadow-[0_0_20px_rgba(168,85,247,0.4)]"
-                    : "bg-gradient-to-r from-[#1a1a1a]/60 via-[#2a1a3d]/40 to-[#3d1f5e]/40 text-purple-200 border border-purple-500/10 hover:border-purple-400/30 hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
+                    ? "bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70 text-white border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]"
+                    : "bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]"
                 }`}
             >
               <p className="truncate relative z-10">{ft.toUpperCase()}</p>
 
-              {/* diagonal glass reflection effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-40 -translate-x-full hover:translate-x-0 transition-transform duration-500"></div>
+              {/* diagonal glass reflection effect (very subtle) */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-30 -translate-x-full hover:translate-x-0 transition-transform duration-500"></div>
             </div>
           </Link>
         ))}
