@@ -7,14 +7,21 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
   const [viewMode, setViewMode] = useState("grid");
 
   if (!data || data.length === 0) {
-    return <div className="text-center text-white mt-10"><p className="text-lg font-semibold">No recent files found</p></div>;
+    return (
+      <div className="text-center text-white mt-10">
+        <p className="text-lg font-semibold">No recent files found</p>
+      </div>
+    );
   }
 
   return (
     <div className="w-full px-6 flex flex-col flex-1">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-        <p className="text-white/80 text-left">Files uploaded from last {weeks} weeks</p>
-        <div className="flex justify-center sm:justify-end space-x-2 sm:space-x-3">
+      {/* Top bar with text + toggle always on the same line */}
+      <div className="flex flex-row items-center justify-between mb-4 gap-3">
+        <p className="text-white/80 text-left truncate">
+          Files uploaded from last {weeks} weeks
+        </p>
+        <div className="flex justify-end space-x-2 sm:space-x-3">
           <button
             onClick={() => setViewMode("grid")}
             className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${
@@ -23,7 +30,7 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
                 : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
             }`}
           >
-            <FiGrid className="w-4 h-4 sm:w-5 sm:h-5" />
+            <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={() => setViewMode("list")}
@@ -33,10 +40,12 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
                 : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
             }`}
           >
-            <FiList className="w-4 h-4 sm:w-5 sm:h-5" />
+            <FiList className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>
+
+      {/* File cards grid/list */}
       <div
         className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
           viewMode === "grid"

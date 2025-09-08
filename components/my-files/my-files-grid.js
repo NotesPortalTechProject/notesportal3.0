@@ -24,7 +24,7 @@ export default function MyFilesGrid({ data, userid, src }) {
             p-2 sm:p-3 rounded-lg 
             ${viewMode === "grid" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
         >
-          <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
+          <FiGrid className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           onClick={() => setViewMode("list")}
@@ -32,7 +32,7 @@ export default function MyFilesGrid({ data, userid, src }) {
             p-2 sm:p-3 rounded-lg
             ${viewMode === "list" ? "bg-purple-700 text-white" : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"}`}
         >
-          <FiList className="w-5 h-5 sm:w-6 sm:h-6" />
+          <FiList className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
 
