@@ -18,6 +18,7 @@ export default async function IndividualSubjectPage({ params }) {
         <span className="text-white">&gt; {subjectname}</span>
       </p>
 
+      {/* Filetype buttons with gradient + glass reflection */}
       <div className="w-full md:w-1/2 flex items-center gap-3 mt-2 mb-2 px-4 overflow-x-auto scrollbar-hide">
         {filetypesList.map((ft, idx) => (
           <Link
@@ -26,17 +27,18 @@ export default async function IndividualSubjectPage({ params }) {
             className="flex-shrink-0"
           >
             <div
-              className={`rounded-xl px-4 py-2 text-sm md:text-base transition-all
+              className={`relative overflow-hidden rounded-xl px-4 py-2 text-sm md:text-base font-medium transition-all
                 backdrop-blur-lg
-                shadow-[0_0_12px_rgba(0,0,0,0.25),0_0_6px_rgba(168,85,247,0.25)]
-                hover:shadow-[0_0_18px_rgba(0,0,0,0.35),0_0_10px_rgba(168,85,247,0.35)]
                 ${
                   filetype === ft
-                    ? "bg-gradient-to-r from-purple-300/40 to-purple-500/40 text-white border-2 border-purple-300/50"
-                    : "bg-gradient-to-r from-purple-200/20 via-purple-400/20 to-purple-600/20 text-purple-100 border border-white/10 hover:border-purple-300/40 hover:text-white"
+                    ? "bg-gradient-to-r from-[#2a0a3d] via-[#4b0e63] to-[#2a0a3d] text-white border border-purple-400/40 shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+                    : "bg-gradient-to-r from-[#1a1a1a]/60 via-[#2a1a3d]/40 to-[#3d1f5e]/40 text-purple-200 border border-purple-500/10 hover:border-purple-400/30 hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
                 }`}
             >
-              <p className="truncate">{ft}</p>
+              <p className="truncate relative z-10">{ft.toUpperCase()}</p>
+
+              {/* diagonal glass reflection effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-40 -translate-x-full hover:translate-x-0 transition-transform duration-500"></div>
             </div>
           </Link>
         ))}
