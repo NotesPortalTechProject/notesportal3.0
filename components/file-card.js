@@ -131,7 +131,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav }) {
       {viewMode === "list" && (
         <div className="flex flex-row items-center justify-between w-full space-x-4 text-white">
           <div className="flex items-center space-x-4 flex-1 min-w-0">
-            <FiFileText className="text-2xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
+            <FiFileText className="text-2xl text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
             <div className="min-w-0">
               <h2 className="text-lg font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
               <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
