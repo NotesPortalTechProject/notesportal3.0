@@ -65,9 +65,32 @@ export default function FileCardWrapper({ file, index, userid, src, viewMode = "
     : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} />;
 }
 
+// ✨ GlassCard now includes Spotlight effect
 function GlassCard({ children, viewMode }) {
+  const [coords, setCoords] = useState({ x: -200, y: -200 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
-    <div className={`relative overflow-hidden rounded-2xl ${viewMode === "grid" ? "p-4" : "p-3"}`}>
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setCoords({ x: -200, y: -200 })}
+      className={`relative overflow-hidden rounded-2xl transition-transform duration-300 ${viewMode === "grid" ? "p-4" : "p-3"}`}
+    >
+      {/* Spotlight gradient following cursor */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-2xl"
+        style={{
+          background: `radial-gradient(600px circle at ${coords.x}px ${coords.y}px, rgba(168,85,247,0.2), transparent 40%)`,
+        }}
+      />
+
       {/* Purple frosted glass base */}
       <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]" />
 
@@ -151,7 +174,7 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
       {viewMode === "list" && (
         <div className="flex flex-row items-center justify-between w-full space-x-4 text-white">
           <div className="flex items-center space-x-4 flex-1 min-w-0">
-            <FiFileText className="text-3xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
+            <FiFileText className="text-3xl text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
             <div className="min-w-0">
               <h2 className="text-lg font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
               <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
