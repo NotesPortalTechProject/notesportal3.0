@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 export default function NPLoading() {
   return (
     <div className="flex items-center justify-center min-h-[100vh] bg-[#1a1a1a]">
-      <div className="w-24 h-24 relative bg-white/5 border border-white/20 rounded-full backdrop-blur-md shadow-md flex items-center justify-center">
+      <div className="w-24 h-24 relative border border-white/20 rounded-full backdrop-blur-md shadow-md flex items-center justify-center">
         <motion.svg
           width="120"
           height="60"
