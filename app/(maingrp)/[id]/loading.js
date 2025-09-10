@@ -4,14 +4,12 @@ import { motion } from "framer-motion";
 export default function NPLoading() {
   return (
     <div className="flex items-center justify-center min-h-[100vh] bg-[#1a1a1a]">
-      <div className="w-24 h-24 relative border border-white/20 rounded-full backdrop-blur-md shadow-md flex items-center justify-center">
+      <div className="relative border border-white/20 rounded-full backdrop-blur-md shadow-md flex items-center justify-center p-4">
         <motion.svg
-          width="120"
-          height="60"
           viewBox="0 0 120 60"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="stroke-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]"
+          className="w-32 h-16 stroke-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]"
         >
           {/* N */}
           <motion.path
@@ -33,7 +31,7 @@ export default function NPLoading() {
             stroke="url(#gradient)"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 0.5, delay: 0.1, repeat: Infinity, repeatType: "loop" }}
+            transition={{ duration: 0.5, delay: 0.55, repeat: Infinity, repeatType: "loop" }}
           />
 
           {/* Gradient for neon effect */}
