@@ -13,7 +13,6 @@ function FilePreview({ file, isMobile }) {
         src={file.filelink}
         title={file.filename}
         className="w-full h-36 rounded-xl border-0"
-        loading="lazy"
       />
     );
   }

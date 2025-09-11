@@ -186,3 +186,7 @@ export async function uploadFile(prevState, formData) {
     console.log(file)
 
 }
+
+export async function revalidatePathCustom(path) {
+    revalidatePath(path)
+}
