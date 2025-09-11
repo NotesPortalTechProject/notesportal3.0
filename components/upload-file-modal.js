@@ -73,8 +73,8 @@ export default function UploadFileModal({ children, id,subjectlist}) {
       setFilename('');
       setFile(null);
     } else {
-      const {code,error,details} = data.error || {};
-      setError([`${error} [${code}] ${details ? " - "+details:""}`])
+      const {code,text,details} = data.error || {};
+      setError([`${text} [${code}] ${details ? " - "+details:""}`])
     }
   }
 
