@@ -32,26 +32,18 @@ export async function POST(req) {
     const description = formData.get("description");
     const file = formData.get("file");
     const userid = formData.get("userid");
+    const userdata = await getUserData(userid);
+    const username = userdata?.username;
 
     if (!file) {
       return errorResponse("NO_FILE", "No file provided", null, 400);
     }
 
-    const userdata = await getUserData(userid);
-    const username = userdata?.username;
-    if (!username) {
-      return errorResponse("INVALID_USER", "User not found", null, 404);
-    }
-
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const fileHash = crypto.createHash("sha256").update(fileBuffer).digest("hex");
 
-    // Duplicate check
-    const { data: exists, error: selectError } = await supabase
-      .from("notes")
-      .select("id")
-      .eq("hash", fileHash);
-
+    // CHECKING FOR DUPLICATES
+    const { data: exists, error: selectError } = await supabase.from("notes").select("id").eq("hash", fileHash);
     if (selectError) {
       return errorResponse("SUPABASE_SELECT_ERROR", "Failed to query Supabase", selectError.message);
     }
@@ -60,7 +52,6 @@ export async function POST(req) {
       return errorResponse("DUPLICATE_FILE", "Duplicate! file already exists", null, 409);
     }
 
-    // File type detection
     let tempfileType = "other";
     if (file.type.includes("pdf")) tempfileType = "pdf";
     else if (file.type.includes("msword")) tempfileType = "doc";
@@ -71,7 +62,7 @@ export async function POST(req) {
     const tempfilename = `${subjectcode}_${filename}`;
     const fileKey = `${tempfilename}.${tempfileType}`;
 
-    // Upload to R2
+    // UPLOADING TO BUCKET
     try {
       await s3.send(
         new PutObjectCommand({
@@ -81,8 +72,8 @@ export async function POST(req) {
           ContentType: file.type,
         })
       );
-    } catch (s3Error) {
-      return errorResponse("R2_UPLOAD_ERROR", "Failed to upload to R2", s3Error.message);
+    } catch (err) {
+      return errorResponse("R2_UPLOAD_ERROR", "Failed to upload to R2", err.message);
     }
 
     // Insert into Supabase
