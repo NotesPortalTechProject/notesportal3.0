@@ -42,7 +42,8 @@ export default function ProfileDropdown({ id }) {
       fetch('/api/getuserdata', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userid: id })
+        body: JSON.stringify({ userid: id }),
+        cache:'force-cache'
       })
         .then(res => res.json())
         .then(data => {
