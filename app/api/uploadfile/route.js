@@ -76,7 +76,7 @@ export async function POST(req) {
       return errorResponse("R2_UPLOAD_ERROR", "Failed to upload to R2", err.message);
     }
 
-    // Insert into Supabase
+    // INSERTING METADATA INTO SUPABASE
     const filelink = `${process.env.CLOUDFARE_PUBLIC_URL}/${fileKey}`;
     const { error: insertError } = await supabase.from("notes").insert([
       {
@@ -94,7 +94,7 @@ export async function POST(req) {
       return errorResponse("SUPABASE_INSERT_ERROR", "Failed to insert into Supabase", insertError.message);
     }
 
-    return NextResponse.json({ success: true}, { status: 200 });
+    return NextResponse.json({ success: true }, { status: 200 });
 
   } catch (err) {
     return errorResponse("SERVER_ERROR", "Unexpected server error", err.message);

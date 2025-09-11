@@ -66,7 +66,7 @@ export default function UploadFileModal({ children, id,subjectlist}) {
     const data = await res.json();
     setLoading(false);
 
-    if (res.success) {
+    if (data.success) {
       setSuccess("File Uploaded Successfully");
       setSubjectcode('');
       setDescription('');
