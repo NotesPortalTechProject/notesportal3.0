@@ -78,7 +78,11 @@ export default function UploadFileModal({ children, id,subjectlist}) {
       await revalidatePathCustom(pathname)
     } else {
       const {code,text,details} = data.error || {};
-      setError([`${text} [${code}] ${details ? " - "+details:""}`])
+      if(text=='Duplicate! file already exists'||text=='No file provided'){
+        setError([`${text}`])
+        return
+      }
+      setError([`Oops! something went wrong, please try again later`])
     }
   }
 
