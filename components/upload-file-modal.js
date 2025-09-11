@@ -66,14 +66,15 @@ export default function UploadFileModal({ children, id,subjectlist}) {
     const data = await res.json();
     setLoading(false);
 
-    if (res.ok) {
+    if (res.success) {
       setSuccess("File Uploaded Successfully");
       setSubjectcode('');
       setDescription('');
       setFilename('');
       setFile(null);
     } else {
-      setError(["Something went wrong or resource already exists"]);
+      const {code,error,details} = data.error || {};
+      setError([`${error} [${code}] ${details ? " - "+details:""}`])
     }
   }
 
