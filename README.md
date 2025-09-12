@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  🔗 <a href="https://test.notesportal.tech" target="_blank"><b>Visit NotesPortal</b></a>
+  🔗 <a href="https://notesportal.tech" target="_blank"><b>Visit NotesPortal</b></a>
 </p>
 
 ---
