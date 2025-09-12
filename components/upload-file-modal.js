@@ -74,8 +74,7 @@ export default function UploadFileModal({ children, id,subjectlist}) {
       setDescription('');
       setFilename('');
       setFile(null);
-      const pathname = usePathname()
-      await revalidatePathCustom(pathname)
+      await revalidatePathCustom('/')
     } else {
       const {code,text,details} = data.error || {};
       if(text=='Duplicate! file already exists'||text=='No file provided'){
