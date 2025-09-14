@@ -29,7 +29,6 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     const prevSubjects = subjects;
     const updatedSubjects = subjects.filter((s)=>s!==subject);
     setSubjects(updatedSubjects);
-    toast.loading(`Removing ${subject}...`,{id:subject});
 
     try{
       await RemoveSubject(id,subject);
