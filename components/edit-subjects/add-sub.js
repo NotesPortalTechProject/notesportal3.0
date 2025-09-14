@@ -5,10 +5,10 @@ import { UpdateSubjects } from "@/actions/other-actions";
 import toast from "react-hot-toast";
 import LoadingDots from "../loadingDots";
 
-export default function AddSubjectModal({ id }) {
+export default function AddSubjectModal({ id, onAdd }) {
   const [isOpen, setIsOpen] = useState(false);
   const [errorstate, setErrorState] = useState("");
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function HandleAddSub(e) {
     e.preventDefault();
@@ -32,13 +32,14 @@ export default function AddSubjectModal({ id }) {
 
     try {
       await UpdateSubjects(id, sub_code);
+      if(onAdd) onAdd(sub_code);
+      toast.success("Subject added successfully!");
       setLoading(false)
       setIsOpen(false);
-      toast.success("Subject added successfully!");
     } catch (err) {
       setLoading(false)
       console.log(err);
-      setErrorState("Failed to add subject. Try again.");
+      setErrorState(`Failed to add subject, ${sub_code} might already exist. try again`);
       toast.error("Something went wrong. Please try again.");
     }
   }
@@ -126,7 +127,7 @@ export default function AddSubjectModal({ id }) {
                     transition-all hover:scale-105
                   "
                 >
-                  {loading ? <LoadingDots text="please wait"/>:'Add'}
+                  {loading ? <LoadingDots text="please wait" /> : 'Add'}
                 </button>
                 {errorstate && (
                   <p className="text-red-500 text-xs text-center">

@@ -52,7 +52,7 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     return (
       <div className="text-center text-white mt-10">
         <p className="text-lg font-semibold">No subjects found.</p>
-        <AddSubjectModal id={id} />
+        <AddSubjectModal id={id} onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
           onRemove={handleRemove}
         />
         <div className="mt-6 px-4">
-          <AddSubjectModal id={id} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700" />
+          <AddSubjectModal id={id} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700" onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
         </div>
       </div>
     );
@@ -82,7 +82,7 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
       {subjects.map((subject, index) => (
         <SubjectCard key={index} subject={subject} id={id} onRemove={() => handleRemove(subject)} />
       ))}
-      <AddSubjectModal id={id} buttonClass="w-full h-36 sm:h-40 text-4xl" />
+      <AddSubjectModal id={id} buttonClass="w-full h-36 sm:h-40 text-4xl" onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
     </div>
   );
 }
