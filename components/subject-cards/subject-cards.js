@@ -31,8 +31,8 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     setSubjects(updatedSubjects);
 
     try{
-      await RemoveSubject(id,subject);
       toast.success(`Removed subject: ${subject}`,{id:subject});
+      await RemoveSubject(id,subject);
     }catch(err){
       console.error(err);
       setSubjects(prevSubjects);
