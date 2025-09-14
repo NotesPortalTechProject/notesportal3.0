@@ -38,9 +38,11 @@ export default function LoginPage() {
         <div className="relative w-full max-w-lg p-8 rounded-2xl bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)] flex flex-col items-center justify-center text-white">
           {/* Info banner */}
           <div className="w-full mb-6 p-4 rounded-xl bg-[#1a1a1a]/80 border border-purple-500/20 text-center">
-            <p className="text-sm text-purple-300 font-medium">
-              Use <span className="text-pink-300 font-semibold">Pass@123</span>{" "}
-              as a temporary password to access your NotesPortal account.
+            <p className="mt-6 text-center text-sm text-purple-200">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-purple-400 hover:underline">
+                Signup
+              </Link>
             </p>
           </div>
 
@@ -110,9 +112,9 @@ export default function LoginPage() {
 
           {/* Signup link */}
           <p className="mt-6 text-center text-sm text-purple-200">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-purple-400 hover:underline">
-              Signup
+            forgot password? {" "}
+            <Link href="/login/with-otp" className="text-purple-400 hover:underline">
+              login with otp
             </Link>
           </p>
         </div>
