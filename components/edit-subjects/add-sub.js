@@ -10,8 +10,12 @@ export default function AddSubjectModal({ id }) {
   const [errorstate, setErrorState] = useState("");
   const [loading,setLoading] = useState(false)
 
-  async function HandleAddSub(formData) {
+  async function HandleAddSub(e) {
+    e.preventDefault();
+    setErrorState(" ");
     setLoading(true)
+
+    const formData = new FormData(e.target);
     const sub_code = formData.get("sub_code");
     const id = formData.get("id");
 
@@ -102,7 +106,7 @@ export default function AddSubjectModal({ id }) {
                 </button>
               </div>
 
-              <form className="flex flex-col gap-4" action={HandleAddSub}>
+              <form className="flex flex-col gap-4" onSubmit={HandleAddSub}>
                 <input
                   name="sub_code"
                   type="text"
@@ -115,6 +119,7 @@ export default function AddSubjectModal({ id }) {
                 <input type="text" name="id" value={id} readOnly hidden />
                 <button
                   type="submit"
+                  disabled={loading}
                   className="
                     w-full py-2 text-sm font-semibold rounded-xl text-white
                     bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40]
