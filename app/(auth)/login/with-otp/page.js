@@ -10,28 +10,31 @@ import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
 
 export default function LoginWithOtpPage() {
-  const [formState, formAction] = useActionState(login_with_otp, {});
+  const [formState, formAction, isPending] = useActionState(login_with_otp, {}); 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(" ");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
 
-  async function handleSendOtp(formData) {
+  async function handleSendOtp(e) {
+    e.preventDefault();
     try {
-      setLoading(true)
+      setLoading(true);
+      const formData = new FormData(e.target);
       const userEmail = formData.get("email");
       const doesNotExist = await EmailExists(userEmail);
       const otp = generateOtp();
-      console.log(userEmail)
-      console.log(otp)
+
       if (doesNotExist) {
         setEmailError("No account associated with this Email Id");
         setLoading(false);
         setStep(1);
         return;
       }
+
       setEmailError("");
       setEmail(userEmail);
+
       const res = await fetch(`/api/sendOtpMail`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -42,15 +45,16 @@ export default function LoginWithOtpPage() {
           otp: otp,
         }),
       });
+
       const data = await res.json();
-      setLoading(false)
+      setLoading(false);
+
       if (!res.ok || !data.success) {
-        setEmailError("Failed to send OTP please try again", data.message);
-        setLoading(false);
+        setEmailError("Failed to send OTP please try again");
         setStep(1);
         return;
       }
-      setEmailError("");
+
       setStep(2);
     } catch (error) {
       setEmailError("Something went wrong while sending OTP. Please try again.");
@@ -93,7 +97,7 @@ export default function LoginWithOtpPage() {
           </p>
 
           {step === 1 && (
-            <form className="flex flex-col gap-6 w-full" action={handleSendOtp}>
+            <form className="flex flex-col gap-6 w-full" onSubmit={handleSendOtp}>
               <div>
                 <label
                   htmlFor="email"
@@ -116,9 +120,10 @@ export default function LoginWithOtpPage() {
               </div>
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                disabled={loading}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
               >
-                {loading ? <LoadingDots text="please wait"/>:"Send OTP"}
+                {loading ? <LoadingDots text="please wait" /> : "Send OTP"}
               </button>
               {emailError && <p className="text-red-500">{emailError}</p>}
             </form>
@@ -170,9 +175,10 @@ export default function LoginWithOtpPage() {
 
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                disabled={isPending}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
               >
-                Submit
+                {isPending ? <LoadingDots text="verifying" /> : "Submit"}
               </button>
 
               {formState?.errors?.length > 0 && (

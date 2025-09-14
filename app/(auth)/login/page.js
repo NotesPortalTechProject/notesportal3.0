@@ -4,9 +4,10 @@ import { login_with_password } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState } from "react";
 import Particles from "@/components/effects/particles";
+import LoadingDots from "@/components/loadingDots";
 
 export default function LoginPage() {
-  const [formState, formAction] = useActionState(login_with_password, {});
+  const [formState, formAction,isPending] = useActionState(login_with_password, {});
 
   return (
     <div className="relative bg-black min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden">
@@ -95,9 +96,10 @@ export default function LoginPage() {
             {/* Submit button */}
             <button
               type="submit"
+              disabled={isPending}
               className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-2 rounded-xl shadow-[0_0_20px_#9333ea40] text-white font-semibold transition-all hover:scale-[1.03]"
             >
-              Submit
+              {isPending ? <LoadingDots text="verifying"/>:"Login"}
             </button>
 
             {/* Errors */}
