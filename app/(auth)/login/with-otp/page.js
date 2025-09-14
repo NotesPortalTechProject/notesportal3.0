@@ -40,7 +40,7 @@ export default function LoginWithOtpPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: userEmail,
-          subject: "OTP FOR LOGIN",
+          subject: "OTP for login",
           html: OtpTemplate(otp),
           otp: otp,
         }),
