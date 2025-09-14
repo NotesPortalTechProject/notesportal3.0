@@ -15,27 +15,40 @@ export default function LoginWithOtpPage() {
   const [emailError, setEmailError] = useState(" ");
 
   async function handleSendOtp(formData) {
-    const userEmail = formData.get("email");
-    const doesNotExist = await EmailExists(userEmail);
-    const otp = generateOtp();
-    if (doesNotExist) {
-      setEmailError("No account associated with this Email Id");
+    try {
+      const userEmail = formData.get("email");
+      const doesNotExist = await EmailExists(userEmail);
+      const otp = generateOtp();
+      console.log(userEmail)
+      console.log(otp)
+      if (doesNotExist) {
+        setEmailError("No account associated with this Email Id");
+        setStep(1);
+        return;
+      }
+      setEmailError("");
+      const res = await fetch(`/api/sendOtpMail`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: userEmail,
+          subject: "OTP FOR LOGIN",
+          html: OtpTemplate(otp),
+          otp: otp,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setEmailError("Failed to send OTP please try again", data.message);
+        setStep(1);
+        return;
+      }
+      setEmailError("");
+      setStep(2);
+    } catch (error) {
+      setEmailError("Something went wrong while sending OTP. Please try again.");
       setStep(1);
-      return;
     }
-    setEmailError("");
-    setEmail(userEmail);
-    setStep(2);
-    await fetch("/api/sendOtpMail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: userEmail,
-        subject: "OTP FOR LOGIN",
-        html: OtpTemplate(otp),
-        otp: otp,
-      }),
-    });
   }
 
   return (
@@ -43,7 +56,7 @@ export default function LoginWithOtpPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={950}
+          particleCount={600}
           particleSpread={10}
           speed={0.12}
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
