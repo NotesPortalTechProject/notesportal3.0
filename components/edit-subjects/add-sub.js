@@ -3,29 +3,36 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { UpdateSubjects } from "@/actions/other-actions";
 import toast from "react-hot-toast";
+import LoadingDots from "../loadingDots";
 
 export default function AddSubjectModal({ id }) {
   const [isOpen, setIsOpen] = useState(false);
   const [errorstate, setErrorState] = useState("");
+  const [loading,setLoading] = useState(false)
 
   async function HandleAddSub(formData) {
+    setLoading(true)
     const sub_code = formData.get("sub_code");
     const id = formData.get("id");
 
     if (!sub_code?.trim()) {
+      setLoading(false)
       setErrorState("Subject name cannot be empty");
       return;
     }
     if (!id?.trim()) {
+      setLoading(false)
       setErrorState("Try again");
       return;
     }
 
     try {
       await UpdateSubjects(id, sub_code);
+      setLoading(false)
       setIsOpen(false);
       toast.success("Subject added successfully!");
     } catch (err) {
+      setLoading(false)
       console.log(err);
       setErrorState("Failed to add subject. Try again.");
       toast.error("Something went wrong. Please try again.");
@@ -114,7 +121,7 @@ export default function AddSubjectModal({ id }) {
                     transition-all hover:scale-105
                   "
                 >
-                  Add
+                  {loading ? <LoadingDots text="please wait"/>:'Add'}
                 </button>
                 {errorstate && (
                   <p className="text-red-500 text-xs text-center">

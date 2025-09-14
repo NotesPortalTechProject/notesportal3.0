@@ -178,7 +178,7 @@ export default function LoginWithOtpPage() {
                 disabled={isPending}
                 className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
               >
-                {isPending ? <LoadingDots text="verifying" /> : "Submit"}
+                {isPending ? <LoadingDots text="verifying" /> : "Login"}
               </button>
 
               {formState?.errors?.length > 0 && (
