@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { FaUser, FaLock, FaEnvelope, FaKey, FaListOl } from "react-icons/fa";
 import Particles from "@/components/effects/particles";
+import LoadingDots from "@/components/loadingDots";
 
 export default function SignupPage() {
   const [noOfSubjects, setNoOfSubjects] = useState(0);
-  const [formState, formAction] = useActionState(signup, {});
+  const [formState, formAction,isPending] = useActionState(signup, {});
 
   function handleSubjectsChange(event) {
     const value = parseInt(event.target.value, 10);
@@ -201,9 +202,10 @@ export default function SignupPage() {
             {/* Submit */}
             <button
               type="submit"
+              disabled={isPending}
               className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded-lg transition text-white"
             >
-              Signup
+              {isPending ? <LoadingDots text="creating account"/>:"Signup"}
             </button>
 
             {/* Errors */}

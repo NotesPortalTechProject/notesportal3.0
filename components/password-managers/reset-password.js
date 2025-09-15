@@ -44,6 +44,7 @@ export default function ResetPasswordModal({ id }) {
         otp: otp
       })
     });
+    console.log(res)
   }
 
   async function handleVerifyOtp(formData) {

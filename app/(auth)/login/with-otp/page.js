@@ -7,35 +7,60 @@ import { EmailExists } from "@/actions/other-actions";
 import OtpTemplate from "@/lib/email-templates/otp-template-login";
 import { generateOtp } from "@/lib/gen-otp";
 import Particles from "@/components/effects/particles";
+import LoadingDots from "@/components/loadingDots";
 
 export default function LoginWithOtpPage() {
-  const [formState, formAction] = useActionState(login_with_otp, {});
+  const [formState, formAction, isPending] = useActionState(login_with_otp, {}); 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(" ");
+  const [loading, setLoading] = useState(false); 
 
-  async function handleSendOtp(formData) {
-    const userEmail = formData.get("email");
-    const doesNotExist = await EmailExists(userEmail);
-    const otp = generateOtp();
-    if (doesNotExist) {
-      setEmailError("No account associated with this Email Id");
+  async function handleSendOtp(e) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const formData = new FormData(e.target);
+      const userEmail = formData.get("email");
+      const doesNotExist = await EmailExists(userEmail);
+      const otp = generateOtp();
+
+      if (doesNotExist) {
+        setEmailError("No account associated with this Email Id");
+        setLoading(false);
+        setStep(1);
+        return;
+      }
+
+      setEmailError("");
+      setEmail(userEmail);
+
+      const res = await fetch(`/api/sendOtpMail`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: userEmail,
+          subject: "OTP for login",
+          html: OtpTemplate(otp),
+          otp: otp,
+        }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok || !data.success) {
+        setEmailError("Failed to send OTP please try again");
+        setStep(1);
+        return;
+      }
+
+      setStep(2);
+    } catch (error) {
+      setEmailError("Something went wrong while sending OTP. Please try again.");
+      setLoading(false);
       setStep(1);
-      return;
     }
-    setEmailError("");
-    setEmail(userEmail);
-    setStep(2);
-    await fetch("/api/sendOtpMail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: userEmail,
-        subject: "OTP FOR LOGIN",
-        html: OtpTemplate(otp),
-        otp: otp,
-      }),
-    });
   }
 
   return (
@@ -43,7 +68,7 @@ export default function LoginWithOtpPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={950}
+          particleCount={300}
           particleSpread={10}
           speed={0.12}
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
@@ -72,7 +97,7 @@ export default function LoginWithOtpPage() {
           </p>
 
           {step === 1 && (
-            <form className="flex flex-col gap-6 w-full" action={handleSendOtp}>
+            <form className="flex flex-col gap-6 w-full" onSubmit={handleSendOtp}>
               <div>
                 <label
                   htmlFor="email"
@@ -95,9 +120,10 @@ export default function LoginWithOtpPage() {
               </div>
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                disabled={loading}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
               >
-                Send OTP
+                {loading ? <LoadingDots text="please wait" /> : "Send OTP"}
               </button>
               {emailError && <p className="text-red-500">{emailError}</p>}
             </form>
@@ -149,9 +175,10 @@ export default function LoginWithOtpPage() {
 
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                disabled={isPending}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
               >
-                Submit
+                {isPending ? <LoadingDots text="verifying" /> : "Login"}
               </button>
 
               {formState?.errors?.length > 0 && (

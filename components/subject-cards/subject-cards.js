@@ -9,9 +9,8 @@ import dynamic from "next/dynamic";
 
 const Carousel = dynamic(() => import("../effects/carousel"), { ssr: false });
 
-export default function SubjectCards({ subjects, id }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+export default function SubjectCards({ subjects:initialSubjects , id }) {
+  const [subjects,setSubjects] = useState(initialSubjects)
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -21,18 +20,25 @@ export default function SubjectCards({ subjects, id }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleRemove = (subject) => {
-    startTransition(async () => {
-      try {
-        await RemoveSubject(id, subject);
-        toast.success(`Removed subject: ${subject}`);
-        router.refresh();
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to remove subject.");
-      }
-    });
-  };
+  const handleRemove = async (subject) =>{
+    if(subjects.length<=1){
+      toast.error("You must keep atleast one subject");
+      return;
+    }
+
+    const prevSubjects = subjects;
+    const updatedSubjects = subjects.filter((s)=>s!==subject);
+    setSubjects(updatedSubjects);
+
+    try{
+      toast.success(`Removed subject: ${subject}`,{id:subject});
+      await RemoveSubject(id,subject);
+    }catch(err){
+      console.error(err);
+      setSubjects(prevSubjects);
+      toast.error(`Failed to remove subject: ${subject}`,{id:subject});
+    }
+  }
 
   const carouselItems = subjects.map((subject, index) => ({
     title: subject,
@@ -46,7 +52,7 @@ export default function SubjectCards({ subjects, id }) {
     return (
       <div className="text-center text-white mt-10">
         <p className="text-lg font-semibold">No subjects found.</p>
-        <AddSubjectModal id={id} />
+        <AddSubjectModal id={id} onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
       </div>
     );
   }
@@ -65,7 +71,7 @@ export default function SubjectCards({ subjects, id }) {
           onRemove={handleRemove}
         />
         <div className="mt-6 px-4">
-          <AddSubjectModal id={id} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700" />
+          <AddSubjectModal id={id} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700" onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
         </div>
       </div>
     );
@@ -76,7 +82,7 @@ export default function SubjectCards({ subjects, id }) {
       {subjects.map((subject, index) => (
         <SubjectCard key={index} subject={subject} id={id} onRemove={() => handleRemove(subject)} />
       ))}
-      <AddSubjectModal id={id} buttonClass="w-full h-36 sm:h-40 text-4xl" />
+      <AddSubjectModal id={id} buttonClass="w-full h-36 sm:h-40 text-4xl" onAdd={(newSub) => setSubjects([...subjects, newSub])}/>
     </div>
   );
 }

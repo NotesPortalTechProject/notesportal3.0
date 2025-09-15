@@ -12,7 +12,7 @@ export default function LoadingDots({ text = 'Loading' }) {
   };
 
   return (
-    <div className="flex items-center justify-center h-12 px-4 space-x-3 text-neutral-300 text-base font-medium">
+    <div className="flex items-center justify-center h-10 px-4 space-x-3 text-neutral-300 text-base font-medium">
       <span>{text}</span>
       <div className="flex space-x-2">
         <motion.span

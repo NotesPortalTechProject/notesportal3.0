@@ -4,9 +4,10 @@ import { login_with_password } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState } from "react";
 import Particles from "@/components/effects/particles";
+import LoadingDots from "@/components/loadingDots";
 
 export default function LoginPage() {
-  const [formState, formAction] = useActionState(login_with_password, {});
+  const [formState, formAction,isPending] = useActionState(login_with_password, {});
 
   return (
     <div className="relative bg-black min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden">
@@ -38,9 +39,11 @@ export default function LoginPage() {
         <div className="relative w-full max-w-lg p-8 rounded-2xl bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)] flex flex-col items-center justify-center text-white">
           {/* Info banner */}
           <div className="w-full mb-6 p-4 rounded-xl bg-[#1a1a1a]/80 border border-purple-500/20 text-center">
-            <p className="text-sm text-purple-300 font-medium">
-              Use <span className="text-pink-300 font-semibold">Pass@123</span>{" "}
-              as a temporary password to access your NotesPortal account.
+            <p className="mt-6 text-center text-sm text-purple-200">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-purple-400 hover:underline">
+                Signup
+              </Link>
             </p>
           </div>
 
@@ -93,9 +96,10 @@ export default function LoginPage() {
             {/* Submit button */}
             <button
               type="submit"
+              disabled={isPending}
               className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-2 rounded-xl shadow-[0_0_20px_#9333ea40] text-white font-semibold transition-all hover:scale-[1.03]"
             >
-              Submit
+              {isPending ? <LoadingDots text="verifying"/>:"Login"}
             </button>
 
             {/* Errors */}
@@ -110,9 +114,9 @@ export default function LoginPage() {
 
           {/* Signup link */}
           <p className="mt-6 text-center text-sm text-purple-200">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-purple-400 hover:underline">
-              Signup
+            forgot password? {" "}
+            <Link href="/login/with-otp" className="text-purple-400 hover:underline">
+              login with otp
             </Link>
           </p>
         </div>

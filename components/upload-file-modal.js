@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import LoadingDots from './loadingDots';
+import { usePathname } from 'next/navigation';
+import { revalidatePathCustom } from '@/actions/other-actions';
 
 
 export default function UploadFileModal({ children, id,subjectlist}) {
@@ -66,14 +68,20 @@ export default function UploadFileModal({ children, id,subjectlist}) {
     const data = await res.json();
     setLoading(false);
 
-    if (res.ok) {
+    if (res.ok && data.success) {
       setSuccess("File Uploaded Successfully");
       setSubjectcode('');
       setDescription('');
       setFilename('');
       setFile(null);
+      await revalidatePathCustom('/')
     } else {
-      setError(["Something went wrong or resource already exists"]);
+      const {code,text,details} = data.error || {};
+      if(text=='Duplicate! file already exists'||text=='No file provided'){
+        setError([`${text}`])
+        return
+      }
+      setError([`Oops! something went wrong, please try again later`])
     }
   }
 
@@ -92,7 +100,7 @@ export default function UploadFileModal({ children, id,subjectlist}) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg sm:text-xl font-semibold text-purple-300">Upload File</h2>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => {setIsOpen(false);()=>setError('');()=>setSuccess('');}}
             className="text-xs sm:text-sm font-medium bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition"
           >
             Close
