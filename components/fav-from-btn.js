@@ -1,28 +1,21 @@
 'use client'
-import { useOptimistic, useTransition } from 'react';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import { ToggleFiletoFavourites } from '@/actions/other-actions';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function FavFormBtn({ initialIsFav, fileid, userid, src }) {
-  const [isPending, startTransition] = useTransition();
-  const [optimisticFav, setOptimisticFav] = useOptimistic(initialIsFav);
-
+export default function FavFormBtn({ isFav, setIsFav, fileid, userid, src }) {
   const toggleFav = () => {
-    startTransition(() => {
-      setOptimisticFav(prev => !prev);
+      setIsFav(prev=>!prev)
       ToggleFiletoFavourites(fileid, userid, src);
-    });
   };
 
   return (
     <button
       onClick={toggleFav}
-      disabled={isPending}
       className="transition-transform active:scale-95"
     >
       <AnimatePresence mode="wait" initial={false}>
-        {optimisticFav ? (
+        {isFav ? (
           <motion.span
             key="filled"
             initial={{ scale: 0.5, opacity: 0 }}

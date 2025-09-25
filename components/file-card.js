@@ -60,8 +60,8 @@ export default function FileCardWrapper({ file, index, userid, src, viewMode = "
   if (isMobile === null) return null;
 
   return isMobile
-    ? <MobileFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} />
-    : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} />;
+    ? <MobileFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav}/>
+    : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav}/>;
 }
 
 // ✨ GlassCard now includes Spotlight effect
@@ -104,7 +104,7 @@ function GlassCard({ children, viewMode }) {
   );
 }
 
-function MobileFileCard({ file, userid, src, viewMode, isFav }) {
+function MobileFileCard({ file, userid, src, viewMode, isFav,setIsFav }) {
   return (
     <GlassCard viewMode={viewMode}>
       {viewMode === "grid" && (
@@ -114,7 +114,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav }) {
           </div>
 
           <div className="flex justify-end mb-2">
-            <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
+            <FavFormBtn isFav={isFav} setIsFav={setIsFav} fileid={file.id} userid={userid} src={src} />
           </div>
 
           <h2 className="text-lg font-medium tracking-wide mb-1 truncate text-purple-100">{file.filename}</h2>
@@ -138,7 +138,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav }) {
             </div>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
+            <FavFormBtn isFav={isFav} setIsFav={setIsFav} fileid={file.id} userid={userid} src={src} />
             <FileViewModal data={file} />
           </div>
         </div>
@@ -147,7 +147,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav }) {
   );
 }
 
-function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
+function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
   return (
     <GlassCard viewMode={viewMode}>
       {viewMode === "grid" && (
@@ -157,7 +157,7 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
           </div>
 
           <div className="flex justify-end mb-2">
-            <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
+            <FavFormBtn isFav={isFav} setIsFav={setIsFav} fileid={file.id} userid={userid} src={src} />
           </div>
 
           <h2 className="text-lg font-bold tracking-wide mb-1 truncate text-purple-100">{file.filename}</h2>
@@ -181,7 +181,7 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav }) {
             </div>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <FavFormBtn initialIsFav={isFav} fileid={file.id} userid={userid} src={src} />
+            <FavFormBtn isFav={isFav} setIsFav={setIsFav} userid={userid} src={src} />
             <FileViewModal data={file} />
           </div>
         </div>
