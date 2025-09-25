@@ -107,7 +107,7 @@ export default function FileViewModal({ data }) {
           </a>
           <button
             onClick={() =>
-              copyToClipboard(`https://note.notesportal.live/${data.filename}`)
+              copyToClipboard(data.filelink)
             }
             className="mt-3 w-full text-center text-base bg-white/10 hover:bg-white/20 border border-purple-300 text-purple-200 py-2 px-4 rounded transition-all"
           >
