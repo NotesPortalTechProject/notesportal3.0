@@ -45,7 +45,7 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     description: "Click to view subject",
     id: index,
     icon: <span className="text-xs text-white font-bold">{subject[0]}</span>,
-    href: `/${id}/subject/${subject}/all`,
+    href: `/${id}/subject/${subject}`,
   }));
 
   if (subjects.length === 0) {
