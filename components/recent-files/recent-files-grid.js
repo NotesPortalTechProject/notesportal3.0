@@ -6,6 +6,7 @@ import { FiGrid, FiList } from "react-icons/fi";
 export default function RecentFilesGrid({ data, weeks, userid, src }) {
   const [viewMode, setViewMode] = useState("grid");
 
+  // Show message if no files available
   if (!data || data.length === 0) {
     return (
       <div className="text-center text-white mt-10">
@@ -16,12 +17,13 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
 
   return (
     <div className="w-full px-6 flex flex-col flex-1">
-      {/* Top bar with text + toggle always on the same line */}
+      {/* Top bar: file count + view toggle */}
       <div className="flex flex-row items-center justify-between mb-4 gap-3">
         <p className="text-white/80 text-left truncate">
           Files uploaded from last {weeks} weeks
         </p>
         <div className="flex justify-end space-x-2 sm:space-x-3">
+          {/* Grid view button */}
           <button
             onClick={() => setViewMode("grid")}
             className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${
@@ -32,6 +34,8 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
           >
             <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
+
+          {/* List view button */}
           <button
             onClick={() => setViewMode("list")}
             className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${
@@ -45,24 +49,26 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
         </div>
       </div>
 
-      {/* File cards grid/list */}
+      {/* File cards container */}
       <div
         className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-min" // grid fix applied
             : "flex flex-col gap-4"
         }`}
         style={{ maxHeight: "calc(100vh - 250px)" }}
       >
         {data.slice(0, 9).map((file, index) => (
-          <FileCardWrapper
-            key={index}
-            file={file}
-            index={index}
-            userid={userid}
-            src={src}
-            viewMode={viewMode}
-          />
+          // Each card wrapped in w-full to respect grid layout
+          <div key={index} className="w-full">
+            <FileCardWrapper
+              file={file}
+              index={index}
+              userid={userid}
+              src={src}
+              viewMode={viewMode}
+            />
+          </div>
         ))}
       </div>
     </div>
