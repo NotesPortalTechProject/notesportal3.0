@@ -6,6 +6,7 @@ import { FiGrid, FiList } from "react-icons/fi";
 export default function MyFilesGrid({ data, userid, src }) {
   const [viewMode, setViewMode] = useState("grid");
 
+  // Show message if no files
   if (!data || data.length === 0) {
     return (
       <div className="text-center text-white mt-10">
@@ -40,19 +41,21 @@ export default function MyFilesGrid({ data, userid, src }) {
       <div
         className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-min" // prevent crumbling
             : "flex flex-col gap-4"
         }`}
       >
         {data.map((file, index) => (
-          <FileCardWrapper
-            key={index}
-            file={file}
-            index={index}
-            userid={userid}
-            src={src}
-            viewMode={viewMode}
-          />
+          // Wrap each card in w-full to respect grid column width
+          <div key={index} className="w-full">
+            <FileCardWrapper
+              file={file}
+              index={index}
+              userid={userid}
+              src={src}
+              viewMode={viewMode}
+            />
+          </div>
         ))}
       </div>
     </div>
