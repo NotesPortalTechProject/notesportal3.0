@@ -1,14 +1,6 @@
-export default function ChatWithPdf(){
-    return(
-        <>
-        <div>
-            <p>ChatWithPdf</p>
-        </div>
-        <div>
-            <form>
-                
-            </form>
-        </div>
-        </>
-    )
+import ChatWithPdf from "@/components/chatwithpdf/chatwithpdf";
+
+export default function Page({params}){
+    const userid = params.id;
+    return <ChatWithPdf userId={userid}/>
 }
