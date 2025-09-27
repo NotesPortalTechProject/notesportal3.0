@@ -1,8 +1,8 @@
 'use client'
 import { useState } from "react";
-import FileCardWrapper from "@/components/file-card";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
+import Markdown from "react-markdown";
 
 export default function ChatWithPdf({ userId }) {
   const [step, setStep] = useState(1);
@@ -18,7 +18,7 @@ export default function ChatWithPdf({ userId }) {
   const [errorFiles, setErrorFiles] = useState('');
 
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState([]);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
   const [errorAnswer, setErrorAnswer] = useState('');
 
@@ -26,7 +26,8 @@ export default function ChatWithPdf({ userId }) {
   const fetchSubjects = async () => {
     try {
       setLoadingSubjects(true);
-      const res = await fetch(`/api/getUserSubjectList?userid=${userId}`);
+      setErrorSubjects('');
+      const res = await fetch(`/api/getUserSubjectList?userid=${encodeURIComponent(userId)}`);
       const data = await res.json();
       if (res.ok) setSubjects(data.subjects || []);
       else setErrorSubjects(data.error || "Failed to fetch subjects");
@@ -40,7 +41,8 @@ export default function ChatWithPdf({ userId }) {
   const fetchFiles = async (subject) => {
     try {
       setLoadingFiles(true);
-      const res = await fetch(`/api/getFileNames?subject=${subject}`);
+      setErrorFiles('');
+      const res = await fetch(`/api/getFileNames?subject=${encodeURIComponent(subject)}`);
       const data = await res.json();
       if (res.ok) setFileList(data.files || []);
       else setErrorFiles(data.error || "Failed to fetch files");
@@ -53,9 +55,10 @@ export default function ChatWithPdf({ userId }) {
 
   const fetchFileData = async (filename) => {
     try {
+      setErrorFiles('');
       const res = await fetch(`/api/getFileDataByName?filename=${encodeURIComponent(filename)}`);
       const data = await res.json();
-      if (res.ok) setSelectedFile(data.file || null);
+      if (res.ok && data.file) setSelectedFile(data.file);
       else setErrorFiles(data.error || "Failed to fetch file");
     } catch (err) {
       setErrorFiles(err.message || "Something went wrong");
@@ -68,9 +71,7 @@ export default function ChatWithPdf({ userId }) {
 
     try {
       setLoadingAnswer(true);
-      setAnswer('');
       setErrorAnswer('');
-
       const res = await fetch(`/api/pdfchat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,24 +80,60 @@ export default function ChatWithPdf({ userId }) {
           prompt: question
         })
       });
-
       const data = await res.json();
-      if (res.ok && data.answer) setAnswer(data.answer);
+      if (res.ok && data.answer) setAnswer(prev => [...prev, { question, answer: data.answer }]);
       else setErrorAnswer(data.error || "Failed to get answer");
     } catch (err) {
       setErrorAnswer(err.message || "Something went wrong");
     } finally {
       setLoadingAnswer(false);
+      setQuestion('');
     }
   };
 
-  // --- UI Classes ---
-  const containerClass = "p-6 max-w-6xl mx-auto space-y-8 text-white";
-  const cardClass = "bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg space-y-4";
-  const inputClass = "w-full bg-white/10 backdrop-blur-xl border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition";
-  const selectClass = "w-full bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition";
-  const buttonClass = "bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-medium transition-all disabled:opacity-50";
-  const backButtonClass = "bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-medium transition-all disabled:opacity-50";
+  // --- Classes ---
+  const containerClass = "p-6 max-w-7xl h-full mx-auto space-y-6 text-white";
+  const cardClass = "bg-gradient-to-br from-[#1a1a1a]/90 via-[#2a1a3d]/70 to-[#3d1f5e]/60 border border-purple-500/20 rounded-2xl h-fit p-4 shadow-[0_0_20px_rgba(168,85,247,0.15)]";
+  const inputClass = "w-full bg-white/5 border border-purple-500/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition";
+  const buttonClass = "bg-purple-700 hover:bg-purple-600 px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50";
+  const backButtonClass = "bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50";
+  const fileBoxClass = "bg-purple-700/20 border border-purple-500/30 rounded-lg px-4 py-2 text-white font-medium shadow-md";
+
+  // --- NotesPortal-style dropdown ---
+  const Dropdown = ({ label, options, value, onChange }) => {
+    const [open, setOpen] = useState(false);
+    const handleSelect = (option) => {
+      onChange(option);
+      setOpen(false);
+    };
+    return (
+      <div className="relative w-full">
+        <label className="text-white font-semibold">{label}</label>
+        <div
+          className="w-full bg-white/10 border border-purple-500/20 rounded-xl px-4 py-3 cursor-pointer flex justify-between items-center focus-within:ring-2 focus-within:ring-purple-400 transition"
+          onClick={() => setOpen(!open)}
+        >
+          <span className={`${!value ? "text-gray-400" : "text-white"}`}>{value || `--Select--`}</span>
+          <svg className="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={open ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+          </svg>
+        </div>
+        {open && (
+          <div className="absolute z-10 mt-1 w-full bg-black/90 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar">
+            {options.map((opt, idx) => (
+              <div
+                key={idx}
+                className="px-4 py-3 hover:bg-purple-600/40 cursor-pointer text-white transition"
+                onClick={() => handleSelect(opt)}
+              >
+                {opt}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={containerClass}>
@@ -113,23 +150,26 @@ export default function ChatWithPdf({ userId }) {
                 Load My Subjects
               </button>
             )}
-            {loadingSubjects && <LoadingDots text="Loading subjects..." />}
+            {loadingSubjects && <LoadingDots text="Loading subjects" />}
             {errorSubjects && <p className="text-red-400">{errorSubjects}</p>}
 
             {subjects.length > 0 && (
-              <div className="space-y-3">
-                <label className="text-white font-semibold">Select Subject:</label>
-                <select className={selectClass} value={subjectState} onChange={(e) => setSubjectState(e.target.value)}>
-                  <option value="">--Select--</option>
-                  {subjects.map((subj, idx) => <option key={idx} value={subj}>{subj}</option>)}
-                </select>
-                <button
-                  disabled={!subjectState}
-                  className={buttonClass}
-                  onClick={async () => { await fetchFiles(subjectState); setStep(2); }}
-                >
-                  Next
-                </button>
+              <div className="space-y-3 w-full">
+                <Dropdown
+                  label="Select Subject:"
+                  options={subjects}
+                  value={subjectState}
+                  onChange={(val) => setSubjectState(val)}
+                />
+                <div className="flex justify-end gap-2 mt-2">
+                  <button
+                    disabled={!subjectState}
+                    className={buttonClass}
+                    onClick={async () => { await fetchFiles(subjectState); setStep(2); }}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </motion.div>
@@ -143,17 +183,15 @@ export default function ChatWithPdf({ userId }) {
             {loadingFiles && <LoadingDots text="Loading files..." />}
             {errorFiles && <p className="text-red-400">{errorFiles}</p>}
 
-            <p className="text-purple-200 font-semibold">Selected Subject: <span className="text-white">{subjectState}</span></p>
-
             {fileList.length > 0 && (
-              <div className="space-y-3">
-                <label className="text-white font-semibold">Select File:</label>
-                <select className={selectClass} value={selectedFileName} onChange={(e) => setSelectedFileName(e.target.value)}>
-                  <option value="">--Select File--</option>
-                  {fileList.map((f, idx) => <option key={idx} value={f.filename}>{f.filename}</option>)}
-                </select>
-
-                <div className="flex gap-4 justify-end">
+              <div className="space-y-3 w-full">
+                <Dropdown
+                  label="Select File:"
+                  options={fileList.map(f => f.filename)}
+                  value={selectedFileName}
+                  onChange={(val) => setSelectedFileName(val)}
+                />
+                <div className="flex justify-end gap-2 mt-2">
                   <button
                     disabled={!selectedFileName}
                     className={buttonClass}
@@ -169,38 +207,42 @@ export default function ChatWithPdf({ userId }) {
         )}
       </AnimatePresence>
 
-      {/* STEP 3 - PDF Chat */}
+      {/* STEP 3 - Chat */}
       <AnimatePresence>
         {step === 3 && selectedFile && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={cardClass}>
-            <p className="text-purple-200 font-semibold">Selected Subject: <span className="text-white">{subjectState}</span></p>
-            <p className="text-purple-200 font-semibold">Selected File: <span className="text-white">{selectedFileName}</span></p>
-
-            <div className="max-w-5xl">
-              <FileCardWrapper file={selectedFile} userid={userId} />
+            {/* File Box */}
+            <div className={`w-full ${fileBoxClass} mb-4`}>
+              {selectedFileName}
             </div>
 
-            <form onSubmit={handleAskQuestion} className="space-y-3 mt-4">
+            {/* Chat */}
+            <div className="flex flex-col space-y-3 w-full lg:max-h-[55vh] overflow-y-auto hide-scrollbar">
+              {answer.map((item, idx) => (
+                <div key={idx} className="space-y-1 w-full">
+                  <div className="bg-purple-700/20 px-4 py-2 rounded-xl text-white font-medium shadow-sm w-full">{item.question}</div>
+
+                  <div className="bg-white/5 px-4 py-2 rounded-xl text-white shadow-inner whitespace-pre-wrap w-full"><Markdown>{item.answer}</Markdown></div>
+                </div>
+              ))}
+              {loadingAnswer && <LoadingDots text="Getting answer..." />}
+              {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
+            </div>
+
+            {/* Input */}
+            <form onSubmit={handleAskQuestion} className="mt-4 flex gap-2 w-full">
               <input
                 type="text"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="Ask something..."
-                className={inputClass}
+                className={`flex-1 ${inputClass}`}
               />
               <button type="submit" className={buttonClass} disabled={loadingAnswer}>
-                {loadingAnswer ? <LoadingDots text="Getting answer" /> : "Ask"}
+                Ask
               </button>
+              <button type="button" className={backButtonClass} onClick={() => setStep(2)}>Back</button>
             </form>
-
-            {answer && (
-              <div className="bg-white/10 backdrop-blur-xl p-4 rounded-2xl text-white max-w-5xl whitespace-pre-wrap mt-3 shadow-md">
-                {answer}
-              </div>
-            )}
-            {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
-
-            <button className={backButtonClass} onClick={() => setStep(2)}>Back</button>
           </motion.div>
         )}
       </AnimatePresence>
