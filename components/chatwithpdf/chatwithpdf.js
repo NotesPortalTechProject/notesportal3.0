@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "react-markdown";
-import { FiArrowLeft, FiArrowUp, FiMic } from "react-icons/fi";
+import { FiArrowLeft, FiArrowUp, FiMic, FiFile } from "react-icons/fi";
 
 export default function ChatWithPdf({ userId }) {
   const [step, setStep] = useState(1);
@@ -128,8 +128,6 @@ export default function ChatWithPdf({ userId }) {
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
   const backButtonClass =
     "bg-gray-600 hover:bg-gray-700 p-2 rounded-full font-medium transition-all disabled:opacity-50 flex items-center justify-center";
-  const inputClass =
-    "flex-1 bg-white/5 text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] rounded-3xl px-4 py-2 pr-24 hide-scrollbar leading-[1.5rem] box-border transition-all duration-200 ease-in-out";
 
   // Dropdown
   const Dropdown = ({ label, options, value, onChange }) => {
@@ -168,7 +166,7 @@ export default function ChatWithPdf({ userId }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className="absolute z-10 mt-1 w-full bg-black/90 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
             >
               {options.map((opt, idx) => (
@@ -298,20 +296,30 @@ export default function ChatWithPdf({ userId }) {
                   ? "max-w-[90%] sm:max-w-[60%]"
                   : "max-w-[80%] sm:max-w-[55%]";
 
-              const bubbleClass =
-                item.type === "bot"
-                  ? `bg-white/5 px-4 py-2 rounded-2xl shadow-inner break-words ${maxWidthClass} min-w-[20%] text-base sm:text-sm`
-                  : `bg-purple-700/40 px-4 py-2 rounded-2xl shadow-md break-words ${maxWidthClass} min-w-[20%] text-base sm:text-sm`;
-
               return (
                 <div key={idx} className={`flex ${justify}`}>
                   {item.type === "bot" ? (
-                    <div className={bubbleClass}>
+                    <div
+                      className={`bg-white/5 px-4 py-2 rounded-2xl shadow-inner break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
+                    >
                       <Markdown>{item.text}</Markdown>
                     </div>
+                  ) : item.type === "pdf" ? (
+                    <div
+                      className={`bg-purple-800/30 border border-purple-500/30 px-4 py-3 rounded-xl shadow-md flex items-center gap-3 ${maxWidthClass}`}
+                    >
+                      <div className="bg-purple-600/40 p-2 rounded-lg">
+                        <FiFile className="w-5 h-5 sm:w-6 sm:h-6 text-purple-300" />
+                      </div>
+                      <span className="text-sm md:text-base font-medium text-purple-200 break-words">
+                        {item.filename}
+                      </span>
+                    </div>
                   ) : (
-                    <div className={bubbleClass}>
-                      {item.text || item.filename}
+                    <div
+                      className={`bg-purple-700/40 px-4 py-2 rounded-2xl shadow-md break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
+                    >
+                      {item.text}
                     </div>
                   )}
                 </div>
@@ -334,8 +342,8 @@ export default function ChatWithPdf({ userId }) {
               }}
               onKeyDown={handleKeyDown}
               placeholder="Ask something..."
-              data-gramm="false" 
-              className="flex-1 bg-white/5 text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] rounded-3xl px-4 py-3 pr-22 hide-scrollbar leading-[1.5rem] box-border transition-all duration-200 ease-in-out text-sm md:text-base"
+              data-gramm="false"
+              className="flex-1 bg-white/5 text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] rounded-3xl px-4 py-2 pr-20 hide-scrollbar leading-[1.5rem] box-border transition-all duration-200 ease-in-out text-sm md:text-base"
               style={{ minHeight: "2rem" }}
             />
 
@@ -344,7 +352,7 @@ export default function ChatWithPdf({ userId }) {
                 type="button"
                 className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
               >
-                <FiMic className="w-5 h-5 md:w-4 md:h-4" />
+                <FiMic className="w-4 h-4 md:w-5 md:h-5" />
               </button>
               <button
                 type="submit"
@@ -354,7 +362,7 @@ export default function ChatWithPdf({ userId }) {
                   loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                <FiArrowUp className="w-5 h-5 md:w-4 md:h-4" />
+                <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
               </button>
             </div>
           </div>
