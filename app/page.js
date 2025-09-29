@@ -26,6 +26,13 @@ export default function Home() {
   }, []);
 
   const teamMembers = [
+        {
+      name: "Sharvil Gharkar",
+      img: "/avatar/Sharvil_Gharkar.jpg",
+      linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",
+      insta: "https://www.instagram.com/sharvilgharkar_/",
+      github: "https://github.com/Sharvil0769",
+    },
     {
       name: "Arya Chawan",
       img: "/avatar/Arya_Chawan.png",
@@ -46,13 +53,6 @@ export default function Home() {
       linkedin: "https://www.linkedin.com/in/bevinjhsn",
       insta: "https://www.instagram.com/bevin_one77/",
       github: "https://github.com/BevinJ",
-    },
-    {
-      name: "Sharvil Gharkar",
-      img: "/avatar/Sharvil_Gharkar.jpg",
-      linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",
-      insta: "https://www.instagram.com/sharvilgharkar_/",
-      github: "https://github.com/Sharvil0769",
     },
   ];
 
