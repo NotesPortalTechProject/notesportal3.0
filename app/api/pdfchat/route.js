@@ -17,7 +17,7 @@ export async function POST(req) {
     const response = await fetch(`${apiUrl}?${queryParams.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filearray }) // ✅ matches FastAPI
+      body: JSON.stringify({ filearray }) 
     });
 
     if (!response.ok) {
