@@ -1,32 +1,39 @@
-'use client'
-import { useState } from "react";
-import FileCardWrapper from "@/components/file-card";
+"use client";
+import { useState, useRef, useEffect } from "react";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
+import Markdown from "react-markdown";
+import { FiArrowLeft, FiArrowUp, FiMic, FiFile } from "react-icons/fi";
 
 export default function ChatWithPdf({ userId }) {
   const [step, setStep] = useState(1);
   const [subjects, setSubjects] = useState([]);
-  const [subjectState, setSubjectState] = useState('');
+  const [subjectState, setSubjectState] = useState("");
   const [loadingSubjects, setLoadingSubjects] = useState(false);
-  const [errorSubjects, setErrorSubjects] = useState('');
+  const [errorSubjects, setErrorSubjects] = useState("");
 
   const [fileList, setFileList] = useState([]);
-  const [selectedFileName, setSelectedFileName] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loadingFiles, setLoadingFiles] = useState(false);
-  const [errorFiles, setErrorFiles] = useState('');
+  const [errorFiles, setErrorFiles] = useState("");
 
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState([]);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
-  const [errorAnswer, setErrorAnswer] = useState('');
+  const [errorAnswer, setErrorAnswer] = useState("");
 
-  // --- Fetch Logic ---
+  const chatContainerRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  // --- Fetch Functions ---
   const fetchSubjects = async () => {
     try {
       setLoadingSubjects(true);
-      const res = await fetch(`/api/getUserSubjectList?userid=${userId}`);
+      setErrorSubjects("");
+      const res = await fetch(
+        `/api/getUserSubjectList?userid=${encodeURIComponent(userId)}`
+      );
       const data = await res.json();
       if (res.ok) setSubjects(data.subjects || []);
       else setErrorSubjects(data.error || "Failed to fetch subjects");
@@ -40,7 +47,10 @@ export default function ChatWithPdf({ userId }) {
   const fetchFiles = async (subject) => {
     try {
       setLoadingFiles(true);
-      const res = await fetch(`/api/getFileNames?subject=${subject}`);
+      setErrorFiles("");
+      const res = await fetch(
+        `/api/getFileNames?subject=${encodeURIComponent(subject)}`
+      );
       const data = await res.json();
       if (res.ok) setFileList(data.files || []);
       else setErrorFiles(data.error || "Failed to fetch files");
@@ -53,10 +63,18 @@ export default function ChatWithPdf({ userId }) {
 
   const fetchFileData = async (filename) => {
     try {
-      const res = await fetch(`/api/getFileDataByName?filename=${encodeURIComponent(filename)}`);
+      setErrorFiles("");
+      const res = await fetch(
+        `/api/getFileDataByName?filename=${encodeURIComponent(filename)}`
+      );
       const data = await res.json();
-      if (res.ok) setSelectedFile(data.file || null);
-      else setErrorFiles(data.error || "Failed to fetch file");
+      if (res.ok && data.file) {
+        setSelectedFile(data.file);
+        setAnswer((prev) => [
+          ...prev,
+          { type: "pdf", file: data.file, filename },
+        ]);
+      } else setErrorFiles(data.error || "Failed to fetch file");
     } catch (err) {
       setErrorFiles(err.message || "Something went wrong");
     }
@@ -66,23 +84,26 @@ export default function ChatWithPdf({ userId }) {
     e.preventDefault();
     if (!question.trim() || !selectedFile) return;
 
+    const userQuestion = question;
+    setAnswer((prev) => [...prev, { type: "user", text: userQuestion }]);
+    setQuestion("");
+    textareaRef.current.style.height = "auto";
+
     try {
       setLoadingAnswer(true);
-      setAnswer('');
-      setErrorAnswer('');
-
+      setErrorAnswer("");
       const res = await fetch(`/api/pdfchat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           filearray: [selectedFile.filelink],
-          prompt: question
-        })
+          prompt: userQuestion,
+        }),
       });
-
       const data = await res.json();
-      if (res.ok && data.answer) setAnswer(data.answer);
-      else setErrorAnswer(data.error || "Failed to get answer");
+      if (res.ok && data.answer) {
+        setAnswer((prev) => [...prev, { type: "bot", text: data.answer }]);
+      } else setErrorAnswer(data.error || "Failed to get answer");
     } catch (err) {
       setErrorAnswer(err.message || "Something went wrong");
     } finally {
@@ -90,120 +111,263 @@ export default function ChatWithPdf({ userId }) {
     }
   };
 
-  // --- UI Classes ---
-  const containerClass = "p-6 max-w-6xl mx-auto space-y-8 text-white";
-  const cardClass = "bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg space-y-4";
-  const inputClass = "w-full bg-white/10 backdrop-blur-xl border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition";
-  const selectClass = "w-full bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition";
-  const buttonClass = "bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-medium transition-all disabled:opacity-50";
-  const backButtonClass = "bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-medium transition-all disabled:opacity-50";
+  // Scroll to bottom
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [answer, loadingAnswer]);
+
+  // --- Classes ---
+  const containerClass =
+    "p-4 sm:p-6 max-w-7xl h-full mx-auto space-y-6 text-white";
+  const cardClass =
+    "bg-gradient-to-br from-[#1a1a1a]/90 via-[#2a1a3d]/70 to-[#3d1f5e]/60 border border-purple-500/20 rounded-2xl p-4 shadow-[0_0_20px_rgba(168,85,247,0.15)] flex flex-col";
+  const buttonClass =
+    "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
+  const backButtonClass =
+    "bg-gray-600 hover:bg-gray-700 p-2 rounded-full font-medium transition-all disabled:opacity-50 flex items-center justify-center";
+
+  // Dropdown
+  const Dropdown = ({ label, options, value, onChange }) => {
+    const [open, setOpen] = useState(false);
+    const handleSelect = (option) => {
+      onChange(option);
+      setOpen(false);
+    };
+    return (
+      <div className="relative w-full">
+        <label className="text-white font-semibold mb-2 block">{label}</label>
+        <div
+          className="w-full bg-white/10 border border-purple-500/20 rounded-xl px-4 py-3 cursor-pointer flex justify-between items-center focus-within:ring-2 focus-within:ring-purple-400 transition text-sm sm:text-base"
+          onClick={() => setOpen(!open)}
+        >
+          <span className={`${!value ? "text-gray-400" : "text-white"}`}>
+            {value || `--Select--`}
+          </span>
+          <svg
+            className="w-4 h-4 sm:w-5 sm:h-5 text-purple-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d={open ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+            />
+          </svg>
+        </div>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute z-10 mt-1 w-full bg-black/90 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
+            >
+              {options.map((opt, idx) => (
+                <div
+                  key={idx}
+                  className="px-4 py-3 hover:bg-purple-600/40 cursor-pointer text-white transition"
+                  onClick={() => handleSelect(opt)}
+                >
+                  {opt}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleAskQuestion(e);
+    }
+  };
 
   return (
     <div className={containerClass}>
-      <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-3xl font-extrabold text-purple-300">
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-purple-300">
         Chat with PDF
-      </motion.h1>
+      </h1>
 
-      {/* STEP 1 - Subject Selection */}
-      <AnimatePresence>
-        {step === 1 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={cardClass}>
-            {!subjects.length && !loadingSubjects && (
-              <button className={buttonClass} onClick={fetchSubjects}>
-                Load My Subjects
-              </button>
-            )}
-            {loadingSubjects && <LoadingDots text="Loading subjects..." />}
-            {errorSubjects && <p className="text-red-400">{errorSubjects}</p>}
+      {/* STEP 1 */}
+      {step === 1 && (
+        <div className={cardClass}>
+          <div className="flex items-center justify-start mb-2">
+            <button className={backButtonClass} disabled>
+              <FiArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </div>
 
-            {subjects.length > 0 && (
-              <div className="space-y-3">
-                <label className="text-white font-semibold">Select Subject:</label>
-                <select className={selectClass} value={subjectState} onChange={(e) => setSubjectState(e.target.value)}>
-                  <option value="">--Select--</option>
-                  {subjects.map((subj, idx) => <option key={idx} value={subj}>{subj}</option>)}
-                </select>
+          {!subjects.length && !loadingSubjects && (
+            <button className={buttonClass} onClick={fetchSubjects}>
+              Load My Subjects
+            </button>
+          )}
+          {loadingSubjects && <LoadingDots text="Loading subjects" />}
+          {errorSubjects && <p className="text-red-400">{errorSubjects}</p>}
+
+          {subjects.length > 0 && (
+            <div className="space-y-3 w-full mt-2">
+              <Dropdown
+                label="Select Subject:"
+                options={subjects}
+                value={subjectState}
+                onChange={setSubjectState}
+              />
+              <div className="flex justify-end gap-2 mt-2">
                 <button
                   disabled={!subjectState}
                   className={buttonClass}
-                  onClick={async () => { await fetchFiles(subjectState); setStep(2); }}
+                  onClick={async () => {
+                    await fetchFiles(subjectState);
+                    setStep(2);
+                  }}
                 >
                   Next
                 </button>
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* STEP 2 - File Selection */}
-      <AnimatePresence>
-        {step === 2 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={cardClass}>
-            {loadingFiles && <LoadingDots text="Loading files..." />}
-            {errorFiles && <p className="text-red-400">{errorFiles}</p>}
-
-            <p className="text-purple-200 font-semibold">Selected Subject: <span className="text-white">{subjectState}</span></p>
-
-            {fileList.length > 0 && (
-              <div className="space-y-3">
-                <label className="text-white font-semibold">Select File:</label>
-                <select className={selectClass} value={selectedFileName} onChange={(e) => setSelectedFileName(e.target.value)}>
-                  <option value="">--Select File--</option>
-                  {fileList.map((f, idx) => <option key={idx} value={f.filename}>{f.filename}</option>)}
-                </select>
-
-                <div className="flex gap-4 justify-end">
-                  <button
-                    disabled={!selectedFileName}
-                    className={buttonClass}
-                    onClick={async () => { await fetchFileData(selectedFileName); setStep(3); }}
-                  >
-                    Next
-                  </button>
-                  <button className={backButtonClass} onClick={() => setStep(1)}>Back</button>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* STEP 3 - PDF Chat */}
-      <AnimatePresence>
-        {step === 3 && selectedFile && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={cardClass}>
-            <p className="text-purple-200 font-semibold">Selected Subject: <span className="text-white">{subjectState}</span></p>
-            <p className="text-purple-200 font-semibold">Selected File: <span className="text-white">{selectedFileName}</span></p>
-
-            <div className="max-w-5xl">
-              <FileCardWrapper file={selectedFile} userid={userId} />
             </div>
+          )}
+        </div>
+      )}
 
-            <form onSubmit={handleAskQuestion} className="space-y-3 mt-4">
-              <input
-                type="text"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="Ask something..."
-                className={inputClass}
+      {/* STEP 2 */}
+      {step === 2 && (
+        <div className={cardClass}>
+          <div className="flex items-center justify-start mb-2">
+            <button className={backButtonClass} onClick={() => setStep(1)}>
+              <FiArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </div>
+
+          {loadingFiles && <LoadingDots text="Loading files..." />}
+          {errorFiles && <p className="text-red-400">{errorFiles}</p>}
+
+          {fileList.length > 0 && (
+            <div className="space-y-3 w-full mt-2">
+              <Dropdown
+                label="Select File:"
+                options={fileList.map((f) => f.filename)}
+                value={selectedFileName}
+                onChange={setSelectedFileName}
               />
-              <button type="submit" className={buttonClass} disabled={loadingAnswer}>
-                {loadingAnswer ? <LoadingDots text="Getting answer" /> : "Ask"}
-              </button>
-            </form>
-
-            {answer && (
-              <div className="bg-white/10 backdrop-blur-xl p-4 rounded-2xl text-white max-w-5xl whitespace-pre-wrap mt-3 shadow-md">
-                {answer}
+              <div className="flex justify-end gap-2 mt-2">
+                <button
+                  disabled={!selectedFileName}
+                  className={buttonClass}
+                  onClick={async () => {
+                    await fetchFileData(selectedFileName);
+                    setStep(3);
+                  }}
+                >
+                  Next
+                </button>
               </div>
-            )}
-            {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
+            </div>
+          )}
+        </div>
+      )}
 
-            <button className={backButtonClass} onClick={() => setStep(2)}>Back</button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* STEP 3 */}
+      {step === 3 && selectedFile && (
+        <div className={cardClass}>
+          {/* Chat messages */}
+          <div
+            ref={chatContainerRef}
+            className="flex flex-col space-y-3 w-full max-h-[49vh] sm:max-h-[43vh] md:max-h-[43vh] lg:max-h-[50vh] xl:max-h-[58vh] overflow-y-auto hide-scrollbar mb-4"
+          >
+            {answer.map((item, idx) => {
+              const justify =
+                item.type === "user" || item.type === "pdf"
+                  ? "justify-end"
+                  : "justify-start";
+
+              const maxWidthClass =
+                item.type === "bot"
+                  ? "max-w-[90%] sm:max-w-[60%]"
+                  : "max-w-[80%] sm:max-w-[55%]";
+
+              return (
+                <div key={idx} className={`flex ${justify}`}>
+                  {item.type === "bot" ? (
+                    <div
+                      className={`bg-white/5 px-4 py-2 rounded-2xl shadow-inner break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
+                    >
+                      <Markdown>{item.text}</Markdown>
+                    </div>
+                  ) : item.type === "pdf" ? (
+                    <div
+                      className={`bg-purple-800/30 border border-purple-500/30 px-4 py-3 rounded-xl shadow-md flex items-center gap-3 ${maxWidthClass}`}
+                    >
+                      <div className="bg-purple-600/40 p-2 rounded-lg">
+                        <FiFile className="w-5 h-5 sm:w-6 sm:h-6 text-purple-300" />
+                      </div>
+                      <span className="text-sm md:text-base font-medium text-purple-200 break-words">
+                        {item.filename}
+                      </span>
+                    </div>
+                  ) : (
+                    <div
+                      className={`bg-purple-700/40 px-4 py-2 rounded-2xl shadow-md break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
+                    >
+                      {item.text}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {loadingAnswer && <LoadingDots text="Getting answer" />}
+            {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
+          </div>
+
+          {/* Chat input */}
+          <div className="relative w-full flex flex-col-reverse max-w-2xl mx-auto">
+            <textarea
+              ref={textareaRef}
+              value={question}
+              onChange={(e) => {
+                setQuestion(e.target.value);
+                textareaRef.current.style.height = "auto";
+                textareaRef.current.style.height =
+                  Math.min(textareaRef.current.scrollHeight, 10 * 24) + "px";
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask something..."
+              data-gramm="false"
+              className="flex-1 bg-white/5 text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] rounded-3xl px-4 py-2 pr-20 hide-scrollbar leading-[1.5rem] box-border transition-all duration-200 ease-in-out text-sm md:text-base"
+              style={{ minHeight: "2rem" }}
+            />
+
+            <div className="absolute right-3 bottom-3 flex space-x-2">
+              <button
+                type="button"
+                className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
+              >
+                <FiMic className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+              <button
+                type="submit"
+                onClick={handleAskQuestion}
+                disabled={loadingAnswer || !question.trim()}
+                className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
+                  loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

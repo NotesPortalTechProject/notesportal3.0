@@ -12,6 +12,7 @@ export async function POST(req) {
     }
 
     const apiUrl = process.env.PYTHON_API_URL+"/pdfchat" || "http://127.0.0.1:8000/pdfchat";
+    console.log("Using PDF API URL:", apiUrl);
     const queryParams = new URLSearchParams({ prompt });
 
     const response = await fetch(`${apiUrl}?${queryParams.toString()}`, {
