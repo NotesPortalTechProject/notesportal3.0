@@ -122,8 +122,6 @@ export default function ChatWithPdf({ userId }) {
   // --- Classes ---
   const containerClass =
     "p-4 sm:p-6 max-w-7xl h-full mx-auto space-y-6 text-white";
-  const cardClass =
-    "bg-gradient-to-br from-[#1a1a1a]/90 via-[#2a1a3d]/70 to-[#3d1f5e]/60 border border-purple-500/20 rounded-2xl p-4 shadow-[0_0_20px_rgba(168,85,247,0.15)] flex flex-col";
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
   const backButtonClass =
@@ -167,7 +165,7 @@ export default function ChatWithPdf({ userId }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-10 mt-1 w-full bg-black/90 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
+              className="absolute z-10 mt-1 w-full bg-black/30 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
             >
               {options.map((opt, idx) => (
                 <div
@@ -200,13 +198,7 @@ export default function ChatWithPdf({ userId }) {
 
       {/* STEP 1 */}
       {step === 1 && (
-        <div className={cardClass}>
-          <div className="flex items-center justify-start mb-2">
-            <button className={backButtonClass} disabled>
-              <FiArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-          </div>
-
+        <>
           {!subjects.length && !loadingSubjects && (
             <button className={buttonClass} onClick={fetchSubjects}>
               Load My Subjects
@@ -237,18 +229,12 @@ export default function ChatWithPdf({ userId }) {
               </div>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {/* STEP 2 */}
       {step === 2 && (
-        <div className={cardClass}>
-          <div className="flex items-center justify-start mb-2">
-            <button className={backButtonClass} onClick={() => setStep(1)}>
-              <FiArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-          </div>
-
+        <>
           {loadingFiles && <LoadingDots text="Loading files..." />}
           {errorFiles && <p className="text-red-400">{errorFiles}</p>}
 
@@ -274,16 +260,16 @@ export default function ChatWithPdf({ userId }) {
               </div>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {/* STEP 3 */}
       {step === 3 && selectedFile && (
-        <div className={cardClass}>
+        <div className="flex flex-col h-[85%] sm:h-[80%] lg:h-[95%]">
           {/* Chat messages */}
           <div
             ref={chatContainerRef}
-            className="flex flex-col space-y-3 w-full max-h-[49vh] sm:max-h-[43vh] md:max-h-[43vh] lg:max-h-[50vh] xl:max-h-[58vh] overflow-y-auto hide-scrollbar mb-4"
+            className="flex-1 flex flex-col space-y-3 w-full overflow-y-auto hide-scrollbar px-4 sm:px-6"
           >
             {answer.map((item, idx) => {
               const justify =
@@ -291,37 +277,33 @@ export default function ChatWithPdf({ userId }) {
                   ? "justify-end"
                   : "justify-start";
 
-              const maxWidthClass =
+              const bgClass =
                 item.type === "bot"
-                  ? "max-w-[90%] sm:max-w-[60%]"
-                  : "max-w-[80%] sm:max-w-[55%]";
+                  ? "bg-white/5 border border-white/10"
+                  : item.type === "user"
+                  ? "bg-purple-700/20 border border-purple-600/30"
+                  : "bg-purple-800/20 border border-purple-500/20";
 
               return (
-                <div key={idx} className={`flex ${justify}`}>
-                  {item.type === "bot" ? (
-                    <div
-                      className={`bg-white/5 px-4 py-2 rounded-2xl shadow-inner break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
-                    >
+                <div key={idx} className={`flex ${justify} w-full`}>
+                  <div
+                    className={`px-4 py-2 rounded-2xl shadow-md break-words lg:max-w-[80%] text-sm md:text-base ${bgClass}`}
+                  >
+                    {item.type === "bot" ? (
                       <Markdown>{item.text}</Markdown>
-                    </div>
-                  ) : item.type === "pdf" ? (
-                    <div
-                      className={`bg-purple-800/30 border border-purple-500/30 px-4 py-3 rounded-xl shadow-md flex items-center gap-3 ${maxWidthClass}`}
-                    >
-                      <div className="bg-purple-600/40 p-2 rounded-lg">
-                        <FiFile className="w-5 h-5 sm:w-6 sm:h-6 text-purple-300" />
+                    ) : item.type === "pdf" ? (
+                      <div className="flex items-center gap-3">
+                        <div className="bg-purple-600/30 p-2 rounded-lg">
+                          <FiFile className="w-5 h-5 sm:w-6 sm:h-6 text-purple-300" />
+                        </div>
+                        <span className="text-sm md:text-base font-medium text-purple-200 break-words">
+                          {item.filename}
+                        </span>
                       </div>
-                      <span className="text-sm md:text-base font-medium text-purple-200 break-words">
-                        {item.filename}
-                      </span>
-                    </div>
-                  ) : (
-                    <div
-                      className={`bg-purple-700/40 px-4 py-2 rounded-2xl shadow-md break-words ${maxWidthClass} min-w-[20%] text-sm md:text-base`}
-                    >
-                      {item.text}
-                    </div>
-                  )}
+                    ) : (
+                      item.text
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -330,40 +312,42 @@ export default function ChatWithPdf({ userId }) {
           </div>
 
           {/* Chat input */}
-          <div className="relative w-full flex flex-col-reverse max-w-2xl mx-auto">
-            <textarea
-              ref={textareaRef}
-              value={question}
-              onChange={(e) => {
-                setQuestion(e.target.value);
-                textareaRef.current.style.height = "auto";
-                textareaRef.current.style.height =
-                  Math.min(textareaRef.current.scrollHeight, 10 * 24) + "px";
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask something..."
-              data-gramm="false"
-              className="flex-1 bg-white/5 text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] rounded-3xl px-4 py-2 pr-20 hide-scrollbar leading-[1.5rem] box-border transition-all duration-200 ease-in-out text-sm md:text-base"
-              style={{ minHeight: "2rem" }}
-            />
+          <div className="relative w-full flex justify-center mt-2">
+            <div className="w-full max-w-3xl relative flex items-center bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2">
+              <textarea
+                ref={textareaRef}
+                value={question}
+                onChange={(e) => {
+                  setQuestion(e.target.value);
+                  textareaRef.current.style.height = "auto";
+                  textareaRef.current.style.height =
+                    Math.min(textareaRef.current.scrollHeight, 10 * 24) + "px";
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask something..."
+                data-gramm="false"
+                className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] outline-none leading-[1.5rem] text-sm md:text-base"
+                style={{ minHeight: "2rem" }}
+              />
 
-            <div className="absolute right-3 bottom-3 flex space-x-2">
-              <button
-                type="button"
-                className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
-              >
-                <FiMic className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
-              <button
-                type="submit"
-                onClick={handleAskQuestion}
-                disabled={loadingAnswer || !question.trim()}
-                className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
-                  loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
+              <div className="flex space-x-2 ml-2">
+                <button
+                  type="button"
+                  className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <FiMic className="w-4 h-4 md:w-5 md:h-5" />
+                </button>
+                <button
+                  type="submit"
+                  onClick={handleAskQuestion}
+                  disabled={loadingAnswer || !question.trim()}
+                  className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
+                    loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
