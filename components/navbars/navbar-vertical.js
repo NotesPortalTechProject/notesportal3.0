@@ -32,7 +32,7 @@ export default function VerticalSidebar({ id,subjectlist}) {
 
           <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-          <NavItem icon={<FiMessageCircle />} label="Chat Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname}/>
+          <NavItem icon={<FiMessageCircle />} label="Chat with Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname}/>
           <NavItem icon={<FiSearch/>} label="Smart Search" id={id} endpoint={"smartsearch"} pathname={pathname}/>
         </nav>
 

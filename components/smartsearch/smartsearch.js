@@ -99,7 +99,7 @@ export default function SmartSearch({ userid }) {
 
       {!loading && files.length > 0 && (
         <>
-          <p className="text-gray-300 mb-4">
+          <p className="text-gray-300 ">
             Based on your search, we were able to gather these files:
           </p>
           <SSFilesGrid files={files} id={userid} />
