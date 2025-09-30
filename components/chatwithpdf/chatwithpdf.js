@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "react-markdown";
-import { FiArrowLeft, FiArrowUp, FiMic, FiFile } from "react-icons/fi";
+import { FiArrowUp, FiMic, FiFile, FiPlus, FiX, FiCheck } from "react-icons/fi";
 
 export default function ChatWithPdf({ userId }) {
   const [step, setStep] = useState(1);
@@ -13,8 +13,7 @@ export default function ChatWithPdf({ userId }) {
   const [errorSubjects, setErrorSubjects] = useState("");
 
   const [fileList, setFileList] = useState([]);
-  const [selectedFileName, setSelectedFileName] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [loadingFiles, setLoadingFiles] = useState(false);
   const [errorFiles, setErrorFiles] = useState("");
 
@@ -22,9 +21,26 @@ export default function ChatWithPdf({ userId }) {
   const [answer, setAnswer] = useState([]);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
   const [errorAnswer, setErrorAnswer] = useState("");
+  const [showFilePicker, setShowFilePicker] = useState(false);
 
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
+  const pickerRef = useRef(null);
+
+  // Close picker on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (pickerRef.current && !pickerRef.current.contains(e.target)) {
+        setShowFilePicker(false);
+      }
+    }
+    if (showFilePicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFilePicker]);
 
   // --- Fetch Functions ---
   const fetchSubjects = async () => {
@@ -69,10 +85,13 @@ export default function ChatWithPdf({ userId }) {
       );
       const data = await res.json();
       if (res.ok && data.file) {
-        setSelectedFile(data.file);
+        setSelectedFiles((prev) => {
+          if (prev.find((f) => f.filename === filename)) return prev;
+          return [...prev, { filename, file: data.file }];
+        });
         setAnswer((prev) => [
           ...prev,
-          { type: "pdf", file: data.file, filename },
+          { type: "pdf", filename, file: data.file },
         ]);
       } else setErrorFiles(data.error || "Failed to fetch file");
     } catch (err) {
@@ -82,7 +101,7 @@ export default function ChatWithPdf({ userId }) {
 
   const handleAskQuestion = async (e) => {
     e.preventDefault();
-    if (!question.trim() || !selectedFile) return;
+    if (!question.trim() || selectedFiles.length === 0) return;
 
     const userQuestion = question;
     setAnswer((prev) => [...prev, { type: "user", text: userQuestion }]);
@@ -92,13 +111,11 @@ export default function ChatWithPdf({ userId }) {
     try {
       setLoadingAnswer(true);
       setErrorAnswer("");
+      const fileLinks = selectedFiles.map((f) => f.file.filelink);
       const res = await fetch(`/api/pdfchat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filearray: [selectedFile.filelink],
-          prompt: userQuestion,
-        }),
+        body: JSON.stringify({ filearray: fileLinks, prompt: userQuestion }),
       });
       const data = await res.json();
       if (res.ok && data.answer) {
@@ -124,8 +141,6 @@ export default function ChatWithPdf({ userId }) {
     "p-4 sm:p-6 max-w-7xl h-full mx-auto space-y-6 text-white";
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
-  const backButtonClass =
-    "bg-gray-600 hover:bg-gray-700 p-2 rounded-full font-medium transition-all disabled:opacity-50 flex items-center justify-center";
 
   // Dropdown
   const Dropdown = ({ label, options, value, onChange }) => {
@@ -237,23 +252,19 @@ export default function ChatWithPdf({ userId }) {
         <>
           {loadingFiles && <LoadingDots text="Loading files..." />}
           {errorFiles && <p className="text-red-400">{errorFiles}</p>}
-
           {fileList.length > 0 && (
             <div className="space-y-3 w-full mt-2">
               <Dropdown
                 label="Select File:"
                 options={fileList.map((f) => f.filename)}
-                value={selectedFileName}
-                onChange={setSelectedFileName}
+                value={selectedFiles[0]?.filename || ""}
+                onChange={(filename) => fetchFileData(filename)}
               />
               <div className="flex justify-end gap-2 mt-2">
                 <button
-                  disabled={!selectedFileName}
+                  disabled={selectedFiles.length === 0}
                   className={buttonClass}
-                  onClick={async () => {
-                    await fetchFileData(selectedFileName);
-                    setStep(3);
-                  }}
+                  onClick={() => setStep(3)}
                 >
                   Next
                 </button>
@@ -264,8 +275,8 @@ export default function ChatWithPdf({ userId }) {
       )}
 
       {/* STEP 3 */}
-      {step === 3 && selectedFile && (
-        <div className="flex flex-col h-[85%] sm:h-[80%] lg:h-[95%]">
+      {step === 3 && selectedFiles.length > 0 && (
+        <div className="flex flex-col h-[85%] sm:h-[80%] lg:h-[95%] relative">
           {/* Chat messages */}
           <div
             ref={chatContainerRef}
@@ -276,7 +287,6 @@ export default function ChatWithPdf({ userId }) {
                 item.type === "user" || item.type === "pdf"
                   ? "justify-end"
                   : "justify-start";
-
               const bgClass =
                 item.type === "bot"
                   ? "bg-white/5 border border-white/10"
@@ -311,43 +321,113 @@ export default function ChatWithPdf({ userId }) {
             {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
           </div>
 
-          {/* Chat input */}
+          {/* Chat input with plus button */}
           <div className="relative w-full flex justify-center mt-2">
-            <div className="w-full max-w-3xl relative flex items-center bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2">
-              <textarea
-                ref={textareaRef}
-                value={question}
-                onChange={(e) => {
-                  setQuestion(e.target.value);
-                  textareaRef.current.style.height = "auto";
-                  textareaRef.current.style.height =
-                    Math.min(textareaRef.current.scrollHeight, 10 * 24) + "px";
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask something..."
-                data-gramm="false"
-                className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none overflow-y-auto max-h-[10rem] outline-none leading-[1.5rem] text-sm md:text-base"
-                style={{ minHeight: "2rem" }}
-              />
+            <div className="w-full max-w-3xl relative" ref={pickerRef}>
+              {/* Textarea container */}
+<div className="flex items-end bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2 w-full max-w-3xl">
+  {/* Plus button */}
+  <button
+    type="button"
+    className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
+    onClick={() => setShowFilePicker(true)}
+  >
+    <FiPlus className="w-4 h-4 md:w-5 md:h-5" />
+  </button>
 
-              <div className="flex space-x-2 ml-2">
-                <button
-                  type="button"
-                  className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
-                >
-                  <FiMic className="w-4 h-4 md:w-5 md:h-5" />
-                </button>
-                <button
-                  type="submit"
-                  onClick={handleAskQuestion}
-                  disabled={loadingAnswer || !question.trim()}
-                  className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
-                    loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
-                </button>
-              </div>
+  {/* Textarea */}
+  <div className="flex-1 flex items-end">
+    <textarea
+      ref={textareaRef}
+      value={question}
+      onChange={(e) => {
+        setQuestion(e.target.value);
+        // Auto grow
+        textareaRef.current.style.height = "auto";
+        const maxHeight = 5 * 24; // 5 lines * line height in px
+        textareaRef.current.style.height = `${Math.min(
+          textareaRef.current.scrollHeight,
+          maxHeight
+        )}px`;
+      }}
+      onKeyDown={handleKeyDown}
+      placeholder="Ask something..."
+      className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
+      style={{
+        minHeight: "2.5rem", // initial height
+        lineHeight: "1.5rem",
+        overflow: "hidden",
+        paddingTop: "0.5rem",
+        paddingBottom: "0.5rem",
+      }}
+      data-gramm="false"
+      data-gramm_editor="false"
+      data-enable-grammarly="false"
+    />
+  </div>
+
+  {/* Send/Mic buttons */}
+  <div className="flex space-x-2 ml-2">
+    <button className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200">
+      <FiMic className="w-4 h-4 md:w-5 md:h-5" />
+    </button>
+    <button
+      type="submit"
+      onClick={handleAskQuestion}
+      disabled={loadingAnswer || !question.trim()}
+      className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
+        loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
+      }`}
+    >
+      <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+    </button>
+  </div>
+</div>
+
+
+              {/* Floating file picker */}
+              {showFilePicker && (
+                <div className="absolute bottom-full left-0 mb-2 w-64 max-h-60 overflow-y-auto bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg z-20">
+                  {fileList.length > 0 ? (
+                    fileList.map((f, idx) => {
+                      const alreadySelected = selectedFiles.some(
+                        (sf) => sf.filename === f.filename
+                      );
+                      return (
+                        <div
+                          key={idx}
+                          className={`flex m-1 items-center justify-between px-3 py-2 cursor-pointer text-sm transition rounded-md ${
+                            alreadySelected
+                              ? "bg-purple-600/30 text-purple-200"
+                              : "hover:bg-white/10 text-white"
+                          }`}
+                          onClick={async () => {
+                            if (!alreadySelected) {
+                              await fetchFileData(f.filename);
+                            } else {
+                              setSelectedFiles(
+                                selectedFiles.filter(
+                                  (sf) => sf.filename !== f.filename
+                                )
+                              );
+                            }
+                            setShowFilePicker(false); // 👈 close after selection
+                          }}
+                        >
+                          <span className="truncate">{f.filename}</span>
+                          {alreadySelected && (
+                            <FiCheck className="text-purple-400" />
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="px-3 py-2 text-sm text-gray-400">
+                      No files found
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
