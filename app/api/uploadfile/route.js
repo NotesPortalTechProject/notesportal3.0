@@ -28,7 +28,7 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     const subjectcode = formData.get("scode")?.toUpperCase();
-    const filename = formData.get("filename")?.toUpperCase();
+    let filename = formData.get("filename")?.toUpperCase();
     filename = filename.trim().replace(/\s+/g, "_");
     const description = formData.get("description");
     const file = formData.get("file");
