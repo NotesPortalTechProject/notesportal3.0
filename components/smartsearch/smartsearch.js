@@ -73,7 +73,7 @@ export default function SmartSearch({ userid }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your question here..."
+          placeholder="type your question here..."
           className="flex-1 p-4 rounded-xl border border-purple-500/20 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder:text-white/50"
         />
         <button
@@ -81,7 +81,7 @@ export default function SmartSearch({ userid }) {
           disabled={loading}
           className="px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg flex items-center justify-center disabled:opacity-50 transition"
         >
-          Search
+          {loading ? <LoadingDots text="looking for files"/>:"Search"}
         </button>
       </div>
 
@@ -103,12 +103,6 @@ export default function SmartSearch({ userid }) {
             Based on your search, we were able to gather these files:
           </p>
           <SSFilesGrid files={files} id={userid} />
-        </div>
-      )}
-
-      {loading && (
-        <div className="flex items-center justify-center mt-8">
-          <LoadingDots text="Searching" />
         </div>
       )}
     </div>

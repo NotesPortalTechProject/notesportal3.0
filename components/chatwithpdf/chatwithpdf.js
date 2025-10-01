@@ -3,15 +3,11 @@ import { useState, useRef, useEffect } from "react";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "react-markdown";
-import { FiArrowUp, FiMic, FiFile, FiPlus, FiX, FiCheck } from "react-icons/fi";
+import { FiArrowUp, FiMic, FiFile, FiPlus, FiCheck, FiX } from "react-icons/fi";
 
-export default function ChatWithPdf({ userId }) {
+export default function ChatWithPdf({ userId, subjectList }) {
   const [step, setStep] = useState(1);
-  const [subjects, setSubjects] = useState([]);
   const [subjectState, setSubjectState] = useState("");
-  const [loadingSubjects, setLoadingSubjects] = useState(false);
-  const [errorSubjects, setErrorSubjects] = useState("");
-
   const [fileList, setFileList] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loadingFiles, setLoadingFiles] = useState(false);
@@ -41,24 +37,6 @@ export default function ChatWithPdf({ userId }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showFilePicker]);
-
-  // --- Fetch Functions ---
-  const fetchSubjects = async () => {
-    try {
-      setLoadingSubjects(true);
-      setErrorSubjects("");
-      const res = await fetch(
-        `/api/getUserSubjectList?userid=${encodeURIComponent(userId)}`
-      );
-      const data = await res.json();
-      if (res.ok) setSubjects(data.subjects || []);
-      else setErrorSubjects(data.error || "Failed to fetch subjects");
-    } catch (err) {
-      setErrorSubjects(err.message || "Something went wrong");
-    } finally {
-      setLoadingSubjects(false);
-    }
-  };
 
   const fetchFiles = async (subject) => {
     try {
@@ -120,9 +98,17 @@ export default function ChatWithPdf({ userId }) {
       const data = await res.json();
       if (res.ok && data.answer) {
         setAnswer((prev) => [...prev, { type: "bot", text: data.answer }]);
-      } else setErrorAnswer(data.error || "Failed to get answer");
+      } else {
+        setAnswer((prev) => [
+          ...prev,
+          { type: "bot", text: " Failed to fetch answer." },
+        ]);
+      }
     } catch (err) {
-      setErrorAnswer(err.message || "Something went wrong");
+      setAnswer((prev) => [
+        ...prev,
+        { type: "bot", text: " Error: " + (err.message || "Something went wrong") },
+      ]);
     } finally {
       setLoadingAnswer(false);
     }
@@ -136,13 +122,11 @@ export default function ChatWithPdf({ userId }) {
     }
   }, [answer, loadingAnswer]);
 
-  // --- Classes ---
   const containerClass =
-    "p-4 sm:p-6 max-w-7xl h-full mx-auto space-y-6 text-white";
+    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white";
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
 
-  // Dropdown
   const Dropdown = ({ label, options, value, onChange }) => {
     const [open, setOpen] = useState(false);
     const handleSelect = (option) => {
@@ -207,59 +191,82 @@ export default function ChatWithPdf({ userId }) {
 
   return (
     <div className={containerClass}>
-      <h1 className="text-2xl sm:text-3xl font-extrabold text-purple-300">
-        Chat with PDF
-      </h1>
+      <div className="flex flex-col items-start">
+        <h1 className="text-lg sm:text-xl font-bold text-purple-300">
+          Chat with PDF
+        </h1>
+        <p className="text-gray-400 text-xs sm:text-sm mt-1">
+          Select one or more files and ask questions. We will answer based on the files provided.
+        </p>
+      </div>
 
       {/* STEP 1 */}
       {step === 1 && (
-        <>
-          {!subjects.length && !loadingSubjects && (
-            <button className={buttonClass} onClick={fetchSubjects}>
-              Load My Subjects
+        <div className="space-y-3 w-full mt-2">
+          <Dropdown
+            label="Select Subject:"
+            options={subjectList}
+            value={subjectState}
+            onChange={setSubjectState}
+          />
+          <div className="flex justify-end gap-2 mt-2">
+            <button
+              disabled={!subjectState}
+              className={buttonClass}
+              onClick={async () => {
+                await fetchFiles(subjectState);
+                setStep(2);
+              }}
+            >
+              Next
             </button>
-          )}
-          {loadingSubjects && <LoadingDots text="Loading subjects" />}
-          {errorSubjects && <p className="text-red-400">{errorSubjects}</p>}
-
-          {subjects.length > 0 && (
-            <div className="space-y-3 w-full mt-2">
-              <Dropdown
-                label="Select Subject:"
-                options={subjects}
-                value={subjectState}
-                onChange={setSubjectState}
-              />
-              <div className="flex justify-end gap-2 mt-2">
-                <button
-                  disabled={!subjectState}
-                  className={buttonClass}
-                  onClick={async () => {
-                    await fetchFiles(subjectState);
-                    setStep(2);
-                  }}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+          </div>
+        </div>
       )}
 
       {/* STEP 2 */}
       {step === 2 && (
         <>
           {loadingFiles && <LoadingDots text="Loading files..." />}
-          {errorFiles && <p className="text-red-400">{errorFiles}</p>}
+          {errorFiles && (
+            <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm">
+              {errorFiles}
+            </div>
+          )}
           {fileList.length > 0 && (
             <div className="space-y-3 w-full mt-2">
               <Dropdown
-                label="Select File:"
+                label="Select File(s):"
                 options={fileList.map((f) => f.filename)}
-                value={selectedFiles[0]?.filename || ""}
+                value=""
                 onChange={(filename) => fetchFileData(filename)}
               />
+
+              {/* Selected files display */}
+              {selectedFiles.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedFiles.map((f, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center bg-purple-700/20 border border-purple-500/30 rounded-lg px-3 py-1 text-sm text-purple-200"
+                    >
+                      <FiFile className="mr-1 text-purple-300" />
+                      {f.filename}
+                      <button
+                        onClick={() =>
+                          setSelectedFiles(
+                            selectedFiles.filter((sf) => sf.filename !== f.filename)
+                          )
+                        }
+                        className="ml-2 text-red-400 hover:text-red-300"
+                      >
+                        <FiX />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="flex justify-end gap-2 mt-2">
                 <button
                   disabled={selectedFiles.length === 0}
@@ -277,7 +284,7 @@ export default function ChatWithPdf({ userId }) {
       {/* STEP 3 */}
       {step === 3 && selectedFiles.length > 0 && (
         <div className="flex flex-col h-[85%] sm:h-[80%] lg:h-[95%] relative">
-          {/* Chat messages */}
+          {/* Messages */}
           <div
             ref={chatContainerRef}
             className="flex-1 flex flex-col space-y-3 w-full overflow-y-auto hide-scrollbar px-4 sm:px-6"
@@ -318,74 +325,67 @@ export default function ChatWithPdf({ userId }) {
               );
             })}
             {loadingAnswer && <LoadingDots text="Getting answer" />}
-            {errorAnswer && <p className="text-red-400">{errorAnswer}</p>}
           </div>
 
-          {/* Chat input with plus button */}
+          {/* Input */}
           <div className="relative w-full flex justify-center mt-2">
             <div className="w-full max-w-3xl relative" ref={pickerRef}>
-              {/* Textarea container */}
-<div className="flex items-end bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2 w-full max-w-3xl">
-  {/* Plus button */}
-  <button
-    type="button"
-    className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
-    onClick={() => setShowFilePicker(true)}
-  >
-    <FiPlus className="w-4 h-4 md:w-5 md:h-5" />
-  </button>
+              <div className="flex items-end bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2 w-full max-w-3xl">
+                {/* Plus */}
+                <button
+                  type="button"
+                  className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
+                  onClick={() => setShowFilePicker(true)}
+                >
+                  <FiPlus className="w-4 h-4 md:w-5 md:h-5" />
+                </button>
 
-  {/* Textarea */}
-  <div className="flex-1 flex items-end">
-    <textarea
-      ref={textareaRef}
-      value={question}
-      onChange={(e) => {
-        setQuestion(e.target.value);
-        // Auto grow
-        textareaRef.current.style.height = "auto";
-        const maxHeight = 5 * 24; // 5 lines * line height in px
-        textareaRef.current.style.height = `${Math.min(
-          textareaRef.current.scrollHeight,
-          maxHeight
-        )}px`;
-      }}
-      onKeyDown={handleKeyDown}
-      placeholder="Ask something..."
-      className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
-      style={{
-        minHeight: "2.5rem", // initial height
-        lineHeight: "1.5rem",
-        overflow: "hidden",
-        paddingTop: "0.5rem",
-        paddingBottom: "0.5rem",
-      }}
-      data-gramm="false"
-      data-gramm_editor="false"
-      data-enable-grammarly="false"
-    />
-  </div>
+                {/* Textarea */}
+                <div className="flex-1 flex items-end">
+                  <textarea
+                    ref={textareaRef}
+                    value={question}
+                    onChange={(e) => {
+                      setQuestion(e.target.value);
+                      textareaRef.current.style.height = "auto";
+                      const maxHeight = 5 * 24;
+                      textareaRef.current.style.height = `${Math.min(
+                        textareaRef.current.scrollHeight,
+                        maxHeight
+                      )}px`;
+                    }}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask something..."
+                    className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
+                    style={{
+                      minHeight: "2.5rem",
+                      lineHeight: "1.5rem",
+                      overflow: "hidden",
+                      paddingTop: "0.5rem",
+                      paddingBottom: "0.5rem",
+                    }}
+                  />
+                </div>
 
-  {/* Send/Mic buttons */}
-  <div className="flex space-x-2 ml-2">
-    <button className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200">
-      <FiMic className="w-4 h-4 md:w-5 md:h-5" />
-    </button>
-    <button
-      type="submit"
-      onClick={handleAskQuestion}
-      disabled={loadingAnswer || !question.trim()}
-      className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
-        loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
-      }`}
-    >
-      <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
-    </button>
-  </div>
-</div>
+                {/* Buttons */}
+                <div className="flex space-x-2 ml-2">
+                  <button className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200">
+                    <FiMic className="w-4 h-4 md:w-5 md:h-5" />
+                  </button>
+                  <button
+                    type="submit"
+                    onClick={handleAskQuestion}
+                    disabled={loadingAnswer || !question.trim()}
+                    className={`bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
+                      loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+                  </button>
+                </div>
+              </div>
 
-
-              {/* Floating file picker */}
+              {/* File Picker */}
               {showFilePicker && (
                 <div className="absolute bottom-full left-0 mb-2 w-64 max-h-60 overflow-y-auto bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg z-20">
                   {fileList.length > 0 ? (
@@ -411,7 +411,7 @@ export default function ChatWithPdf({ userId }) {
                                 )
                               );
                             }
-                            setShowFilePicker(false); // 👈 close after selection
+                            setShowFilePicker(false);
                           }}
                         >
                           <span className="truncate">{f.filename}</span>
