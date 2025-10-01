@@ -2,8 +2,9 @@
 import { logout } from "@/actions/auth-actions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiHome, FiUpload, FiUser, FiStar, FiFile, FiLogOut, FiMessageCircle, FiSearch} from "react-icons/fi";
+import { FiHome, FiUpload, FiUser, FiStar, FiFile, FiLogOut, FiSearch, FiCpu, FiMessageSquare } from "react-icons/fi";
 import UploadFileModal from "../upload-file-modal";
+
 
 export default function VerticalSidebar({ id,subjectlist}) {
   const pathname = usePathname();
@@ -32,8 +33,9 @@ export default function VerticalSidebar({ id,subjectlist}) {
 
           <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-          <NavItem icon={<FiMessageCircle />} label="Chat with Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname}/>
+          <NavItem icon={<FiMessageSquare/>} label="Chat with Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname}/>
           <NavItem icon={<FiSearch/>} label="Smart Search" id={id} endpoint={"smartsearch"} pathname={pathname}/>
+          <NavItem icon={<FiCpu/>} label="Qna Engine" id={id} endpoint={"qna"} pathname={pathname}/>
         </nav>
 
         {/* Logout at bottom */}
