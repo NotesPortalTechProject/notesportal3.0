@@ -58,15 +58,15 @@ export default function SmartSearch({ userid }) {
   };
 
   return (
-    <div className="min-h-screen w-full p-8 text-white flex flex-col gap-6">
-      <div className="w-full p-6 rounded-2xl backdrop-blur-xl border border-white/5 shadow-lg">
-        <h1 className="text-4xl font-bold text-purple-300">SmartSearch</h1>
-        <p className="mt-2 text-gray-300 text-sm">
+    <div className="min-h-screen w-full p-2 text-white flex flex-col gap-6">
+      <div className="max-w-lg">
+        <h1 className="text-2xl font-semibold text-purple-300">SmartSearch</h1>
+        <p className="mt-1 text-gray-400 text-xs">
           Ask any question and SmartSearch will find the most relevant PDF files from our database.
         </p>
       </div>
 
-      <div className="flex gap-4 w-full">
+      <div className="flex gap-4 w-full max-w-3xl">
         <input
           ref={inputRef}
           type="text"
@@ -81,34 +81,34 @@ export default function SmartSearch({ userid }) {
           disabled={loading}
           className="px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg flex items-center justify-center disabled:opacity-50 transition"
         >
-          {loading ? <LoadingDots text=""/> : "Search"}
+          Search
         </button>
       </div>
 
       {success && (
-        <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm">
+        <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-3xl">
           {success}
         </div>
       )}
 
       {error && (
-        <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm">
+        <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-3xl">
           {error}
         </div>
       )}
 
       {!loading && files.length > 0 && (
-        <>
-          <p className="text-gray-300 ">
+        <div className="max-w-5xl">
+          <p className="text-gray-300 mb-4">
             Based on your search, we were able to gather these files:
           </p>
           <SSFilesGrid files={files} id={userid} />
-        </>
+        </div>
       )}
 
       {loading && (
         <div className="flex items-center justify-center mt-8">
-          <LoadingDots text="Searching..." />
+          <LoadingDots text="Searching" />
         </div>
       )}
     </div>
