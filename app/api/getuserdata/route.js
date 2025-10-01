@@ -1,4 +1,4 @@
-import { getUserData } from "@/lib/data-fetch-functions";
+import { getMyFiles, getUserData } from "@/lib/data-fetch-functions";
 
 export async function POST(req) {
   try {
@@ -6,7 +6,9 @@ export async function POST(req) {
     if (!userid) return Response.json({ success: false, error: "Missing userid" }, { status: 400 });
 
     const userdata = await getUserData(userid);
-    return Response.json({ success: true, userdata });
+    const myfiles = await getMyFiles(userid);
+    const myFilesLength = myfiles.length;
+    return Response.json({ success: true, userdata, myFilesLength });
   } catch (error) {
     console.error("POST /get-user-data error:", error);
     return Response.json({ success: false, error: "Server error" }, { status: 500 });

@@ -4,11 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import Link from "next/link";
 import LoadingDots from "./loadingDots";
 import { logout } from "@/actions/auth-actions";
+import UploadBadges from "./badges/upload-badges";
 
 export default function ProfileDropdown({ id }) {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [userdata, setUserdata] = useState(null);
+  const [noOfUploads, setNoOfUploads] = useState(0); // new state
   const buttonRef = useRef(null);
 
   const calculatePosition = () => {
@@ -26,7 +28,6 @@ export default function ProfileDropdown({ id }) {
     }
 
     const top = rect.bottom + 12;
-
     setPosition({ top, left });
   };
 
@@ -43,12 +44,14 @@ export default function ProfileDropdown({ id }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userid: id }),
-        cache:'force-cache'
+        cache: 'force-cache'
       })
         .then(res => res.json())
         .then(data => {
-          if (data.success) setUserdata(data.userdata);
-          else console.error('Failed to fetch user data');
+          if (data.success) {
+            setUserdata(data.userdata);
+            setNoOfUploads(data.myFilesLength);
+          } else console.error('Failed to fetch user data');
         })
         .catch(err => console.error('Fetch error:', err));
 
@@ -109,6 +112,15 @@ export default function ProfileDropdown({ id }) {
                   </div>
                 </div>
 
+                <div className="flex items-center justify-between gap-2 text-sm">
+                  <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10 text-center">
+                    <p className="text-purple-300 text-sm">Badges</p>
+                    <p className="text-lg font-semibold text-white mt-2">
+                      <UploadBadges noofuploads={noOfUploads}/>
+                    </p>
+                  </div>
+                </div>
+
                 <Link
                   href={`/${id}/profile`}
                   onClick={() => setIsOpen(false)}
@@ -129,7 +141,7 @@ export default function ProfileDropdown({ id }) {
                 </button>
               </div>
             ) : (
-              <LoadingDots text="fetching information"/>
+              <LoadingDots text="fetching information" />
             )}
           </div>
         </>

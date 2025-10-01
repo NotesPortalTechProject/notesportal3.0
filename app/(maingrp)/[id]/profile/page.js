@@ -1,3 +1,4 @@
+import UploadBadges from "@/components/badges/upload-badges";
 import ResetPasswordModal from "@/components/password-managers/reset-password";
 import SetPasswordModal from "@/components/password-managers/set-password";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
@@ -45,6 +46,14 @@ export default async function ProfilePage({ params }) {
         <div className="flex flex-wrap gap-4">
           {!userdata.password && <SetPasswordModal id={userid} />}
           {userdata.password && <ResetPasswordModal id={userid} />}
+        </div>
+      </div>
+
+      {/* Row 4: Badges */}
+      <div className="p-6 border border-white/20 rounded-2xl bg-white/5 shadow-md space-y-4">
+        <p className="text-lg font-semibold text-white">Badges</p>
+        <div className="flex flex-wrap gap-4">
+          <UploadBadges noofuploads={myFilesList.length}/>
         </div>
       </div>
 
