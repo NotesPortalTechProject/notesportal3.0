@@ -58,48 +58,48 @@ export default function SmartSearch({ userid }) {
   };
 
   return (
-    <div className="min-h-screen w-full p-2 text-white flex flex-col gap-6">
-      <div className="max-w-lg">
-        <h1 className="text-2xl font-semibold text-purple-300">SmartSearch</h1>
-        <p className="mt-1 text-gray-400 text-xs">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 text-white flex flex-col gap-6">
+      <div className="max-w-full sm:max-w-lg">
+        <h1 className="text-xl sm:text-2xl font-semibold text-purple-300">SmartSearch</h1>
+        <p className="mt-1 text-gray-400 text-xs sm:text-sm">
           Ask any question and SmartSearch will find the most relevant PDF files from our database.
         </p>
       </div>
 
-      <div className="flex gap-4 w-full max-w-3xl">
+      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-full sm:max-w-3xl">
         <input
           ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="type your question here..."
-          className="flex-1 p-4 rounded-xl border border-purple-500/20 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder:text-white/50"
+          placeholder="Type your question here..."
+          className="flex-1 p-4 rounded-xl border border-purple-500/20 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder:text-white/50 w-full"
         />
         <button
           onClick={handleSearch}
           disabled={loading}
-          className="px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg flex items-center justify-center disabled:opacity-50 transition"
+          className="w-full sm:w-auto px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg flex items-center justify-center disabled:opacity-50 transition"
         >
-          {loading ? <LoadingDots text="looking for files"/>:"Search"}
+          {loading ? <LoadingDots text="Looking for files"/> : "Search"}
         </button>
       </div>
 
       {success && (
-        <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-3xl">
+        <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-full sm:max-w-3xl">
           {success}
         </div>
       )}
 
       {error && (
-        <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-3xl">
+        <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-full sm:max-w-3xl">
           {error}
         </div>
       )}
 
       {!loading && files.length > 0 && (
-        <div className="max-w-5xl">
-          <p className="text-gray-300 mb-4">
+        <div className="max-w-full sm:max-w-5xl">
+          <p className="text-gray-300 mb-4 text-sm sm:text-base">
             Based on your search, we were able to gather these files:
           </p>
           <SSFilesGrid files={files} id={userid} />
