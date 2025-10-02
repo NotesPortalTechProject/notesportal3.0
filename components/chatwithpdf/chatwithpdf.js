@@ -11,7 +11,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
   const [fileList, setFileList] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loadingFiles, setLoadingFiles] = useState(false);
-  const [loadingFileData, setLoadingFileData] = useState(false); // new
+  const [loadingFileData, setLoadingFileData] = useState(false);
   const [errorFiles, setErrorFiles] = useState("");
 
   const [question, setQuestion] = useState("");
@@ -129,7 +129,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
   }, [answer, loadingAnswer]);
 
   const containerClass =
-    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white text-xs"; // smaller font globally
+    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white text-xs"; 
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
 
