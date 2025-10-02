@@ -291,7 +291,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
       {step === 3 && selectedFiles.length > 0 && (
         <div
           className="flex flex-col
-                h-[77%]     /* base / xs */
+                h-[75%]     /* base / xs */
                 sm:h-[72%]  /* ≥640px */
                 md:h-[75%]  /* ≥768px */
                 lg:h-[90%]  /* ≥1024px */
@@ -345,18 +345,18 @@ export default function ChatWithPdf({ userId, subjectList }) {
           {/* Input */}
           <div className="relative w-full flex justify-center mt-2">
             <div className="w-full max-w-3xl relative" ref={pickerRef}>
-              <div className="flex items-end bg-white/5 backdrop-blur-md rounded-3xl px-4 py-2 w-full max-w-3xl">
-                {/* Plus */}
+              <div className="flex items-end bg-white/5 backdrop-blur-md rounded-3xl px-3 sm:px-4 py-2 w-full max-w-3xl">
+                {/* Plus Button */}
                 <button
                   type="button"
-                  className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200"
+                  className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center flex-shrink-0 transition-all duration-200"
                   onClick={() => setShowFilePicker(true)}
                 >
-                  <FiPlus className="w-4 h-4 md:w-5 md:h-5" />
+                  <FiPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
                 {/* Textarea */}
-                <div className="flex-1 flex items-end">
+                <div className="flex-1 flex items-end min-w-0">
                   <textarea
                     ref={textareaRef}
                     value={question}
@@ -370,7 +370,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       )}px`;
                     }}
                     onKeyDown={handleKeyDown}
-                    placeholder="ask something..."
+                    placeholder="Ask something..."
                     className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
                     style={{
                       minHeight: "2.5rem",
@@ -383,9 +383,9 @@ export default function ChatWithPdf({ userId, subjectList }) {
                 </div>
 
                 {/* Buttons */}
-                <div className="flex space-x-2 ml-2">
+                <div className="flex space-x-1 sm:space-x-2 ml-2 flex-shrink-0">
                   <button className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200">
-                    <FiMic className="w-4 h-4 md:w-5 md:h-5" />
+                    <FiMic className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     type="submit"
@@ -395,7 +395,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
-                    <FiArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+                    <FiArrowUp className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
