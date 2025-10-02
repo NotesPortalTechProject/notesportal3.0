@@ -1,4 +1,4 @@
-import { FiUpload, FiStar, FiAward, FiShield, FiCrown } from "react-icons/fi";
+import { FiUpload, FiStar, FiAward, FiShield } from "react-icons/fi";
 
 export default function UploadBadges({ noofuploads }) {
   const baseClasses =
@@ -7,7 +7,7 @@ export default function UploadBadges({ noofuploads }) {
   if (noofuploads >= 100) {
     return (
       <div className={`${baseClasses} bg-gradient-to-r from-gray-800 to-black text-white flex-wrap justify-center`}>
-        <FiCrown className="w-5 h-5" />
+        <FiAward className="w-5 h-5" />
         <span className="font-bold">Uploader V</span>
         <span className="bg-white text-gray-800 rounded-full px-2 py-0.5 text-xs sm:text-sm">100+</span>
       </div>
