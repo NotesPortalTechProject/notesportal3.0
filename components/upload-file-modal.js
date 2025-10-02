@@ -53,45 +53,72 @@ export default function UploadFileModal({ children, id, subjectlist }) {
         return;
       }
 
-      const formData = new FormData();
-      formData.append("scode", subjectcode);
-      formData.append("filename", filename);
-      formData.append("description", description);
-      formData.append("file", file);
-      formData.append("userid", id);
+      const cleanSubjectCode = subjectcode.trim().toUpperCase();
+      const cleanFilename = filename.trim().replace(/\s+/g, "_").toUpperCase();
+      
+      // GETTING PRESIGNED URL
+      const presignRes = await fetch("/api/presign",{
+        method:"POST",
+        headers:{ "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subjectcode:cleanSubjectCode,
+          filename:cleanFilename,
+          description,
+          userid:id,
+          type:file.type
+        })
+      });
 
-      // API CALL
-      const res = await fetch("/api/uploadfile", { method: "POST", body: formData });
-      let data;
-      let flagtext;
-      try {
-        flagtext = await res.text();
-        data = JSON.parse(text);
-      } catch {
-        console.error("Invalid response:", flagtext);
-        setError(["Server returned invalid response"]);
+      const presignData = await presignRes.json();
+      if(!presignRes.ok){
+        setError([presignData?.error?.text||"Failed to get presigned URL"]);
+        setLoading(false);
+        return;
+      }
+      
+      const { uploadUrl, fileKey, hash } = presignData;
+
+      // TRYING UPLOAD USING PRESIGNED URL
+      const r2Res = await fetch(uploadUrl,{
+        method:"PUT",
+        body:file,
+        headers:{"Content-Type":file.type},
+      });
+
+      if(!r2Res.ok){
+        setError(["Failed to upload file"]);
         setLoading(false);
         return;
       }
 
-      if (res.ok && data.success) {
-        setSuccess("File Uploaded Successfully");
-        setSubjectcode('');
-        setFilename('');
-        setDescription('');
-        setFile(null);
-        await revalidatePathCustom('/');
+      // UPLOADING METADATA
+      const confirmRes = await fetch("/api/uploadfile",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          subjectcode:cleanSubjectCode,
+          filename:cleanFilename,
+          description,
+          userid:id,
+          fileKey,
+          filetype:file.type,
+          hash,
+        })
+      });
+
+      const confirmData = await confirmRes.json();
+      if(!confirmRes.ok||!confirmData.success){
+        setError([confirmData?.error?.text||"Failed to save metadata"]);
         setLoading(false);
         return;
       }
 
-      const { text } = data.error || {};
-      if (text) {
-        setError([text]);
-      } else {
-        setError(["Oops! Something went wrong, please try again later"]);
-      }
-
+      setSuccess("File uploaded successfully");
+      setSubjectcode("");
+      setFilename("");
+      setDescription("");
+      setFile(null);
+      await revalidatePathCustom("/");
     } catch (err) {
       console.error('Upload failed:', err);
       setError([err.message || "Network error occurred"]);
