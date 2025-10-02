@@ -107,7 +107,10 @@ export default function ChatWithPdf({ userId, subjectList }) {
     } catch (err) {
       setAnswer((prev) => [
         ...prev,
-        { type: "bot", text: " Error: " + (err.message || "Something went wrong") },
+        {
+          type: "bot",
+          text: " Error: " + (err.message || "Something went wrong"),
+        },
       ]);
     } finally {
       setLoadingAnswer(false);
@@ -196,7 +199,8 @@ export default function ChatWithPdf({ userId, subjectList }) {
           Chat with PDF
         </h1>
         <p className="text-gray-400 text-xs sm:text-sm mt-1">
-          Select one or more files and ask questions. We will answer based on the files provided.
+          Select one or more files and ask questions. We will answer based on
+          the files provided.
         </p>
       </div>
 
@@ -255,7 +259,9 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       <button
                         onClick={() =>
                           setSelectedFiles(
-                            selectedFiles.filter((sf) => sf.filename !== f.filename)
+                            selectedFiles.filter(
+                              (sf) => sf.filename !== f.filename
+                            )
                           )
                         }
                         className="ml-2 text-red-400 hover:text-red-300"
@@ -283,7 +289,16 @@ export default function ChatWithPdf({ userId, subjectList }) {
 
       {/* STEP 3 */}
       {step === 3 && selectedFiles.length > 0 && (
-        <div className="flex flex-col h-[85%] sm:h-[80%] lg:h-[95%] relative">
+        <div
+          className="flex flex-col
+                h-[77%]     /* base / xs */
+                sm:h-[72%]  /* ≥640px */
+                md:h-[75%]  /* ≥768px */
+                lg:h-[90%]  /* ≥1024px */
+                xl:h-[90%]  /* ≥1280px */
+                2xl:h-[90%] /* ≥1536px */
+                relative"
+        >
           {/* Messages */}
           <div
             ref={chatContainerRef}
