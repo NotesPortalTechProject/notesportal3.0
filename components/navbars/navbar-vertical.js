@@ -102,7 +102,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
             <span className="hidden sm:block text-xs mt-1">AI</span>
           </div>
 
-          {/* AI Popup */}
+          {/* AI Popup CHALU*/}
           {aiOpen && (
             <div className="absolute bottom-14 right-0 bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg p-3 w-44 z-50">
               <Link
@@ -128,6 +128,8 @@ export default function VerticalSidebar({ id, subjectlist }) {
               </Link>
             </div>
           )}
+
+          {/* AI POP UP ENDS */}
         </div>
       </div>
     </>
