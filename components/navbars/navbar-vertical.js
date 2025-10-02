@@ -13,6 +13,7 @@ import {
   FiSearch,
   FiCpu,
   FiMessageSquare,
+  FiCommand,
 } from "react-icons/fi";
 import UploadFileModal from "../upload-file-modal";
 
@@ -96,7 +97,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
             className="relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 text-white/70 hover:text-white cursor-pointer"
           >
             <div className="text-xl sm:text-2xl text-purple-400">
-              <FiCpu />
+              <FiCommand />
             </div>
             <span className="hidden sm:block text-xs mt-1">AI</span>
           </div>
@@ -123,7 +124,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
                 onClick={() => setAiOpen(false)}
                 className="block px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
-                QnA Engine
+                Qna Engine
               </Link>
             </div>
           )}
