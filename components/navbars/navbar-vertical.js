@@ -1,17 +1,42 @@
 "use client";
+import { useState, useEffect, useRef } from "react";
 import { logout } from "@/actions/auth-actions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiHome, FiUpload, FiUser, FiStar, FiFile, FiLogOut, FiSearch, FiCpu, FiMessageSquare } from "react-icons/fi";
+import {
+  FiHome,
+  FiUpload,
+  FiUser,
+  FiStar,
+  FiFile,
+  FiLogOut,
+  FiSearch,
+  FiCpu,
+  FiMessageSquare,
+} from "react-icons/fi";
 import UploadFileModal from "../upload-file-modal";
 
-
-export default function VerticalSidebar({ id,subjectlist}) {
+export default function VerticalSidebar({ id, subjectlist }) {
   const pathname = usePathname();
+  const [aiOpen, setAiOpen] = useState(false);
+  const aiRef = useRef(null);
 
   const handleLogout = () => {
     logout();
   };
+
+  // Close popup if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (aiRef.current && !aiRef.current.contains(event.target)) {
+        setAiOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -33,9 +58,9 @@ export default function VerticalSidebar({ id,subjectlist}) {
 
           <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-          <NavItem icon={<FiMessageSquare/>} label="Chat with Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname}/>
-          <NavItem icon={<FiSearch/>} label="Smart Search" id={id} endpoint={"smartsearch"} pathname={pathname}/>
-          <NavItem icon={<FiCpu/>} label="Qna Engine" id={id} endpoint={"qna"} pathname={pathname}/>
+          <NavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint={"chatwithpdf"} pathname={pathname} />
+          <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint={"smartsearch"} pathname={pathname} />
+          <NavItem icon={<FiCpu />} label="Qna Engine" id={id} endpoint={"qna"} pathname={pathname} />
         </nav>
 
         {/* Logout at bottom */}
@@ -63,7 +88,46 @@ export default function VerticalSidebar({ id,subjectlist}) {
           </div>
         </UploadFileModal>
         <BottomNavItem icon={<FiFile />} label="Files" id={id} endpoint="myfiles" pathname={pathname} />
-        <BottomNavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
+
+        {/* AI Popup Trigger */}
+        <div className="relative" ref={aiRef}>
+          <div
+            onClick={() => setAiOpen((prev) => !prev)}
+            className="relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 text-white/70 hover:text-white cursor-pointer"
+          >
+            <div className="text-xl sm:text-2xl text-purple-400">
+              <FiCpu />
+            </div>
+            <span className="hidden sm:block text-xs mt-1">AI</span>
+          </div>
+
+          {/* AI Popup */}
+          {aiOpen && (
+            <div className="absolute bottom-14 right-0 bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg p-3 w-44 z-50">
+              <Link
+                href={`/${id}/chatwithpdf`}
+                onClick={() => setAiOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
+              >
+                Chat with PDF
+              </Link>
+              <Link
+                href={`/${id}/smartsearch`}
+                onClick={() => setAiOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
+              >
+                Smart Search
+              </Link>
+              <Link
+                href={`/${id}/qna`}
+                onClick={() => setAiOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
+              >
+                QnA Engine
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
@@ -97,9 +161,10 @@ function BottomNavItem({ icon, label, id, endpoint, pathname, onClick }) {
   return onClick ? (
     <div
       onClick={onClick}
-      className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${
-        active ? "text-purple-300 font-semibold border-purple-500" : "text-white/70 hover:text-white border-transparent"
-      } cursor-pointer`}
+      className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${active
+        ? "text-purple-300 font-semibold border-purple-500"
+        : "text-white/70 hover:text-white border-transparent"
+        } cursor-pointer`}
     >
       <div className={`text-xl sm:text-2xl ${active ? "text-purple-300" : "text-purple-400"}`}>
         {icon}
@@ -109,9 +174,10 @@ function BottomNavItem({ icon, label, id, endpoint, pathname, onClick }) {
   ) : (
     <Link href={`/${id}/${endpoint}`}>
       <div
-        className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${
-          active ? "text-purple-300 font-semibold border-purple-500" : "text-white/70 hover:text-white border-transparent"
-        }`}
+        className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${active
+          ? "text-purple-300 font-semibold border-purple-500"
+          : "text-white/70 hover:text-white border-transparent"
+          }`}
       >
         <div className={`text-xl sm:text-2xl ${active ? "text-purple-300" : "text-purple-400"}`}>
           {icon}
