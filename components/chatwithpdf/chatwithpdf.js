@@ -240,7 +240,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
           {fileList.length > 0 && (
             <div className="space-y-3 w-full mt-2">
               <Dropdown
-                label="Select File(s):"
+                label="Select Files:"
                 options={fileList.map((f) => f.filename)}
                 value=""
                 onChange={(filename) => fetchFileData(filename)}
@@ -370,7 +370,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       )}px`;
                     }}
                     onKeyDown={handleKeyDown}
-                    placeholder="Ask something..."
+                    placeholder="ask something..."
                     className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
                     style={{
                       minHeight: "2.5rem",
