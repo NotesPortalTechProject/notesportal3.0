@@ -65,9 +65,10 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       let data;
       try {
         data = await res.json();
-      } catch (jsonErr) {
-        console.error('Failed to parse JSON response:', jsonErr);
-        setError(["File upload failed"]);
+      } catch (err) {
+        const raw = await res.text();
+        console.error("Non-JSON response:", raw);
+        setError(["Server returned invalid response"]);
         return;
       }
 
