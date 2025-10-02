@@ -63,12 +63,12 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       // API CALL
       const res = await fetch("/api/uploadfile", { method: "POST", body: formData });
       let data;
-
+      let flagtext;
       try {
-        data = await res.json(); 
+        flagtext = await res.text();
+        data = JSON.parse(text);
       } catch {
-        const raw = await res.text();
-        console.error("Invalid response:", raw);
+        console.error("Invalid response:", flagtext);
         setError(["Server returned invalid response"]);
         setLoading(false);
         return;
