@@ -114,10 +114,8 @@ export default function ProfileDropdown({ id }) {
 
                 <div className="flex items-center justify-between gap-2 text-sm">
                   <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10 text-center">
-                    <p className="text-purple-300 text-sm">Badges</p>
-                    <p className="text-lg font-semibold text-white mt-2">
+                    <p className="text-purple-300 text-sm mb-2">Badges</p>
                       <UploadBadges noofuploads={noOfUploads}/>
-                    </p>
                   </div>
                 </div>
 
