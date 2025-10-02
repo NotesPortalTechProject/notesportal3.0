@@ -20,6 +20,13 @@ export default function UploadFileModal({ children, id, subjectlist }) {
     setIsMounted(true);
   }, []);
 
+  async function calculateHash(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError([]);
@@ -49,66 +56,68 @@ export default function UploadFileModal({ children, id, subjectlist }) {
 
       if (tempErrors.length > 0) {
         setError(tempErrors);
-        setLoading(false); 
+        setLoading(false);
         return;
       }
 
       const cleanSubjectCode = subjectcode.trim().toUpperCase();
       const cleanFilename = filename.trim().replace(/\s+/g, "_").toUpperCase();
-      
+      const fileHash = await calculateHash(file);
+
       // GETTING PRESIGNED URL
-      const presignRes = await fetch("/api/presign",{
-        method:"POST",
-        headers:{ "Content-Type": "application/json" },
+      const presignRes = await fetch("/api/presign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subjectcode:cleanSubjectCode,
-          filename:cleanFilename,
+          subjectcode: cleanSubjectCode,
+          filename: cleanFilename,
           description,
-          userid:id,
-          type:file.type
+          userid: id,
+          type: file.type,
+          hash: fileHash
         })
       });
 
       const presignData = await presignRes.json();
-      if(!presignRes.ok){
-        setError([presignData?.error?.text||"Failed to get presigned URL"]);
+      if (!presignRes.ok) {
+        setError([presignData?.error?.text || "Failed to get presigned URL"]);
         setLoading(false);
         return;
       }
-      
-      const { uploadUrl, fileKey, hash } = presignData;
+
+      const { uploadUrl, fileKey } = presignData;
 
       // TRYING UPLOAD USING PRESIGNED URL
-      const r2Res = await fetch(uploadUrl,{
-        method:"PUT",
-        body:file,
-        headers:{"Content-Type":file.type},
+      const r2Res = await fetch(uploadUrl, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": file.type },
       });
 
-      if(!r2Res.ok){
+      if (!r2Res.ok) {
         setError(["Failed to upload file"]);
         setLoading(false);
         return;
       }
 
       // UPLOADING METADATA
-      const confirmRes = await fetch("/api/uploadfile",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          subjectcode:cleanSubjectCode,
-          filename:cleanFilename,
+      const confirmRes = await fetch("/api/uploadfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subjectcode: cleanSubjectCode,
+          filename: cleanFilename,
           description,
-          userid:id,
+          userid: id,
           fileKey,
-          filetype:file.type,
-          hash,
+          filetype: file.type,
+          hash:fileHash
         })
       });
 
       const confirmData = await confirmRes.json();
-      if(!confirmRes.ok||!confirmData.success){
-        setError([confirmData?.error?.text||"Failed to save metadata"]);
+      if (!confirmRes.ok || !confirmData.success) {
+        setError([confirmData?.error?.text || "Failed to save metadata"]);
         setLoading(false);
         return;
       }
@@ -123,7 +132,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       console.error('Upload failed:', err);
       setError([err.message || "Network error occurred"]);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }
 

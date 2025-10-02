@@ -15,16 +15,13 @@ const s3 = new S3Client({
 
 export async function POST(req) {
     try {
-        const { subjectcode, filename, description, userid, type } = await req.json();
+        const { subjectcode, filename, description, userid, type, hash } = await req.json();
 
         if (!subjectcode || !filename || !type || !userid || !description) {
             return NextResponse.json({ success: false, error: { text: "Missing fields" } }, { status: 400 });
         }
 
-        // duplicate check niche
-        const fileHash = crypto.randomBytes(16).toString("hex");
-
-        const { data: exists, error: selectError } = await supabase.from("notes").select("id").eq("hash", fileHash);
+        const { data: exists, error: selectError } = await supabase.from("notes").select("id").eq("hash", hash);
         if (selectError) {
             return NextResponse.json({ success: false, error: { text: "Upload Failed" } }, { status: 500 });
         }
@@ -44,7 +41,7 @@ export async function POST(req) {
 
         const uploadUrl = await getSignedUrl(s3,command,{expiresIn:60});
 
-        return NextResponse.json({ success: true, uploadUrl, fileKey, hash: fileHash }, { status: 200 });
+        return NextResponse.json({ success: true, uploadUrl, fileKey }, { status: 200 });
     }catch(err){
         return NextResponse.json({ success: false, error: { text: err.message } }, { status: 500 });
     }
