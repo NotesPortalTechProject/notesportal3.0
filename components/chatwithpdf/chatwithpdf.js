@@ -64,6 +64,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
       const data = await res.json();
       if (res.ok && data.file) {
         setSelectedFiles((prev) => {
+          // Prevent duplicates
           if (prev.find((f) => f.filename === filename)) return prev;
           return [...prev, { filename, file: data.file }];
         });
@@ -126,7 +127,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
   }, [answer, loadingAnswer]);
 
   const containerClass =
-    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white";
+    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white text-sm"; // reduced font globally
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
 
@@ -140,7 +141,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
       <div className="relative w-full">
         <label className="text-white font-semibold mb-2 block">{label}</label>
         <div
-          className="w-full bg-white/10 border border-purple-500/20 rounded-xl px-4 py-3 cursor-pointer flex justify-between items-center focus-within:ring-2 focus-within:ring-purple-400 transition text-sm sm:text-base"
+          className="w-full bg-white/20 border border-purple-500/20 rounded-xl px-4 py-3 cursor-pointer flex justify-between items-center focus-within:ring-2 focus-within:ring-purple-400 transition text-sm sm:text-base backdrop-blur-md" // frosted effect
           onClick={() => setOpen(!open)}
         >
           <span className={`${!value ? "text-gray-400" : "text-white"}`}>
@@ -167,7 +168,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-10 mt-1 w-full bg-black/30 border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
+              className="absolute z-10 mt-1 w-full bg-white/10 backdrop-blur-md border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
             >
               {options.map((opt, idx) => (
                 <div
@@ -243,7 +244,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                 label="Select Files:"
                 options={fileList.map((f) => f.filename)}
                 value=""
-                onChange={(filename) => fetchFileData(filename)}
+                onChange={(filename) => fetchFileData(filename)} // selecting a file no longer removes previous
               />
 
               {/* Selected files display */}
@@ -291,13 +292,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
       {step === 3 && selectedFiles.length > 0 && (
         <div
           className="flex flex-col
-                h-[75%]     /* base / xs */
-                sm:h-[72%]  /* ≥640px */
-                md:h-[75%]  /* ≥768px */
-                lg:h-[90%]  /* ≥1024px */
-                xl:h-[90%]  /* ≥1280px */
-                2xl:h-[90%] /* ≥1536px */
-                relative"
+                h-[75%] sm:h-[72%] md:h-[75%] lg:h-[90%] xl:h-[90%] 2xl:h-[90%] relative"
         >
           {/* Messages */}
           <div
@@ -311,16 +306,14 @@ export default function ChatWithPdf({ userId, subjectList }) {
                   : "justify-start";
               const bgClass =
                 item.type === "bot"
-                  ? "bg-white/5 border border-white/10"
+                  ? "bg-white/5 border border-white/10 px-4 py-3 rounded-2xl" // more padding
                   : item.type === "user"
-                  ? "bg-purple-700/20 border border-purple-600/30"
-                  : "bg-purple-800/20 border border-purple-500/20";
+                  ? "bg-purple-700/20 border border-purple-600/30 px-3 py-2 rounded-2xl"
+                  : "bg-purple-800/20 border border-purple-500/20 px-3 py-2 rounded-2xl";
 
               return (
-                <div key={idx} className={`flex ${justify} w-full`}>
-                  <div
-                    className={`px-4 py-2 rounded-2xl shadow-md break-words lg:max-w-[80%] text-sm md:text-base ${bgClass}`}
-                  >
+                <div key={idx} className={`flex ${justify} w-full text-sm`}>
+                  <div className={`shadow-md break-words lg:max-w-[80%] text-sm md:text-sm ${bgClass}`}>
                     {item.type === "bot" ? (
                       <Markdown>{item.text}</Markdown>
                     ) : item.type === "pdf" ? (
@@ -328,7 +321,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                         <div className="bg-purple-600/30 p-2 rounded-lg">
                           <FiFile className="w-5 h-5 sm:w-6 sm:h-6 text-purple-300" />
                         </div>
-                        <span className="text-sm md:text-base font-medium text-purple-200 break-words">
+                        <span className="text-sm md:text-sm font-medium text-purple-200 break-words">
                           {item.filename}
                         </span>
                       </div>
@@ -371,7 +364,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                     }}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask something..."
-                    className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-base hide-scrollbar"
+                    className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm md:text-sm hide-scrollbar"
                     style={{
                       minHeight: "2.5rem",
                       lineHeight: "1.5rem",
@@ -402,7 +395,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
 
               {/* File Picker */}
               {showFilePicker && (
-                <div className="absolute bottom-full left-0 mb-2 w-64 max-h-60 overflow-y-auto bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg z-20">
+                <div className="absolute bottom-full left-0 mb-2 p-1 w-64 max-h-60 overflow-y-auto bg-[#1a1a1a]/80 border border-purple-500/30 rounded-xl shadow-lg z-20 backdrop-blur-md">
                   {fileList.length > 0 ? (
                     fileList.map((f, idx) => {
                       const alreadySelected = selectedFiles.some(
@@ -419,14 +412,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                           onClick={async () => {
                             if (!alreadySelected) {
                               await fetchFileData(f.filename);
-                            } else {
-                              setSelectedFiles(
-                                selectedFiles.filter(
-                                  (sf) => sf.filename !== f.filename
-                                )
-                              );
                             }
-                            setShowFilePicker(false);
                           }}
                         >
                           <span className="truncate">{f.filename}</span>
