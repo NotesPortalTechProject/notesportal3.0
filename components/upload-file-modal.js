@@ -27,7 +27,6 @@ export default function UploadFileModal({ children, id, subjectlist }) {
     setLoading(true);
 
     try {
-
       // VALIDATION
       const tempErrors = [];
       if (!subjectcode.trim()) tempErrors.push('Subject code is required');
@@ -50,6 +49,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
 
       if (tempErrors.length > 0) {
         setError(tempErrors);
+        setLoading(false); 
         return;
       }
 
@@ -63,16 +63,17 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       // API CALL
       const res = await fetch("/api/uploadfile", { method: "POST", body: formData });
       let data;
+
       try {
-        data = await res.json();
-      } catch (err) {
+        data = await res.json(); 
+      } catch {
         const raw = await res.text();
-        console.error("Non-JSON response:", raw);
+        console.error("Invalid response:", raw);
         setError(["Server returned invalid response"]);
+        setLoading(false);
         return;
       }
 
-      // SUCCESS
       if (res.ok && data.success) {
         setSuccess("File Uploaded Successfully");
         setSubjectcode('');
@@ -80,26 +81,25 @@ export default function UploadFileModal({ children, id, subjectlist }) {
         setDescription('');
         setFile(null);
         await revalidatePathCustom('/');
+        setLoading(false);
         return;
       }
 
-      // DUPLICATE OR NO FILE ERRORS
       const { text } = data.error || {};
-      if (text === 'Duplicate! file already exists' || text === 'No file provided') {
+      if (text) {
         setError([text]);
-        return;
+      } else {
+        setError(["Oops! Something went wrong, please try again later"]);
       }
-
-      // OTHER ERROR
-      setError([text || "Oops! Something went wrong, please try again later"]);
 
     } catch (err) {
       console.error('Upload failed:', err);
       setError([err.message || "Network error occurred"]);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   }
+
 
   const modalContent = (
     <>
