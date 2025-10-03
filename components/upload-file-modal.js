@@ -101,6 +101,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       }
 
       // UPLOADING METADATA
+      const extension = file.type.split("/").pop();
       const confirmRes = await fetch("/api/uploadfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,7 +111,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
           description,
           userid: id,
           fileKey,
-          filetype: file.type,
+          filetype: extension,
           hash:fileHash
         })
       });
