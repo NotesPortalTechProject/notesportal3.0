@@ -16,10 +16,10 @@ export default function FileViewModal({ data }) {
     }
   }
 
-  function downloadFile(filename) {
+  function downloadFile(filename,filetype) {
     const url = `/api/download?url=${encodeURIComponent(
       data.filelink
-    )}&name=${encodeURIComponent(filename)}`;
+    )}&name=${encodeURIComponent(`${filename}.${filetype}`)}`;
     const link = document.createElement("a");
     link.href = url;
     link.click();
@@ -117,7 +117,7 @@ export default function FileViewModal({ data }) {
             Download may take a few seconds
           </p>
           <button
-            onClick={() => downloadFile(data.filename)}
+            onClick={() => downloadFile(data.filename,data.filetype)}
             className="mt-1 w-full text-center text-base bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition-all"
           >
             Download
