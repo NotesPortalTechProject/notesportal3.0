@@ -12,8 +12,8 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "NotesPortal",
-  description: "This is a simple notes sharing platform",
+  title: "notesportal",
+  description: "Ai powered collaborative learning platform",
 };
 
 export default function RootLayout({ children }) {
