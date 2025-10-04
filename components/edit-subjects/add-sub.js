@@ -16,7 +16,7 @@ export default function AddSubjectModal({ id, onAdd }) {
     setLoading(true)
 
     const formData = new FormData(e.target);
-    const sub_code = formData.get("sub_code");
+    const sub_code = formData.get("sub_code").toUpperCase();
     const id = formData.get("id");
 
     if (!sub_code?.trim()) {
@@ -32,7 +32,7 @@ export default function AddSubjectModal({ id, onAdd }) {
 
     try {
       await UpdateSubjects(id, sub_code);
-      if(onAdd) onAdd(sub_code);
+      if (onAdd) onAdd(sub_code);
       toast.success("Subject added successfully!");
       setLoading(false)
       setIsOpen(false);
@@ -108,6 +108,7 @@ export default function AddSubjectModal({ id, onAdd }) {
               </div>
 
               <form className="flex flex-col gap-4" onSubmit={HandleAddSub}>
+                <p className="text-xs">you can find subject codes in your timetable</p>
                 <input
                   name="sub_code"
                   type="text"
