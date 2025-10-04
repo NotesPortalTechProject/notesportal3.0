@@ -16,10 +16,11 @@ export default function AddSubjectModal({ id, onAdd }) {
     setLoading(true)
 
     const formData = new FormData(e.target);
-    const sub_code = formData.get("sub_code").toUpperCase();
+    let sub_code;
+    const temp_sub_code = formData.get("sub_code").toUpperCase();
     const id = formData.get("id");
 
-    if (!sub_code?.trim()) {
+    if (!temp_sub_code?.trim()) {
       setLoading(false)
       setErrorState("Subject name cannot be empty");
       return;
@@ -30,6 +31,11 @@ export default function AddSubjectModal({ id, onAdd }) {
       return;
     }
 
+    if(temp_sub_code=="CAL"||temp_sub_code=="cal"){
+      temp_sub_code="CALCULUS";
+    }
+
+    sub_code=temp_sub_code
     try {
       await UpdateSubjects(id, sub_code);
       if (onAdd) onAdd(sub_code);

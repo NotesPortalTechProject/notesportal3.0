@@ -36,7 +36,7 @@ export async function signup(prevState, formData) {
     let subjectslist = [];
     for (let i = 0; i < nsubjects; i++) {
         let subjectcode = formData.get(`subject${i}`);
-        if (!subjectcode || subjectcode.length > 5) {
+        if (!subjectcode || subjectcode.length > 10) {
             errors.push('Invalid subject code');
             break;
         }
