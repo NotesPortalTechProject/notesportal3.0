@@ -41,7 +41,10 @@ export async function signup(prevState, formData) {
             break;
         }
         if (/\d/.test(subjectcode)) errors.push('Subject code cannot contain numbers');
-
+        // CALCULUS FIX
+        if(subjectcode=="CAL"||subjectcode=="cal"){
+            subjectcode="CALCULUS"
+        }
         subjectslist.push(subjectcode.toUpperCase());
     }
 
