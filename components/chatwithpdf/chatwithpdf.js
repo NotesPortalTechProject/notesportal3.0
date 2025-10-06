@@ -13,7 +13,6 @@ export default function ChatWithPdf({ userId, subjectList }) {
   const [loadingFiles, setLoadingFiles] = useState(false);
   const [loadingFileData, setLoadingFileData] = useState(false);
   const [errorFiles, setErrorFiles] = useState("");
-
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState([]);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
@@ -129,7 +128,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
   }, [answer, loadingAnswer]);
 
   const containerClass =
-    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white text-xs"; 
+    "p-3 sm:p-5 max-w-7xl h-full mx-auto space-y-6 text-white text-xs";
   const buttonClass =
     "bg-purple-700 hover:bg-purple-600 px-4 sm:px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 flex items-center justify-center";
 
@@ -191,7 +190,9 @@ export default function ChatWithPdf({ userId, subjectList }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleAskQuestion(e);
+      if (!loadingAnswer && question.trim()) {
+        handleAskQuestion(e);
+      }
     }
   };
 
@@ -250,7 +251,6 @@ export default function ChatWithPdf({ userId, subjectList }) {
               />
               {loadingFileData && <LoadingDots text="loading file" />}
 
-              {/* Selected files display */}
               {selectedFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {selectedFiles.map((f, idx) => (
@@ -293,44 +293,36 @@ export default function ChatWithPdf({ userId, subjectList }) {
 
       {/* STEP 3 */}
       {step === 3 && selectedFiles.length > 0 && (
-        <div className="flex flex-col h-[75%] sm:h-[72%] md:h-[75%] lg:h-[90%] xl:h-[90%] 2xl:h-[90%] relative">
+        <div className="flex flex-col h-[75%] sm:h-[72%] md:h-[75%] lg:h-[90%] xl:h-[90%] 2xl:h-[90%] relative w-full max-w-4xl mx-auto">
           {/* Messages */}
           <div
             ref={chatContainerRef}
-            className="flex-1 flex flex-col space-y-3 w-full overflow-y-auto hide-scrollbar px-4 sm:px-6 text-xs"
+            className="flex-1 flex flex-col space-y-3 w-full overflow-y-auto hide-scrollbar px-4 sm:px-6"
           >
             {answer.map((item, idx) => {
               const justify =
-                item.type === "user" || item.type === "pdf"
-                  ? "justify-end"
-                  : "justify-start";
-              const bgClass =
-                item.type === "bot"
-                  ? "bg-white/5 border border-white/10 px-5 py-4 rounded-2xl" // more padding
-                  : item.type === "user"
-                    ? "bg-purple-700/20 border border-purple-600/30 px-3 py-2 rounded-2xl"
-                    : "bg-purple-800/20 border border-purple-500/20 px-3 py-2 rounded-2xl";
+                item.type === "user" ? "justify-end" : "justify-start";
 
               return (
-                <div key={idx} className={`flex ${justify} w-full text-xs`}>
-                  <div
-                    className={`shadow-md break-words lg:max-w-[80%] text-xs ${bgClass}`}
-                  >
-                    {item.type === "bot" ? (
+                <div key={idx} className={`flex ${justify} w-full`}>
+                  {item.type === "bot" ? (
+                    <div className="w-full text-sm sm:text-base break-words">
                       <Markdown>{item.text}</Markdown>
-                    ) : item.type === "pdf" ? (
-                      <div className="flex items-center gap-3">
-                        <div className="bg-purple-600/30 p-2 rounded-lg">
-                          <FiFile className="w-3 h-3 sm:w-6 sm:h-6 text-purple-300" />
-                        </div>
-                        <span className="text-xs font-medium text-purple-200 break-words">
-                          {item.filename}
-                        </span>
+                    </div>
+                  ) : item.type === "user" ? (
+                    <div className="bg-purple-700/20 border border-purple-600/30 px-3 py-2 rounded-2xl max-w-[60%] text-sm sm:text-base break-words">
+                      {item.text}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 max-w-[60%]">
+                      <div className="bg-purple-600/30 p-2 rounded-lg">
+                        <FiFile className="w-3 h-3 sm:w-5 sm:h-5 text-purple-300" />
                       </div>
-                    ) : (
-                      item.text
-                    )}
-                  </div>
+                      <span className="text-sm sm:text-base font-medium text-purple-200 break-words">
+                        {item.filename}
+                      </span>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -339,8 +331,8 @@ export default function ChatWithPdf({ userId, subjectList }) {
 
           {/* Input */}
           <div className="relative w-full flex justify-center mt-2">
-            <div className="w-full max-w-3xl relative" ref={pickerRef}>
-              <div className="flex items-center bg-white/5 backdrop-blur-md rounded-3xl px-3 sm:px-4 py-2 w-full max-w-3xl">
+            <div className="w-full max-w-4xl relative" ref={pickerRef}>
+              <div className="flex items-center bg-white/5 backdrop-blur-md rounded-3xl px-3 sm:px-4 py-2 w-full">
                 {/* Plus Button */}
                 <button
                   type="button"
@@ -365,7 +357,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                   }}
                   onKeyDown={handleKeyDown}
                   placeholder="ask something..."
-                  className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-md hide-scrollbar py-2 mt-4 ml-2"
+                  className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm sm:text-base hide-scrollbar py-2 mt-4 ml-2"
                   style={{
                     minHeight: "2.5rem",
                     maxHeight: "6rem",
@@ -377,8 +369,9 @@ export default function ChatWithPdf({ userId, subjectList }) {
                   type="submit"
                   onClick={handleAskQuestion}
                   disabled={loadingAnswer || !question.trim()}
-                  className={`ml-2 bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                  className={`ml-2 bg-purple-700 hover:bg-purple-600 p-2 rounded-full text-white flex items-center justify-center transition-all duration-200 ${
+                    loadingAnswer ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   <FiArrowUp className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
