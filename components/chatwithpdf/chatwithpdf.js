@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import LoadingDots from "@/components/loadingDots";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "react-markdown";
-import { FiArrowUp, FiFile, FiPlus, FiX } from "react-icons/fi";
+import { FiArrowUp, FiFile, FiPlus, FiX, FiCheck } from "react-icons/fi";
 
 export default function ChatWithPdf({ userId, subjectList }) {
   const [step, setStep] = useState(1);
@@ -64,20 +64,26 @@ export default function ChatWithPdf({ userId, subjectList }) {
       );
       const data = await res.json();
       if (res.ok && data.file) {
-        setSelectedFiles((prev) => {
-          if (prev.find((f) => f.filename === filename)) return prev;
-          return [...prev, { filename, file: data.file }];
-        });
-        setAnswer((prev) => [
-          ...prev,
-          { type: "pdf", filename, file: data.file },
-        ]);
+        if (!selectedFiles.find((f) => f.filename === filename)) {
+          setSelectedFiles((prev) => [...prev, { filename, file: data.file }]);
+          setAnswer((prev) => [
+            ...prev,
+            { type: "pdf", filename, file: data.file },
+          ]);
+        }
       } else setErrorFiles(data.error || "Failed to fetch file");
     } catch (err) {
       setErrorFiles(err.message || "Something went wrong");
     } finally {
       setLoadingFileData(false);
     }
+  };
+
+  const removeSelectedFile = (filename) => {
+    setSelectedFiles((prev) => prev.filter((f) => f.filename !== filename));
+    setAnswer((prev) =>
+      prev.filter((a) => !(a.type === "pdf" && a.filename === filename))
+    );
   };
 
   const handleAskQuestion = async (e) => {
@@ -165,16 +171,16 @@ export default function ChatWithPdf({ userId, subjectList }) {
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.15 }}
               className="absolute z-10 mt-1 w-full bg-white/10 backdrop-blur-md border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
             >
               {options.map((opt, idx) => (
                 <div
                   key={idx}
-                  className="px-4 py-3 hover:bg-purple-600/40 cursor-pointer text-white transition"
+                  className="px-4 py-3 hover:bg-purple-600/40 cursor-pointer text-white transition rounded-lg"
                   onClick={() => handleSelect(opt)}
                 >
                   {opt}
@@ -261,13 +267,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       <FiFile className="mr-1 text-purple-300" />
                       {f.filename}
                       <button
-                        onClick={() =>
-                          setSelectedFiles(
-                            selectedFiles.filter(
-                              (sf) => sf.filename !== f.filename
-                            )
-                          )
-                        }
+                        onClick={() => removeSelectedFile(f.filename)}
                         className="ml-2 text-red-400 hover:text-red-300"
                       >
                         <FiX />
@@ -329,7 +329,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
             {loadingAnswer && <LoadingDots text="getting answer" />}
           </div>
 
-          {/* Input */}
+          {/* Input + File Picker */}
           <div className="relative w-full flex justify-center mt-2">
             <div className="w-full max-w-4xl relative" ref={pickerRef}>
               <div className="flex items-center bg-white/5 backdrop-blur-md rounded-3xl px-3 sm:px-4 py-2 w-full">
@@ -337,7 +337,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
                 <button
                   type="button"
                   className="mr-2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white flex items-center justify-center flex-shrink-0 transition-all duration-200"
-                  onClick={() => setShowFilePicker(true)}
+                  onClick={() => setShowFilePicker(!showFilePicker)}
                 >
                   <FiPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
@@ -355,13 +355,11 @@ export default function ChatWithPdf({ userId, subjectList }) {
                       maxHeight
                     )}px`;
                   }}
+                  onFocus={() => setShowFilePicker(false)}
                   onKeyDown={handleKeyDown}
                   placeholder="ask something..."
                   className="flex-1 bg-transparent text-white placeholder:text-gray-400 resize-none outline-none text-sm sm:text-base hide-scrollbar py-2 mt-4 ml-2"
-                  style={{
-                    minHeight: "2.5rem",
-                    maxHeight: "6rem",
-                  }}
+                  style={{ minHeight: "2.5rem", maxHeight: "6rem" }}
                 />
 
                 {/* Send Button */}
@@ -375,6 +373,51 @@ export default function ChatWithPdf({ userId, subjectList }) {
                 >
                   <FiArrowUp className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
+
+                {/* Modern File Picker Dropdown */}
+                <AnimatePresence>
+                  {showFilePicker && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute bottom-20 left-0 w-64 bg-black backdrop-blur-md border border-purple-500/30 rounded-xl p-3 z-20 max-h-64 overflow-y-auto hide-scrollbar"
+                    >
+                      {loadingFileData ? (
+                        <LoadingDots text="loading file..." />
+                      ) : fileList.length > 0 ? (
+                        fileList.map((f, idx) => {
+                          const isSelected = selectedFiles.some(
+                            (sf) => sf.filename === f.filename
+                          );
+
+                          return (
+                            <div
+                              key={idx}
+                              className="px-4 py-3 hover:bg-purple-600/40 cursor-pointer text-white rounded-lg transition mb-1 flex items-center justify-between"
+                              onClick={() => {
+                                // Only fetch if not already selected
+                                if (!isSelected) {
+                                  fetchFileData(f.filename);
+                                }
+                              }}
+                            >
+                              <span className="truncate">{f.filename}</span>
+                              {isSelected && (
+                                <FiCheck className="text-green-400 ml-2" />
+                              )}
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <p className="text-gray-400 px-4 py-2">
+                          No files available
+                        </p>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
