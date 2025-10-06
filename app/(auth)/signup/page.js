@@ -20,7 +20,7 @@ export default function SignupPage() {
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particles
-          particleCount={600} // Reduced to improve clarity and performance
+          particleCount={300} // Reduced to improve clarity and performance
           particleSpread={12} // Tighter grouping
           speed={0.15} // Slower, calming movement
           particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
