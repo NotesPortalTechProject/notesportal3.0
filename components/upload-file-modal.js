@@ -193,7 +193,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
             onChange={(e) => setFile(e.target.files[0])}
             className="text-sm sm:text-base text-white file:mr-2 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
           />
-          <p className='text-sm'>dont add subject code in filename, it will be done automatically</p>
+          <p className='text-xs'>dont add subject code in filename, it will be handled</p>
           <input
             type="text"
             name="filename"
