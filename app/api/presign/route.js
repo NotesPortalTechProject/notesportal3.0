@@ -15,7 +15,7 @@ const s3 = new S3Client({
 
 export async function POST(req) {
     try {
-        const { subjectcode, filename, description, userid, type, hash } = await req.json();
+        const { subjectcode, filename, description, userid, type, hash, extension } = await req.json();
 
         if (!subjectcode || !filename || !type || !userid || !description) {
             return NextResponse.json({ success: false, error: { text: "Missing fields" } }, { status: 400 });
@@ -30,19 +30,18 @@ export async function POST(req) {
             return NextResponse.json({ success: false, error: { text: "Duplicate file, resource already exists !" } }, { status: 409 });
         }
 
-        const extension = type.split("/").pop();
         const fileKey = `${subjectcode}_${filename}.${extension}`;
 
         const command = new PutObjectCommand({
-            Bucket:process.env.R2_BUCKET,
-            Key:fileKey,
-            ContentType:type,
+            Bucket: process.env.R2_BUCKET,
+            Key: fileKey,
+            ContentType: type,
         })
 
-        const uploadUrl = await getSignedUrl(s3,command,{expiresIn:60});
+        const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
 
         return NextResponse.json({ success: true, uploadUrl, fileKey }, { status: 200 });
-    }catch(err){
+    } catch (err) {
         return NextResponse.json({ success: false, error: { text: err.message } }, { status: 500 });
     }
 }

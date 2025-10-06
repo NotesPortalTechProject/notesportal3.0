@@ -63,6 +63,12 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       const cleanSubjectCode = subjectcode.trim().toUpperCase();
       const cleanFilename = filename.trim().replace(/\s+/g, "_").toUpperCase();
       const fileHash = await calculateHash(file);
+      let tempfileType = "other";
+      if (file.type.includes("pdf")) tempfileType = "pdf";
+      else if (file.type.includes("msword")) tempfileType = "doc";
+      else if (file.type.includes("wordprocessingml.document")) tempfileType = "docx";
+      else if (file.type.includes("ms-powerpoint")) tempfileType = "ppt";
+      else if (file.type.includes("presentationml.presentation")) tempfileType = "pptx";
 
       // GETTING PRESIGNED URL
       const presignRes = await fetch("/api/presign", {
@@ -74,7 +80,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
           description,
           userid: id,
           type: file.type,
-          hash: fileHash
+          hash: fileHash,
+          extension: tempfileType
         })
       });
 
@@ -101,7 +108,6 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       }
 
       // UPLOADING METADATA
-      const extension = file.type.split("/").pop();
       const confirmRes = await fetch("/api/uploadfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -111,8 +117,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
           description,
           userid: id,
           fileKey,
-          filetype: extension,
-          hash:fileHash
+          filetype: tempfileType,
+          hash: fileHash
         })
       });
 
