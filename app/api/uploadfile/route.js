@@ -13,7 +13,7 @@ export async function POST(req) {
 
     const {error:insertError} = await supabase.from("notes").insert([
       {
-        filename,
+        filename:`${subjectcode}_${filename}`,
         subjectname:subjectcode,
         filetype,
         filelink,
