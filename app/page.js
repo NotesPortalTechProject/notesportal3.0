@@ -27,13 +27,6 @@ export default function Home() {
 
   const teamMembers = [
         {
-      name: "Sharvil Gharkar",
-      img: "/avatar/Sharvil_Gharkar.jpg",
-      linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",
-      insta: "https://www.instagram.com/sharvilgharkar_/",
-      github: "https://github.com/Sharvil0769",
-    },
-    {
       name: "Arya Chawan",
       img: "/avatar/Arya_Chawan.png",
       linkedin: "https://www.linkedin.com/in/arya-chawan-99b127303/",
@@ -41,18 +34,25 @@ export default function Home() {
       github: "https://github.com/aryachawan",
     },
     {
+      name: "Bevin Johnson",
+      img: "/avatar/Bevin_Johnson.jpg",
+      linkedin: "https://www.linkedin.com/in/bevinjhsn",
+      insta: "https://www.instagram.com/bevin_one77/",
+      github: "https://github.com/BevinJ",
+    },
+        {
       name: "Arhaan Bhiwandkar",
       img: "/avatar/Arhaan_Bhiwandkar.jpeg",
       linkedin: "https://www.linkedin.com/in/arhaan-bhiwandkar-583aaa233/",
       insta: "https://www.instagram.com/arhaanbhiwandkar/",
       github: "https://github.com/ArhaanB24",
     },
-    {
-      name: "Bevin Johnson",
-      img: "/avatar/Bevin_Johnson.jpg",
-      linkedin: "https://www.linkedin.com/in/bevinjhsn",
-      insta: "https://www.instagram.com/bevin_one77/",
-      github: "https://github.com/BevinJ",
+            {
+      name: "Sharvil Gharkar",
+      img: "/avatar/Sharvil_Gharkar.jpg",
+      linkedin: "https://www.linkedin.com/in/sharvil-gharkar-16767b2b5/",
+      insta: "https://www.instagram.com/sharvilgharkar_/",
+      github: "https://github.com/Sharvil0769",
     },
   ];
 
