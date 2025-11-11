@@ -98,7 +98,7 @@ export default function FileViewModal({ data }) {
           </div>
 
           <a
-            href={data.filelink}
+            href={`https://notesportal.tech/file/${data.filename}`}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 w-full text-center text-base bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded transition-all"
@@ -107,7 +107,7 @@ export default function FileViewModal({ data }) {
           </a>
           <button
             onClick={() =>
-              copyToClipboard(data.filelink)
+              copyToClipboard(`https://notesportal.tech/file/${data.filename}`)
             }
             className="mt-3 w-full text-center text-base bg-white/10 hover:bg-white/20 border border-purple-300 text-purple-200 py-2 px-4 rounded transition-all"
           >
