@@ -15,18 +15,6 @@ export default async function middleware(req) {
         return NextResponse.next();
     }
 
-    if(path.startsWith("/file") && !session?.userId){
-        return NextResponse.redirect(new URL("/login",req.nextUrl))
-    }
-
-    if(path.startsWith("/file")&& session?.userId)
-    {
-        let filename = path.split("/").pop();
-        filename.trim();
-        const actualfileLink = await supabase.from("notes").select("filelink").eq("filename",filename);
-        return NextResponse.redirect(new URL(actualfileLink));
-    }
-
     if (!isPublicRoute && !session?.userId) {
         return NextResponse.redirect(new URL("/login", req.nextUrl))
     }
