@@ -45,7 +45,7 @@ export async function signup(prevState, formData) {
         if(subjectcode=="CAL"||subjectcode=="cal"){
             subjectcode="CALCULUS"
         }
-        subjectslist.push(subjectcode.toUpperCase());
+        subjectslist.push(subjectcode.toUpperCase().trim());
     }
 
     if (errors.length > 0) return { errors };

@@ -17,7 +17,7 @@ export default function AddSubjectModal({ id, onAdd }) {
 
     const formData = new FormData(e.target);
     let sub_code;
-    const temp_sub_code = formData.get("sub_code").toUpperCase();
+    const temp_sub_code = formData.get("sub_code").toUpperCase().trim();
     const id = formData.get("id");
 
     if (!temp_sub_code?.trim()) {
