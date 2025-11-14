@@ -39,8 +39,8 @@ export default function SmartSearch({ userid }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: query }),
       });
-      const data = await res.json();
 
+      const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Search failed");
 
       if (data.filelist && data.filelist.length > 0) {
@@ -59,14 +59,20 @@ export default function SmartSearch({ userid }) {
 
   return (
     <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 text-white flex flex-col gap-6">
-      <div className="max-w-full sm:max-w-lg">
-        <h1 className="text-xl sm:text-2xl font-semibold text-purple-300">SmartSearch</h1>
+
+      {/* Title & Subtitle */}
+      <div className="max-w-full sm:max-w-2xl">
+        <h1 className="text-lg sm:text-xl font-bold text-purple-300">
+          SmartSearch
+        </h1>
         <p className="mt-1 text-gray-400 text-xs sm:text-sm">
-          Ask any question and SmartSearch will find the most relevant PDF files from our database.
+          Ask any question and SmartSearch will fetch the most relevant PDF files from the database.
         </p>
       </div>
 
+      {/* Search Bar */}
       <div className="flex flex-col sm:flex-row gap-4 w-full max-w-full sm:max-w-3xl">
+
         <input
           ref={inputRef}
           type="text"
@@ -74,35 +80,61 @@ export default function SmartSearch({ userid }) {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type your question here..."
-          className="flex-1 p-4 rounded-xl border border-purple-500/20 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder:text-white/50 w-full"
+          className="
+            flex-1 p-4 rounded-2xl bg-white/5 backdrop-blur-xl
+            border border-purple-500/20 text-white placeholder:text-gray-400
+            focus:ring-2 focus:ring-purple-500 focus:outline-none
+            transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.15)]
+          "
         />
+
         <button
           onClick={handleSearch}
           disabled={loading}
-          className="w-full sm:w-auto px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg flex items-center justify-center disabled:opacity-50 transition"
+          className="
+            w-full sm:w-auto px-6 py-4 rounded-2xl
+            bg-purple-700 hover:bg-purple-600 text-white font-semibold
+            shadow-[0_0_25px_rgba(168,85,247,0.25)]
+            disabled:opacity-50 disabled:cursor-not-allowed
+            transition-all duration-200
+          "
         >
-          {loading ? <LoadingDots text="Looking for files"/> : "Search"}
+          {loading ? <LoadingDots text="Looking for files" /> : "Search"}
         </button>
       </div>
 
+      {/* Success Message */}
       {success && (
-        <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-full sm:max-w-3xl">
+        <div className="
+          border border-green-500/50 rounded-xl p-3 text-green-400 text-sm
+          bg-green-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.2)]
+          max-w-full sm:max-w-3xl
+        ">
           {success}
         </div>
       )}
 
+      {/* Error Message */}
       {error && (
-        <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-full sm:max-w-3xl">
+        <div className="
+          border border-red-500/50 rounded-xl p-3 text-red-400 text-sm
+          bg-red-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(239,68,68,0.2)]
+          max-w-full sm:max-w-3xl
+        ">
           {error}
         </div>
       )}
 
+      {/* Results */}
       {!loading && files.length > 0 && (
-        <div className="max-w-full sm:max-w-5xl">
+        <div className="max-w-full mt-4">
           <p className="text-gray-300 mb-4 text-sm sm:text-base">
-            Based on your search, we were able to gather these files:
+            Based on your search, we found these files:
           </p>
-          <SSFilesGrid files={files} id={userid} />
+
+          <div className=" p-4 sm:p-6 ">
+            <SSFilesGrid files={files} id={userid} />
+          </div>
         </div>
       )}
     </div>
