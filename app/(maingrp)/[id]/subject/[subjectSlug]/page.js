@@ -16,6 +16,10 @@ export default async function IndividualSubjectPage({ params }) {
     tempflag = true;
     tempSubjectName = "EOB"
   }
+  if(initialSubjectName == "PNS"){
+    tempflag = true;
+    tempSubjectName = "PES"
+  }
   return (
     <>
       <p className="text-lg font-semibold ml-6 mb-2">
