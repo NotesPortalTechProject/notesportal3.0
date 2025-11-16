@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import LoadingDots from './loadingDots';
 import { revalidatePathCustom } from '@/actions/other-actions';
+import toast from 'react-hot-toast';
 
 export default function UploadFileModal({ children, id, subjectlist }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +33,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
     setError([]);
     setSuccess('');
     setLoading(true);
+    const toastId = toast.loading("Uploading file");
 
     try {
       // VALIDATION
@@ -130,6 +132,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       }
 
       setSuccess("File uploaded successfully");
+      toast.dismiss(toastId);
+      toast.success("File uploaded successfully")
       setSubjectcode("");
       setFilename("");
       setDescription("");
@@ -138,7 +142,10 @@ export default function UploadFileModal({ children, id, subjectlist }) {
     } catch (err) {
       console.error('Upload failed:', err);
       setError([err.message || "Network error occurred"]);
+      toast.dismiss(toastId)
+      toast.error("File upload failed")
     } finally {
+      toast.dismiss(toastId)
       setLoading(false);
     }
   }
