@@ -20,6 +20,7 @@ export default function AddSubjectModal({ id, onAdd }) {
     let sub_code;
     const temp_sub_code = formData.get("sub_code").toUpperCase().trim();
     const id = formData.get("id");
+    toast.loading("validating",{id:toastId})
 
     if (!temp_sub_code?.trim()) {
       setLoading(false)
@@ -38,18 +39,17 @@ export default function AddSubjectModal({ id, onAdd }) {
 
     sub_code=temp_sub_code
     try {
+      toast.loading("adding",{id:toastId})
       await UpdateSubjects(id, sub_code);
       if (onAdd) onAdd(sub_code);
-      toast.dismiss(toastId)
-      toast.success("Subject added : "+sub_code);
+      toast.success("Subject added : "+sub_code,{id:toastId});
       setLoading(false)
       setIsOpen(false);
     } catch (err) {
       setLoading(false)
       console.log(err);
       setErrorState(`Failed to add subject, ${sub_code} might already exist. try again`);
-      toast.dismiss(toastId)
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.",{id:toastId});
     }
   }
 

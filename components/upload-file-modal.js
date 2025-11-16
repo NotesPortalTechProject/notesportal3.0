@@ -37,6 +37,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
 
     try {
       // VALIDATION
+      toast.loading("validating",{id:toastId});
       const tempErrors = [];
       if (!subjectcode.trim()) tempErrors.push('Subject code is required');
       if (!filename.trim()) tempErrors.push('Filename is required');
@@ -61,7 +62,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
         setLoading(false);
         return;
       }
-
+      
+      toast.loading("formatting filedata",{id:toastId})
       const cleanSubjectCode = subjectcode.trim().toUpperCase();
       const cleanFilename = filename.trim().replace(/\s+/g, "_").toUpperCase();
       const fileHash = await calculateHash(file);
@@ -96,6 +98,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
 
       const { uploadUrl, fileKey } = presignData;
 
+      toast.loading("uploading file",{id:toastId})
+
       // TRYING UPLOAD USING PRESIGNED URL
       const r2Res = await fetch(uploadUrl, {
         method: "PUT",
@@ -108,6 +112,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
         setLoading(false);
         return;
       }
+
+      toast.loading("uploading metadata",{id: toastId})
 
       // UPLOADING METADATA
       const confirmRes = await fetch("/api/uploadfile", {
@@ -132,8 +138,7 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       }
 
       setSuccess("File uploaded successfully");
-      toast.dismiss(toastId);
-      toast.success("File uploaded successfully")
+      toast.success("File uploaded successfully",{id:toastId})
       setSubjectcode("");
       setFilename("");
       setDescription("");
