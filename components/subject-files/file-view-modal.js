@@ -93,7 +93,7 @@ export default function FileViewModal({ data }) {
             </div>
             <div>
               <p className="text-purple-400 font-semibold">Description</p>
-              <p>{data.description}</p>
+              <p className="text-sm">{data.description}</p>
             </div>
           </div>
 
