@@ -193,6 +193,7 @@ export default function SignupPage() {
                 <input
                   type="text"
                   name={`subject${index}`}
+                  placeholder="ex CN for Computer Network"
                   required
                   className="w-full bg-white/5 border border-white/20 text-white placeholder-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
                 />

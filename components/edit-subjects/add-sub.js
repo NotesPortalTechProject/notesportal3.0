@@ -121,7 +121,7 @@ export default function AddSubjectModal({ id, onAdd }) {
                 <input
                   name="sub_code"
                   type="text"
-                  placeholder="Enter subject name"
+                  placeholder="Ex CN for Computer Networks"
                   className="
                     bg-[#1a1a1a]/40 border border-purple-500/10 p-3 text-white
                     placeholder-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm
