@@ -106,15 +106,15 @@ export default function ProfileDropdown({ id }) {
                 <div className="flex items-center justify-between gap-2 text-sm">
                   <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10 text-center">
                     <p className="text-purple-300 text-sm">Subjects</p>
-                    <p className="text-lg font-semibold text-white">
+                    <p className="text-4xl font-semibold text-white">
                       {JSON.parse(userdata.subjects).length}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 text-sm">
-                  <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10 text-center">
-                    <p className="text-purple-300 text-sm mb-2">Badges</p>
+                  <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10">
+                    <p className="text-purple-300 text-sm mb-3">Badges</p>
                       <UploadBadges noofuploads={noOfUploads}/>
                   </div>
                 </div>

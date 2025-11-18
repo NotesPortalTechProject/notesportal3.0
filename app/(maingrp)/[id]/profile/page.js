@@ -51,7 +51,10 @@ export default async function ProfilePage({ params }) {
 
       {/* Row 4: Badges */}
       <div className="p-6 border border-white/20 rounded-2xl bg-white/5 shadow-md space-y-4">
+      <div>
         <p className="text-lg font-semibold text-white">Badges</p>
+        <p className="text-sm text-gray-400">start uploading files to get badges</p>
+      </div>
         <div className="flex flex-wrap gap-4">
           <UploadBadges noofuploads={myFilesList.length}/>
         </div>
