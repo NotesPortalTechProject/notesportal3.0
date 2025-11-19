@@ -4,7 +4,7 @@ import { decrypt } from "@/lib/session";
 
 
 export default async function FilePage({ params }) {
-  const { subjectname } = params;
+  const subjectname = params.subjectSlug;
 
   const cookie = (await cookies()).get("session")?.value;
   const session = await decrypt(cookie);
@@ -13,5 +13,5 @@ export default async function FilePage({ params }) {
     return redirect("/login");
   }
 
-  return redirect(`/${userid}/subject/${subjectname}`);
+  return redirect(`/${session.userId}/subject/${subjectname}`);
 }

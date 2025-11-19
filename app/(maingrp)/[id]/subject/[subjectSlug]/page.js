@@ -2,6 +2,8 @@ import FilesDisplay from "@/components/subject-files/files-display";
 import { Suspense } from "react";
 import Link from "next/link";
 import LoadingDots from "@/components/loadingDots";
+import toast from "react-hot-toast";
+import ShareSubjectButton from "@/components/shareSubjectButton";
 
 export default async function IndividualSubjectPage({ params }) {
   let initialSubjectName = params.subjectSlug;
@@ -16,10 +18,20 @@ export default async function IndividualSubjectPage({ params }) {
     tempflag = true;
     tempSubjectName = "EOB"
   }
-  if(initialSubjectName == "PNS"){
+  if (initialSubjectName == "PNS") {
     tempflag = true;
     tempSubjectName = "PES"
   }
+
+  function copyToClipboard(text) {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => toast.success("link copied to clipboard"))
+        .catch(() => toast.error("failed to copy"));
+    }
+  }
+
   return (
     <>
       <p className="text-lg font-semibold ml-6 mb-2">
@@ -31,7 +43,9 @@ export default async function IndividualSubjectPage({ params }) {
       {tempflag && (
         <p className="text-sm font-regular ml-6 mb-6">{initialSubjectName} is similar to {tempSubjectName}</p>
       )}
-
+      <div>
+        <ShareSubjectButton subjectName={initialSubjectName}/>
+      </div>
       {tempflag && (
         <Suspense fallback={<LoadingDots text="Fetching files" />}>
           <FilesDisplay
