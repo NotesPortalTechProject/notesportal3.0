@@ -13,7 +13,7 @@ export default function ShareSubjectButton({ subjectName }) {
   return (
     <button
       onClick={copyToClipboard}
-      className="mt-4 w-full text-center text-base bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded transition-all"
+      className="mt-2 mb-4 ml-6 text-center text-xs bg-purple-600 hover:bg-purple-700 text-white py-1 px-3 rounded-xl transition-all"
     >
       share subject
     </button>

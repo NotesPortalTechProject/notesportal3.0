@@ -34,18 +34,24 @@ export default async function IndividualSubjectPage({ params }) {
 
   return (
     <>
-      <p className="text-lg font-semibold ml-6 mb-2">
-        <Link href={`/${id}/home`} className="text-purple-400 hover:underline">
-          My Subjects
-        </Link>{" "}
-        <span className="text-white">&gt; {initialSubjectName}</span>
-      </p>
+      <div className="flex items-center">
+        <div>
+          <p className="text-lg font-semibold ml-6 mb-2">
+            <Link href={`/${id}/home`} className="text-purple-400 hover:underline">
+              My Subjects
+            </Link>{" "}
+            <span className="text-white">&gt; {initialSubjectName}</span>
+          </p>
+        </div>
+        <div>
+          <ShareSubjectButton subjectName={initialSubjectName} />
+        </div>
+      </div>
+
       {tempflag && (
         <p className="text-sm font-regular ml-6 mb-6">{initialSubjectName} is similar to {tempSubjectName}</p>
       )}
-      <div>
-        <ShareSubjectButton subjectName={initialSubjectName}/>
-      </div>
+
       {tempflag && (
         <Suspense fallback={<LoadingDots text="Fetching files" />}>
           <FilesDisplay
