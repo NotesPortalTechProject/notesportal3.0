@@ -11,7 +11,7 @@ export default function FilesGrid({ data, id, src }) {
 
   const sortRef = useRef(null);
 
-  // ⭐ Close dropdown when clicking outside
+  // Close dropdown when clicked outside
   useEffect(() => {
     function handleClickOutside(e) {
       if (sortRef.current && !sortRef.current.contains(e.target)) {
@@ -137,7 +137,7 @@ export default function FilesGrid({ data, id, src }) {
               )}
             </div>
 
-            {/* ⭐ VIEW TOGGLE — Fully Responsive */}
+            {/* VIEW TOGGLE */}
             <div
               className="
                 w-24 sm:w-32 
