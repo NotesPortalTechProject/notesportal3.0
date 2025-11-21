@@ -1,13 +1,15 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import FileCardWrapper from "../file-card";
-import { FiGrid, FiList, FiChevronDown } from "react-icons/fi";
+import { FiGrid, FiList, FiChevronDown, FiCheck } from "react-icons/fi";
 
 export default function FilesGrid({ data, id, src }) {
   const [viewMode, setViewMode] = useState("grid");
   const [filetype, setFileType] = useState("all");
+
+  // default sort
+  const [sortMode, setSortMode] = useState("new");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  const [sortMode, setSortMode] = useState("az");
 
   const sortRef = useRef(null);
 
@@ -43,8 +45,16 @@ export default function FilesGrid({ data, id, src }) {
     filesdata.sort((a, b) => b.filename.localeCompare(a.filename));
   else if (sortMode === "new")
     filesdata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  // default
   else if (sortMode === "old")
     filesdata.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  const sortOptions = [
+    { key: "az", label: "A → Z" },
+    { key: "za", label: "Z → A" },
+    { key: "new", label: "Newest → Oldest" },
+    { key: "old", label: "Oldest → Newest" },
+  ];
 
   return (
     <>
@@ -64,7 +74,7 @@ export default function FilesGrid({ data, id, src }) {
                     : "bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]"
                 }`}
             >
-              <p className="truncate relative z-10">{ft}</p>
+              <p className="truncate relative z-10 capitalize">{ft}</p>
               <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-30 -translate-x-full hover:translate-x-0 transition-transform duration-500"></div>
             </div>
           </button>
@@ -77,8 +87,7 @@ export default function FilesGrid({ data, id, src }) {
           <p className="text-white/80">{filesdata.length} files available</p>
 
           <div className="flex items-center gap-3">
-
-            {/* ⭐ SORT BUTTON */}
+            {/* SORT BUTTON */}
             <div className="relative" ref={sortRef}>
               <button
                 onClick={() => setSortMenuOpen(!sortMenuOpen)}
@@ -110,27 +119,30 @@ export default function FilesGrid({ data, id, src }) {
                     right-auto sm:right-0
                   "
                 >
-                  {[
-                    { key: "az", label: "A → Z" },
-                    { key: "za", label: "Z → A" },
-                    { key: "new", label: "Newest → Oldest" },
-                    { key: "old", label: "Oldest → Newest" },
-                  ].map((item, index) => (
+                  {sortOptions.map((item) => (
                     <div
-                      key={index}
+                      key={item.key}
                       onClick={() => {
                         setSortMode(item.key);
                         setSortMenuOpen(false);
                       }}
-                      className="
+                      className={`
                         px-3 py-2 
                         text-xs sm:text-sm 
-                        rounded-lg text-purple-200 
-                        hover:bg-white/10 hover:text-white 
-                        cursor-pointer
-                      "
+                        rounded-lg cursor-pointer flex justify-between items-center
+                        transition-all
+                      ${
+                        sortMode === item.key
+                          ? "bg-purple-500/5 text-purple-100 font-normal"
+                          : "text-purple-200 hover:bg-white/10 hover:text-white"
+                      }
+                  `}
                     >
                       {item.label}
+
+                      {sortMode === item.key && (
+                        <FiCheck className="w-4 h-4 text-purple-300 opacity-90" />
+                      )}
                     </div>
                   ))}
                 </div>
