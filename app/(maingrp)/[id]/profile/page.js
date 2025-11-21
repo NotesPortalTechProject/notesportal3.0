@@ -36,7 +36,7 @@ export default async function ProfilePage({ params }) {
         </div>
         <div className="w-full md:w-1/2 p-6 border border-white/20 rounded-2xl bg-white/5 shadow-md flex flex-col items-center justify-center text-center space-y-2">
           <p className="text-lg text-white/80">My Files</p>
-          <p className="text-4xl font-extrabold text-white">{myFilesList.length}</p>
+          <p className="text-6xl font-extrabold text-white">{myFilesList.length}</p>
         </div>
       </div>
 
