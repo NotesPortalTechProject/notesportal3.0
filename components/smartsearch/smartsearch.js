@@ -66,7 +66,7 @@ export default function SmartSearch({ userid }) {
           SmartSearch
         </h1>
         <p className="mt-1 text-gray-400 text-xs sm:text-sm">
-          Ask any question and SmartSearch will fetch the most relevant PDF files from the database.
+          Search for any TOPIC and SmartSearch will fetch the most relevant PDF files from the database.
         </p>
       </div>
 
@@ -102,6 +102,7 @@ export default function SmartSearch({ userid }) {
           {loading ? <LoadingDots text="Looking for files" /> : "Search"}
         </button>
       </div>
+        {loading && <LoadingDots text="This process may take some time. Thank you for your patience." />}
 
       {/* Success Message */}
       {success && (
