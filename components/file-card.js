@@ -8,12 +8,12 @@ import { FaFilePdf, FaFileWord, FaFilePowerpoint } from "react-icons/fa";
 
 function FilePreview({ file, isMobile }) {
   if (file.filetype === "pdf" && !isMobile) {
+    Icon = FaFilePdf;
     return (
-      <iframe
-        src={file.filelink}
-        title={file.filename}
-        className="w-full h-36 rounded-xl border-0"
-      />
+      // TEMP PREVIEW REMOVED
+      <div className="flex items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
+        <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+      </div>
     );
   }
 
@@ -60,8 +60,8 @@ export default function FileCardWrapper({ file, index, userid, src, viewMode = "
   if (isMobile === null) return null;
 
   return isMobile
-    ? <MobileFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav}/>
-    : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav}/>;
+    ? <MobileFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav} />
+    : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav} />;
 }
 
 // ✨ GlassCard now includes Spotlight effect
@@ -104,7 +104,7 @@ function GlassCard({ children, viewMode }) {
   );
 }
 
-function MobileFileCard({ file, userid, src, viewMode, isFav,setIsFav }) {
+function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
   return (
     <GlassCard viewMode={viewMode}>
       {viewMode === "grid" && (
