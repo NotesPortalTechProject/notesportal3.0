@@ -205,11 +205,11 @@ export default function FilesGrid({ data, id, src }) {
         )}
         {filesdata.length == 0 && (
           <div className="text-center text-white mt-10 space-y-2">
-            <p className="text-lg font-semibold">No files available</p>
+            <p className="text-lg font-semibold">Sorry, No files available right now</p>
             <p className="text-sm opacity-75">
               Start uploading and share with everyone.
             </p>
-            <p className="text-xs opacity-75 text-red-900">Check for typing error in subject code as well</p>
+            <p className="text-sm opacity-75 text-red-900">check for typing mistake in subject code as well</p>
           </div>
         )}
       </div>
