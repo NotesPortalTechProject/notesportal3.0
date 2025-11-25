@@ -22,6 +22,10 @@ export default async function IndividualSubjectPage({ params }) {
     tempflag = true;
     tempSubjectName = "PES"
   }
+   if (initialSubjectName == "POM") {
+    tempflag = true;
+    tempSubjectName = "PEM"
+  }
 
   function copyToClipboard(text) {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
