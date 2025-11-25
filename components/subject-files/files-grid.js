@@ -68,10 +68,9 @@ export default function FilesGrid({ data, id, src }) {
           >
             <div
               className={`relative overflow-hidden rounded-xl px-4 py-2 
-                text-xs sm:text-sm md:text-base font-medium transition-all backdrop-blur-md ${
-                  filetype === ft
-                    ? "bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70 text-white border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]"
-                    : "bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]"
+                text-xs sm:text-sm md:text-base font-medium transition-all backdrop-blur-md ${filetype === ft
+                  ? "bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70 text-white border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]"
+                  : "bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]"
                 }`}
             >
               <p className="truncate relative z-10">{ft}</p>
@@ -131,11 +130,10 @@ export default function FilesGrid({ data, id, src }) {
                         text-xs sm:text-sm 
                         rounded-lg cursor-pointer flex justify-between items-center
                         transition-all
-                      ${
-                        sortMode === item.key
+                      ${sortMode === item.key
                           ? "bg-purple-500/5 text-purple-100 font-normal"
                           : "text-purple-200 hover:bg-white/10 hover:text-white"
-                      }
+                        }
                   `}
                     >
                       {item.label}
@@ -186,24 +184,33 @@ export default function FilesGrid({ data, id, src }) {
         </div>
 
         {/* FILE CARDS */}
-        <div
-          className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
-            viewMode === "grid"
+        {filesdata.length != 0 && (
+          <div
+            className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${viewMode === "grid"
               ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               : "flex flex-col gap-4"
-          }`}
-        >
-          {filesdata.map((file, index) => (
-            <FileCardWrapper
-              key={index}
-              file={file}
-              index={index}
-              userid={id}
-              src={src}
-              viewMode={viewMode}
-            />
-          ))}
-        </div>
+              }`}
+          >
+            {filesdata.map((file, index) => (
+              <FileCardWrapper
+                key={index}
+                file={file}
+                index={index}
+                userid={id}
+                src={src}
+                viewMode={viewMode}
+              />
+            ))}
+          </div>
+        )}
+        {filesdata.length == 0 && (
+          <div className="text-center text-white mt-10 space-y-2">
+            <p className="text-lg font-semibold">No files available</p>
+            <p className="text-sm opacity-75">
+              Start uploading and share with everyone.
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

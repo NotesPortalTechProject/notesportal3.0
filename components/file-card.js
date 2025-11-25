@@ -7,6 +7,7 @@ import { FiFileText } from "react-icons/fi";
 import { FaFilePdf, FaFileWord, FaFilePowerpoint } from "react-icons/fa";
 
 function FilePreview({ file, isMobile }) {
+    let Icon;
   if (file.filetype === "pdf" && !isMobile) {
     Icon = FaFilePdf;
     return (
@@ -17,7 +18,6 @@ function FilePreview({ file, isMobile }) {
     );
   }
 
-  let Icon;
   switch (file.filetype) {
     case "doc":
     case "docx":
