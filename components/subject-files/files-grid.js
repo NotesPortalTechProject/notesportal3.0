@@ -209,6 +209,7 @@ export default function FilesGrid({ data, id, src }) {
             <p className="text-sm opacity-75">
               Start uploading and share with everyone.
             </p>
+            <p className="text-xs opacity-75 text-red-900">Check for typing error in subject code as well</p>
           </div>
         )}
       </div>
