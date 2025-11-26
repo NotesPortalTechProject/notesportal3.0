@@ -6,7 +6,6 @@ export default async function MyfIlesPage({ params }) {
     return (
         <>
             <div>
-                <p className="px-6">My files</p>
                 <Suspense fallback={<LoadingDots text="fetching your files"/>}>
                     <MyFilesDisplay id={userid} src={`/${userid}/home`} />
                 </Suspense>

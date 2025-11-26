@@ -20,31 +20,45 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
       {/* Top bar: file count + view toggle */}
       <div className="flex flex-row items-center justify-between mb-4 gap-3">
         <p className="text-white/80 text-left truncate">
-          Files uploaded from last {weeks} weeks
+          Files uploaded in the last {weeks} weeks
         </p>
-        <div className="flex justify-end space-x-2 sm:space-x-3">
-          {/* Grid view button */}
+
+        {/* 🔥 Replaced with your new purple pill toggle */}
+        <div
+          className="
+            w-36 sm:w-32 
+            relative flex rounded-full overflow-hidden backdrop-blur-md
+            bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30
+            border border-purple-500/20 px-1 py-1 select-none
+          "
+        >
+          {/* Sliding highlight */}
+          <div
+            className={`
+              absolute top-1 bottom-1 w-1/2 rounded-full
+              transition-all duration-300 ease-out
+              bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70
+              border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]
+              ${viewMode === "grid" ? "left-1" : "left-1/2"}
+            `}
+          ></div>
+
+          {/* Grid button */}
           <button
             onClick={() => setViewMode("grid")}
-            className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${
-              viewMode === "grid"
-                ? "bg-purple-700 text-white"
-                : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
-            }`}
+            className="relative z-10 w-1/2 text-center py-2 
+                       text-[10px] sm:text-xs text-purple-200 hover:text-white"
           >
-            <FiGrid className="w-5 h-5 sm:w-6 sm:h-6" />
+            <FiGrid className="mx-auto w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          {/* List view button */}
+          {/* List button */}
           <button
             onClick={() => setViewMode("list")}
-            className={`transition-transform duration-300 transform hover:scale-110 p-1.5 sm:p-2.5 rounded-lg ${
-              viewMode === "list"
-                ? "bg-purple-700 text-white"
-                : "bg-[#1a1a1a]/50 text-gray-400 hover:bg-purple-600/70"
-            }`}
+            className="relative z-10 w-1/2 text-center py-2 
+                       text-[10px] sm:text-xs text-purple-200 hover:text-white"
           >
-            <FiList className="w-5 h-5 sm:w-6 sm:h-6" />
+            <FiList className="mx-auto w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -53,13 +67,12 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
       <div
         className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-min" // grid fix applied
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-min"
             : "flex flex-col gap-4"
         }`}
         style={{ maxHeight: "calc(100vh - 250px)" }}
       >
         {data.slice(0, 9).map((file, index) => (
-          // Each card wrapped in w-full to respect grid layout
           <div key={index} className="w-full">
             <FileCardWrapper
               file={file}
