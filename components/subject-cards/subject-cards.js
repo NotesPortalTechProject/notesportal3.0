@@ -4,7 +4,6 @@ import AddSubjectModal from "../edit-subjects/add-sub";
 import { RemoveSubject } from "@/actions/other-actions";
 import toast from "react-hot-toast";
 import { useTransition, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const Carousel = dynamic(() => import("../effects/carousel"), { ssr: false });
@@ -23,7 +22,7 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
   const handleRemove = async (subject) =>{
     const toastId = toast.loading("removing subject")
     if(subjects.length<=1){
-      toast.error("You must keep atleast one subject");
+      toast.error("You must keep atleast one subject",{id:toastId});
       return;
     }
     const prevSubjects = subjects;
