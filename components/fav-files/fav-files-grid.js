@@ -6,6 +6,17 @@ import { FiGrid, FiList } from "react-icons/fi";
 export default function FavFilesGrid({ data, userid, src }) {
   const [viewMode, setViewMode] = useState("grid");
 
+  if (data == null) {
+    return (
+      <div className="text-center text-white mt-10 space-y-2">
+        <p className="text-lg font-semibold">No favorites added</p>
+        <p className="text-sm opacity-75">
+          Add your favorite files to keep them separated and highlighted from others.
+        </p>
+      </div>
+    );
+  }
+
   if (!data || data.length === 0) {
     return (
       <div className="text-center text-white mt-10 space-y-2">
@@ -41,11 +52,10 @@ export default function FavFilesGrid({ data, userid, src }) {
 
       {/* Files Container */}
       <div
-        className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${
-          viewMode === "grid"
+        className={`flex-1 overflow-auto scrollbar-hide transition-all duration-500 ease-in-out ${viewMode === "grid"
             ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             : "flex flex-col gap-4"
-        }`}
+          }`}
       >
         {data.map((file, index) => (
           <FileCardWrapper
