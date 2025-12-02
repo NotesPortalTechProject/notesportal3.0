@@ -24,7 +24,7 @@ export async function POST(req) {
     if (!response.ok) {
       const text = await response.text();
       console.error("PDF API Error Response:", text);
-      throw new Error("An unexpected error occured, failed to get answer.");
+      return NextResponse.json({error:"An unexpected error occured, failed to get answer."});
     }
 
     const data = await response.json();
