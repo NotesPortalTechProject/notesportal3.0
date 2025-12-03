@@ -1,0 +1,71 @@
+<mjml>
+  <mj-head>
+    <mj-title>OTP Email</mj-title>
+    <mj-font name="Poppins" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+
+    <mj-attributes>
+      <mj-all font-family="Poppins, Arial, sans-serif" />
+      <mj-text align="center" color="#d4d4d4" />
+    </mj-attributes>
+
+    <mj-style>
+      body {
+        background-color: #0d0d0d !important;
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#0d0d0d">
+
+    <!-- No wrapper, no card, no box -->
+    <mj-section padding="40px 20px">
+      <mj-column>
+
+        <mj-text
+          font-size="28px"
+          color="#c084fc"
+          font-weight="600"
+          padding="0 0 16px 0"
+        >
+          NotesPortal
+        </mj-text>
+
+        <mj-text
+          font-size="17px"
+          color="#e0e0e0"
+          padding="0 0 24px 0"
+        >
+          Your One-Time Password (OTP) for login:
+        </mj-text>
+
+        <mj-text padding="0 0 24px 0">
+          <span style="
+            display:inline-block;
+            font-size:38px;
+            font-weight:bold;
+            color:#fff;
+            background:linear-gradient(90deg, #a855f7, #9333ea);
+            padding:16px 36px;
+            border-radius:12px;
+            letter-spacing:6px;
+            box-shadow:0 8px 20px rgba(147, 51, 234, 0.4);
+          ">
+            ${otp || '------'}
+          </span>
+        </mj-text>
+
+        <mj-text
+          font-size="14px"
+          color="#aaaaaa"
+          line-height="1.5"
+          padding="0"
+        >
+          This OTP is valid for 10 minutes.<br />
+          If you didn’t request this, you can safely ignore this email.
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
