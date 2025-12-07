@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Particles from "../components/effects/particles";
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
+import Image from "next/image";
 
 export default function Home() {
   const [dimensions, setDimensions] = useState({
@@ -158,11 +159,7 @@ export default function Home() {
               className="relative group border border-purple-400/10 rounded-3xl p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col items-center text-center transition-transform duration-500 hover:scale-105 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
             >
               <div className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 mb-4 border-2 border-purple-500/30 rounded-xl overflow-hidden shadow-[0_0_10px_rgba(168,85,247,0.2)] transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(168,85,247,0.5)]">
-                <img
-                  src={member.img}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                />
+                <Image src={member.img} alt={member.name} className="w-full h-full object-cover" width={150} height={150}/>
               </div>
               <h3 className="text-base sm:text-lg md:text-lg lg:text-xl font-bold text-white mb-1">
                 {member.name}
