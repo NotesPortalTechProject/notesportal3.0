@@ -1,0 +1,68 @@
+<mjml>
+  <mj-head>
+    <mj-title>OTP Email</mj-title>
+
+    <mj-font 
+      name="Poppins" 
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    />
+
+    <mj-attributes>
+      <mj-all font-family="Poppins, Arial, sans-serif" />
+      <mj-text color="#e5e5e5" align="center" />
+    </mj-attributes>
+
+    <mj-style>
+      body { background-color: #0d0d0d !important; }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#0d0d0d">
+
+    <mj-section padding="40px 20px">
+      <mj-column>
+
+        <!-- Title -->
+        <mj-text
+          font-size="28px"
+          font-weight="600"
+          color="#c084fc"
+          padding="0 0 10px 0"
+        >
+          NotesPortal
+        </mj-text>
+
+        <!-- Subtitle -->
+        <mj-text font-size="16px" color="#d4d4d4" padding="0 0 24px 0">
+          ${isSet ? 'Use the OTP below to verify your set password request:' : 'Use the OTP below to verify your password reset request:'}
+        </mj-text>
+
+        <!-- OTP -->
+        <mj-text padding="0 0 30px 0">
+          <span style="
+            display: inline-block;
+            font-size: 42px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #a855f7, #9333ea);
+            padding: 20px 40px;
+            border-radius: 12px;
+            letter-spacing: 6px;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            text-shadow: 0 2px 8px rgba(147, 51, 234, 0.6);
+          ">
+            ${otp || "------"}
+          </span>
+        </mj-text>
+
+        <!-- Footer -->
+        <mj-text font-size="14px" color="#aaaaaa" line-height="1.5">
+          This OTP is valid for 10 minutes.<br />
+          If you didn’t request this, you can safely ignore this email.
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
