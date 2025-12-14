@@ -120,7 +120,7 @@ export default function ProfileDropdown({ id }) {
                 </div>
 
                 <Link
-                  href={`/${id}/profile`}
+                  href={`/profile`}
                   onClick={() => setIsOpen(false)}
                   className="mt-2 w-full text-center text-sm text-purple-300 hover:text-white hover:underline transition-all"
                 >
