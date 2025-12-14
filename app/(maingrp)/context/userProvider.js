@@ -19,10 +19,7 @@ export function useUser() {
     return context;
 }
 
-export function getUserIdContext(){
-    const context = useContext(userContext);
-    if(!context){
-        throw new Error("User context unavailable");
-    }
-    return context.userId;
+export function useUserId(){
+    const user = useUser();
+    return user.userId;
 }

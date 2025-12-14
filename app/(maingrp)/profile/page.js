@@ -3,10 +3,10 @@ import ResetPasswordModal from "@/components/password-managers/reset-password";
 import SetPasswordModal from "@/components/password-managers/set-password";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
 import { getMyFiles, getUserData } from "@/lib/data-fetch-functions";
-import { getUserIdContext } from "../context/userProvider";
+import { useUserId } from "../context/userProvider";
 
 export default async function ProfilePage({ params }) {
-  const userid = getUserIdContext()
+  const userid = useUserId()
   const userdata = await getUserData(userid);
   const subjectlist = JSON.parse(userdata.subjects);
   const myFilesList = await getMyFiles(userid);

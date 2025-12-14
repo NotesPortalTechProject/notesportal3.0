@@ -66,7 +66,7 @@ export async function signup(prevState, formData) {
     const userid = await getUserId(username);
 
     await createSession(userid);
-    redirect(`/${userid}/home`)
+    redirect(`/home`)
 }
 
 // LOGIN FUNCTION password
@@ -103,7 +103,7 @@ export async function login_with_password(prevState, formData) {
     if (errors.length > 0) return { errors };
 
     await createSession(userdata.id);
-    redirect(`/${userdata.id}/home`)
+    redirect(`/home`)
 }
 
 // LOGIN FUNCTION otp
@@ -128,7 +128,7 @@ export async function login_with_otp(prevState, formData) {
     await supabase.from("users").update({ otp: null }).eq('email', emailId);
 
     await createSession(userExists.id);
-    redirect(`/${userExists.id}/home`)
+    redirect(`/home`)
 }
 
 export async function logout() {

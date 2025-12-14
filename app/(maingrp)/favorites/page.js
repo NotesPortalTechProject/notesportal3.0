@@ -1,10 +1,10 @@
 import FavFilesDisplay from "@/components/fav-files/fav-files-display";
 import LoadingDots from "@/components/loadingDots";
 import { Suspense } from "react";
-import { getUserIdContext } from "../context/userProvider";
+import { useUserId } from "../context/userProvider";
 
 export default async function FavouritesPage({params}){
-    const userid = getUserIdContext();
+    const userid = useUserId();
     return(
         <>
         <p className="px-6">Favorite Files</p>

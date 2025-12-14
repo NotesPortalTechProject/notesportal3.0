@@ -3,10 +3,10 @@ import RecentFilesDisplay from "@/components/recent-files/recent-files-display";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
 import { getUserDataByUsername } from "@/lib/data-fetch-functions";
 import { Suspense } from "react";
-import { getUserIdContext } from "../context/userProvider";
+import { useUserId } from "../context/userProvider";
 
 export default async function HomePage({ params }) {
-  const userId = getUserIdContext();
+  const userId = useUserId()
   return (
     <>
       <div>

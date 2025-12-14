@@ -1,7 +1,7 @@
 import SmartSearch from "@/components/smartsearch/smartsearch";
-import { getUserIdContext } from "../../context/userProvider";
+import { getUserIdContext, useUserId } from "../../context/userProvider";
 
 export default async function Page({params}){
-    const userid = getUserIdContext()
+    const userid = useUserId();
     return <SmartSearch userid={userid}/>
 }
