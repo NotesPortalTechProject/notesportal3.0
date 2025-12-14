@@ -8,7 +8,7 @@ export default async function MyfIlesPage({ params }) {
         <>
             <div>
                 <Suspense fallback={<LoadingDots text="fetching your files"/>}>
-                    <MyFilesDisplay id={userid} src={`/${userid}/home`} />
+                    <MyFilesDisplay id={userid} src={`/home`} />
                 </Suspense>
             </div>
         </>

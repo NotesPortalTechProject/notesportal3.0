@@ -18,7 +18,7 @@ export default async function HomePage({ params }) {
       <div className="pt-6 md:pt-0">
         <p className="mt-2 md:mt-0 px-6">Recent Files</p>
         <Suspense fallback={<LoadingDots text="fetching recent files" />}>
-          <RecentFilesDisplay id={userId} src={`/${userId}/home`} />
+          <RecentFilesDisplay id={userId} src={`/home`} />
         </Suspense>
       </div>
     </>

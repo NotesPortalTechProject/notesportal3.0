@@ -9,7 +9,7 @@ export default async function FavouritesPage({params}){
         <>
         <p className="px-6">Favorite Files</p>
         <Suspense fallback={<LoadingDots text="fetching favorite files"/>}>
-            <FavFilesDisplay userid={userid} src={`/${userid}/favorites`}/>
+            <FavFilesDisplay userid={userid} src={`/favorites`}/>
         </Suspense>
         </>
     );
