@@ -4,12 +4,11 @@ import Link from "next/link";
 import LoadingDots from "@/components/loadingDots";
 import toast from "react-hot-toast";
 import ShareSubjectButton from "@/components/shareSubjectButton";
-import { useUserId } from "../../context/userProvider";
 
 export default async function IndividualSubjectPage({ params }) {
   let initialSubjectName = params.subjectSlug;
   let tempSubjectName = initialSubjectName;
-  const id = useUserId();
+  const id = await getCurrentUser();
   let tempflag = false;
   if (initialSubjectName == "CTPS") {
     tempflag = true;

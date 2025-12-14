@@ -1,9 +1,8 @@
 import LoadingDots from "@/components/loadingDots";
 import MyFilesDisplay from "@/components/my-files/my-files-display";
 import { Suspense } from "react";
-import { useUserId } from "../context/userProvider";
 export default async function MyfIlesPage({ params }) {
-    const userid = useUserId()
+    const userId = await getCurrentUser();
     return (
         <>
             <div>

@@ -1,9 +1,9 @@
 import ChatWithPdf from "@/components/chatwithpdf/chatwithpdf";
 import { getUserSubjectList } from "@/lib/data-fetch-functions";
-import { useUserId } from "../../context/userProvider";
+import { getCurrentUser } from "@/lib/session";
 
 export default async function Page({params}){
-    const userid = useUserId();
-    const subjectList = await getUserSubjectList(userid)
-    return <ChatWithPdf userId={userid} subjectList={JSON.parse(subjectList)}/>
+    const userId = await getCurrentUser();
+    const subjectList = await getUserSubjectList(userId)
+    return <ChatWithPdf userId={userId} subjectList={JSON.parse(subjectList)}/>
 }

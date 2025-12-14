@@ -3,10 +3,9 @@ import RecentFilesDisplay from "@/components/recent-files/recent-files-display";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
 import { getUserDataByUsername } from "@/lib/data-fetch-functions";
 import { Suspense } from "react";
-import { useUserId } from "../context/userProvider";
 
 export default async function HomePage({ params }) {
-  const userId = useUserId()
+  const userId = await getCurrentUser();
   return (
     <>
       <div>
