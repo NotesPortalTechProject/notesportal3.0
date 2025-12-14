@@ -100,7 +100,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
             <div className="absolute bottom-14 right-0 bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg p-3 w-48 z-50">
 
               <Link
-                href={`/${id}/chatwithpdf`}
+                href={`/chatwithpdf`}
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
@@ -108,7 +108,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
               </Link>
 
               <Link
-                href={`/${id}/smartsearch`}
+                href={`/smartsearch`}
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
@@ -129,9 +129,9 @@ export default function VerticalSidebar({ id, subjectlist }) {
 
 /* Desktop Item */
 function NavItem({ icon, label, id, endpoint, pathname }) {
-  const active = pathname.includes(`/${id}/${endpoint}`);
+  const active = pathname.includes(`/${endpoint}`);
   return (
-    <Link href={`/${id}/${endpoint}`}>
+    <Link href={`/${endpoint}`}>
       <div
         className={`group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 ${
           active
@@ -158,9 +158,9 @@ function DisabledNavItem({ icon, label }) {
 
 /* Mobile Nav Item */
 function BottomNavItem({ icon, label, id, endpoint, pathname }) {
-  const active = pathname.includes(`/${id}/${endpoint}`);
+  const active = pathname.includes(`/${endpoint}`);
   return (
-    <Link href={`/${id}/${endpoint}`}>
+    <Link href={`/${endpoint}`}>
       <div
         className={`relative flex flex-col items-center justify-center transition-all duration-150 px-2 py-1 border-t-2 ${
           active
