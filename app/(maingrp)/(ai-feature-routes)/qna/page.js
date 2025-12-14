@@ -1,5 +1,6 @@
 import QnaEngine from "@/components/qna-engine/qna-engine";
 import { getUserSubjectList } from "@/lib/data-fetch-functions";
+import { getCurrentUser } from "@/lib/session";
 
 export default async function Page({params}){
     const userId = await getCurrentUser();

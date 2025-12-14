@@ -4,6 +4,7 @@ import Link from "next/link";
 import LoadingDots from "@/components/loadingDots";
 import toast from "react-hot-toast";
 import ShareSubjectButton from "@/components/shareSubjectButton";
+import { getCurrentUser } from "@/lib/session";
 
 export default async function IndividualSubjectPage({ params }) {
   let initialSubjectName = params.subjectSlug;

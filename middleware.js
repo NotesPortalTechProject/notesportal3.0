@@ -22,7 +22,7 @@ export default async function middleware(req) {
     if (isPublicRoute && session?.userId) {
         const now = new Date().toISOString(); 
         await supabase.from("users").update({"lastactive":now}).eq("id",session.userId);
-        return NextResponse.redirect(new URL(`/${session?.userId}/home`, req.nextUrl));
+        return NextResponse.redirect(new URL(`/home`, req.nextUrl));
     }
 
     return NextResponse.next()

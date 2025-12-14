@@ -3,6 +3,7 @@ import ResetPasswordModal from "@/components/password-managers/reset-password";
 import SetPasswordModal from "@/components/password-managers/set-password";
 import SubjectCardsDisplay from "@/components/subject-cards/subject-card-display";
 import { getMyFiles, getUserData } from "@/lib/data-fetch-functions";
+import { getCurrentUser } from "@/lib/session";
 
 export default async function ProfilePage({ params }) {
   const userid = await getCurrentUser();
