@@ -6,41 +6,70 @@ import FileViewModal from "./subject-files/file-view-modal";
 import { FiFileText } from "react-icons/fi";
 import { FaFilePdf, FaFileWord, FaFilePowerpoint } from "react-icons/fa";
 
-function FilePreview({ file, isMobile }) {
-    let Icon;
-  if (file.filetype === "pdf" && !isMobile) {
-    Icon = FaFilePdf;
-    return (
-      // TEMP PREVIEW REMOVED
-      <div className="flex items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
-        <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
-      </div>
-    );
-  }
+function FilePreview({ file, isMobile, isList }) {
+  let Icon;
+  let label = file.filetype?.toUpperCase() || "FILE";
 
   switch (file.filetype) {
     case "doc":
     case "docx":
       Icon = FaFileWord;
+      label = "DOC";
       break;
     case "ppt":
     case "pptx":
       Icon = FaFilePowerpoint;
+      label = "PPT";
       break;
     case "pdf":
       Icon = FaFilePdf;
+      label = "PDF";
       break;
     default:
       Icon = FiFileText;
+      label = "FILE";
       break;
   }
 
+  // LIST
+  if (isList) {
+    return (
+      <div
+        className={`
+          flex flex-col items-center justify-center
+          ${isMobile ? "w-12 h-12" : "w-14 h-14"}
+          rounded-xl
+          border border-purple-500/20
+          bg-purple-500/10 backdrop-blur-md
+          shadow-[0_0_12px_rgba(168,85,247,0.25)]
+          flex-shrink-0
+        `}
+      >
+        <Icon
+          className={`
+            ${isMobile ? "text-xl" : "text-2xl"}
+            text-purple-300
+            drop-shadow-[0_0_6px_rgba(168,85,247,0.7)]
+          `}
+        />
+        <span className="mt-0.5 text-[10px] font-medium tracking-wider text-purple-300/80">
+          {label}
+        </span>
+      </div>
+    );
+  }
+
+  // GRID
   return (
-    <div className="flex items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
+    <div className="flex flex-col items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
       <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+      <span className="mt-2 text-xs font-semibold tracking-widest text-purple-200/80">
+        {label}
+      </span>
     </div>
   );
 }
+
 
 export default function FileCardWrapper({ file, index, userid, src, viewMode = "grid" }) {
   const [isMobile, setIsMobile] = useState(null);
@@ -64,7 +93,7 @@ export default function FileCardWrapper({ file, index, userid, src, viewMode = "
     : <DesktopFileCard file={file} userid={userid} src={src} viewMode={viewMode} isFav={isFav} setIsFav={setIsFav} />;
 }
 
-// ✨ GlassCard now includes Spotlight effect
+// GlassCard now includes Spotlight effect
 function GlassCard({ children, viewMode }) {
   const [coords, setCoords] = useState({ x: -200, y: -200 });
 
@@ -110,7 +139,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
       {viewMode === "grid" && (
         <div className="flex flex-col w-full text-white">
           <div className="mb-4">
-            <FilePreview file={file} isMobile={true} />
+            <FilePreview file={file} isMobile={true} isList={false} />
           </div>
 
           <div className="flex justify-end mb-2">
@@ -130,7 +159,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
       {viewMode === "list" && (
         <div className="flex flex-row items-center justify-between w-full space-x-4 text-white">
           <div className="flex items-center space-x-4 flex-1 min-w-0">
-            <FiFileText className="text-2xl text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
+            <FilePreview file={file} isMobile={true} isList={true} />
             <div className="min-w-0">
               <h2 className="text-lg font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
               <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
@@ -153,15 +182,15 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
       {viewMode === "grid" && (
         <div className="flex flex-col w-full text-white">
           <div className="mb-4">
-            <FilePreview file={file} isMobile={false} />
+            <FilePreview file={file} isMobile={false} isList={false} />
           </div>
 
           <div className="flex justify-end mb-2">
             <FavFormBtn isFav={isFav} setIsFav={setIsFav} fileid={file.id} userid={userid} src={src} />
           </div>
 
-          <h2 className="text-lg font-bold tracking-wide mb-1 truncate text-purple-100">{file.filename}</h2>
-          <p className="text-sm text-purple-200/80 mb-4 truncate">{file.description}</p>
+          <h2 className="text-md font-bold tracking-wide mb-1 truncate text-purple-100">{file.filename}</h2>
+          <p className="text-xs text-purple-200/80 mb-4 truncate">{file.description}</p>
 
           <div className="flex items-center justify-between">
             <span className="text-sm text-purple-300/80 truncate">{file.uploaded_by}</span>
@@ -173,14 +202,14 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
       {viewMode === "list" && (
         <div className="flex flex-row items-center justify-between w-full space-x-4 text-white">
           <div className="flex items-center space-x-4 flex-1 min-w-0">
-            <FiFileText className="text-3xl text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] flex-shrink-0" />
+            <FilePreview file={file} isMobile={false} isList={true}/>
             <div className="min-w-0">
-              <h2 className="text-lg font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
-              <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
+              <h2 className="text-md font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
+              <p className="text-xs text-purple-200/80 truncate">{file.description}</p>
               <span className="text-xs text-purple-300/80 truncate">{file.uploaded_by}</span>
             </div>
           </div>
-          <div className="flex items-center space-x-2 flex-shrink-0">
+          <div className="flex items-center space-x-6 flex-shrink-0">
             <FavFormBtn isFav={isFav} setIsFav={setIsFav} userid={userid} src={src} />
             <FileViewModal data={file} />
           </div>
