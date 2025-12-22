@@ -19,7 +19,7 @@ export default function UploadBadges({ noofuploads }) {
         </span>
       </div>
     );
-  } else if (noofuploads >= 75) {
+  } else if (noofuploads >= 50) {
     return (
       <div
         className={`${baseClasses} ${shimmer} bg-gradient-to-r from-fuchsia-500/90 via-pink-500/90 to-rose-500/90 text-white`}
@@ -31,7 +31,7 @@ export default function UploadBadges({ noofuploads }) {
         </span>
       </div>
     );
-  } else if (noofuploads >= 50) {
+  } else if (noofuploads >= 25) {
     return (
       <div
         className={`${baseClasses} ${shimmer} bg-gradient-to-r from-cyan-400/90 via-sky-500/90 to-blue-600/90 text-white`}
@@ -43,7 +43,7 @@ export default function UploadBadges({ noofuploads }) {
         </span>
       </div>
     );
-  } else if (noofuploads >= 25) {
+  } else if (noofuploads >= 10) {
     return (
       <div
         className={`${baseClasses} ${shimmer} bg-gradient-to-r from-lime-400/90 via-green-500/90 to-emerald-600/90 text-white`}
@@ -55,7 +55,7 @@ export default function UploadBadges({ noofuploads }) {
         </span>
       </div>
     );
-  } else if (noofuploads >= 10) {
+  } else if (noofuploads >= 3) {
     return (
       <div
         className={`${baseClasses} ${shimmer} bg-gradient-to-r from-purple-400/90 via-indigo-500/90 to-violet-600/90 text-white`}
