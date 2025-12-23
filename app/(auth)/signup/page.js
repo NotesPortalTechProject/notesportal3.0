@@ -232,7 +232,7 @@ export default function SignupPage() {
             {formState?.errors?.length > 0 && (
               <ul className="text-sm text-red-400 mt-2 space-y-1">
                 {formState.errors.map((error, index) => (
-                  <li key={index}>• {error}</li>
+                  <li key={index}>{error}</li>
                 ))}
               </ul>
             )}

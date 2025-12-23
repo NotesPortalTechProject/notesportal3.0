@@ -5,7 +5,6 @@ import { createSession, deleteSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
 
-// SIGNUP FUNCTION
 export async function signup(prevState, formData) {
     const firstname = formData.get('firstname');
     const lastname = formData.get('lastname');
@@ -69,6 +68,7 @@ export async function signup(prevState, formData) {
     redirect(`/home`)
 }
 
+
 // LOGIN FUNCTION password
 export async function login_with_password(prevState, formData) {
     const userNameorEmail = formData.get('username');
@@ -94,7 +94,7 @@ export async function login_with_password(prevState, formData) {
     if (inpt === 'username') {
         userdata = await getUserDataByUsername(userNameorEmail);
     }
-    else{
+    else {
         userdata = await getUserDataByEmail(userNameorEmail)
     }
     const isValidPassword = verifyPassword(userdata.password, password);
@@ -134,4 +134,89 @@ export async function login_with_otp(prevState, formData) {
 export async function logout() {
     await deleteSession();
     redirect("/");
+}
+
+// SIGNUP FUNCTION
+export async function signup45(prevState, formData) {
+    const nsubjects = formData.get('nsubjects');
+
+    let errors = [];
+
+    if (!nsubjects || nsubjects == 0) errors.push('No subjects provided');
+
+
+    let subjectslist = [];
+    for (let i = 0; i < nsubjects; i++) {
+        let subjectcode = formData.get(`subject${i}`);
+        if (!subjectcode || subjectcode.length > 10) {
+            errors.push('Invalid subject code');
+            break;
+        }
+        if (/\d/.test(subjectcode)) errors.push('Subject code cannot contain numbers');
+        // CALCULUS FIX
+        if (subjectcode == "CAL" || subjectcode == "cal") {
+            subjectcode = "CALCULUS"
+        }
+        subjectslist.push(subjectcode.toUpperCase().trim());
+    }
+
+    if (errors.length > 0) return { errors };
+
+    const hashedPassword = hashUserPassword(password);
+
+    const { error } = await supabase.from('users').insert([{
+        firstname,
+        lastname,
+        username,
+        email: emailid,
+        subjects: subjectslist,
+        password: hashedPassword
+    }]);
+    if (error) throw new Error('Unexpected error: ' + error);
+
+    const userid = await getUserId(username);
+
+    await createSession(userid);
+    redirect(`/home`)
+}
+
+export async function signupStage1(prevState, fromData) {
+    const firstname = formData.get('firstname');
+    const lastname = formData.get('lastname');
+    const username = formData.get('username');
+
+    let errors=[];
+    if (!firstname || firstname.length < 3) errors.push('First name too short');
+    if (!lastname || lastname.length < 3) errors.push('Last name too short');
+    if (/\d/.test(firstname)) errors.push('First name cannot contain numbers');
+    if (/\d/.test(lastname)) errors.push('Last name cannot contain numbers');
+    if (!username || username.length < 3) errors.push('Username too short');
+    if (firstname == lastname) errors.push('Firstname and lastname cannot be same');
+
+    const { data: usernameCheck } = await supabase.from('users').select('*').eq('username', username);
+    if (usernameCheck?.length > 0) errors.push('Username already exists');
+
+    if(errors.length>0){
+        return { errors };
+    }
+
+    return true;
+}
+
+export async function signupStage2(prevState,formData) {
+    const emailid = formData.get('email');
+    const password = formData.get('password');
+    const confirmpassword = formData.get('confirmpassword');
+
+    let errors = [];
+
+    if (!emailid || !emailid.includes('@')) errors.push('Invalid email');
+    if (!password || password.trim().length < 8) errors.push('Password too short');
+    if (password !== confirmpassword) errors.push('Passwords don’t match');
+
+    const { data: emailCheck } = await supabase.from('users').select('*').eq('email', emailid);
+    if (emailCheck?.length > 0) errors.push('Email already exists');
+
+    // VERIFYING EMAIL
+    
 }
