@@ -1,8 +1,8 @@
 "use server"
-
 import { generateOtp } from "@/lib/gen-otp";
 import { EmailExists } from "./other-actions";
 import { SendOTPEmail } from "@/lib/mail-send";
+import crypto from "crypto";
 import OtpAccountVerification from "@/lib/email-templates/otp-acc-verification";
 
 
