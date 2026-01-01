@@ -1,5 +1,5 @@
 "use client";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaLock, FaExclamationCircle } from "react-icons/fa";
 import { login_with_password } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState } from "react";
@@ -7,7 +7,7 @@ import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
 
 export default function LoginPage() {
-  const [formState, formAction,isPending] = useActionState(login_with_password, {});
+  const [formState, formAction, isPending] = useActionState(login_with_password, {});
 
   return (
     <div className="relative bg-black min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden">
@@ -99,17 +99,25 @@ export default function LoginPage() {
               disabled={isPending}
               className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-2 rounded-xl shadow-[0_0_20px_#9333ea40] text-white font-semibold transition-all hover:scale-[1.03]"
             >
-              {isPending ? <LoadingDots text="verifying"/>:"Login"}
+              {isPending ? <LoadingDots text="verifying" /> : "Login"}
             </button>
 
-            {/* Errors */}
             {formState?.errors?.length > 0 && (
-              <ul className="text-sm text-red-400 mt-2 space-y-1">
-                {formState.errors.map((error, index) => (
-                  <li key={index}>• {error}</li>
-                ))}
-              </ul>
+              <div className="mt-4 w-full p-3 bg-red-500/10 border border-red-500/20 rounded-xl ">
+                <ul className="flex flex-col gap-1.5">
+                  {formState.errors.map((error, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start justify-center gap-2 text-xs sm:text-sm text-red-300 font-medium text-center"
+                    >
+                      <FaExclamationCircle className="mt-0.5 flex-shrink-0" />
+                      <span>{error}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
+
           </form>
 
           {/* Signup link */}

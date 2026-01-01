@@ -240,7 +240,6 @@ export default function SignupPage() {
             onKeyDown={handleKeyDown}
             className="w-full flex flex-col"
           >
-            {/* Hidden Inputs */}
             <input type="hidden" name="firstname" value={firstname} readOnly />
             <input type="hidden" name="lastname" value={lastname} readOnly />
             <input type="hidden" name="username" value={username} readOnly />
@@ -404,9 +403,9 @@ export default function SignupPage() {
               </AnimatePresence>
             </div>
 
-            {/* Error Message from Server */}
+            {/* ERROR MSG DIV */}
             {formState?.errors?.length > 0 && (
-              <div className="mt-3 w-full p-2 bg-red-500/10 border border-red-500/20 rounded-lg animate-pulse">
+              <div className="mt-3 w-full p-2 bg-red-500/10 border border-red-500/20 rounded-lg">
                 <p className="text-xs text-red-300 text-center flex items-center justify-center gap-1">
                   <FaExclamationCircle /> {formState.errors[0]}
                 </p>
@@ -448,7 +447,6 @@ export default function SignupPage() {
 
           </form>
 
-          {/* Footer Link */}
           <div className="mt-4 w-full text-center">
              <p className="text-xs text-purple-300/60">
               Already have an account?{" "}
