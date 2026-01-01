@@ -11,7 +11,7 @@ export async function sendOtpAction(email) {
         if(!email) return { success:false,error:"Email is required"};
 
         const exists = await EmailExists(email);
-        if(exists){
+        if(!exists){
             return { success:false,error:"Account with this email already exists"};
         }
 
@@ -27,7 +27,7 @@ export async function sendOtpAction(email) {
             return { success:false, error:"Failed to send email"};
         }
 
-        const hash = crypto.createHmac("sha356",process.env.OTP_SECRET).update(otp).digest("hex");
+        const hash = crypto.createHmac("sha256",process.env.OTP_SECRET).update(otp).digest("hex");
 
         return {success:true,hash};
     }
@@ -39,7 +39,7 @@ export async function sendOtpAction(email) {
 
 export async function verifyOtpAction(userOtp,ogHash){
     try{
-        const inputHash = crypto.createHmac("sha356",process.env.OTP_SECRET).update(userOtp).digest("hex");
+        const inputHash = crypto.createHmac("sha256",process.env.OTP_SECRET).update(userOtp).digest("hex");
         
         if(inputHash===ogHash){
             return {success:true};
