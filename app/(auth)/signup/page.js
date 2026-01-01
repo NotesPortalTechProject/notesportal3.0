@@ -334,7 +334,7 @@ export default function SignupPage() {
                       </motion.div>
                     )}
                     
-                    {otpError && <p className="text-red-400 text-xs flex items-center gap-1 mt-1 animate-pulse"><FaExclamationCircle /> {otpError}</p>}
+                    {otpError && <p className="text-red-400 text-xs flex items-center gap-1 mt-1 "><FaExclamationCircle /> {otpError}</p>}
                   </motion.div>
                 )}
 

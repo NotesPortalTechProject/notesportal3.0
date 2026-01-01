@@ -119,14 +119,14 @@ export default function Home() {
             href="/signup"
             className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:-rotate-1 flex items-center justify-center text-center"
           >
-            Sign Up
+            sign up
           </Link>
 
           <Link
             href="/login"
             className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:rotate-1 flex items-center justify-center text-center"
           >
-            Login
+            login
           </Link>
         </div>
       </div>
