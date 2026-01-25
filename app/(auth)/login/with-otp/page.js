@@ -8,60 +8,64 @@ import OtpTemplate from "@/lib/email-templates/otp-template-login";
 import { generateOtp } from "@/lib/gen-otp";
 import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
+import { sendOtpAction } from "@/actions/otp-action";
 
 export default function LoginWithOtpPage() {
-  const [formState, formAction, isPending] = useActionState(login_with_otp, {}); 
+  const [formState, formAction, isPending] = useActionState(login_with_otp, {});
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(" ");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
-  async function handleSendOtp(e) {
+  // otp hash storage
+  const [otpHash, setOtpHash] = useState("")
+
+  async function handleSendOtpUpgrade(e) {
     e.preventDefault();
-    try {
-      setLoading(true);
-      const formData = new FormData(e.target);
-      const userEmail = formData.get("email");
-      const doesNotExist = await EmailExists(userEmail);
-      const otp = generateOtp();
+    const formData = new FormData(e.target);
+    const userEmail = formData.get("email");
+    setLoading(true)
 
-      if (doesNotExist) {
-        setEmailError("No account associated with this Email Id");
-        setLoading(false);
-        setStep(1);
-        return;
-      }
-
-      setEmailError("");
-      setEmail(userEmail);
-
-      const res = await fetch(`/api/sendOtpMail`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: userEmail,
-          subject: "OTP for login",
-          html: OtpTemplate(otp),
-          otp: otp,
-        }),
-      });
-
-      const data = await res.json();
-      setLoading(false);
-
-      if (!res.ok || !data.success) {
-        setEmailError("Failed to send OTP please try again");
-        setStep(1);
-        return;
-      }
-
-      setStep(2);
-    } catch (error) {
-      setEmailError("Something went wrong while sending OTP. Please try again.");
+    const doesNotExist = await EmailExists(userEmail);
+    if (doesNotExist) {
+      setEmailError("No account associated with this Email Id");
       setLoading(false);
       setStep(1);
+      return;
+    }
+
+    setEmail(userEmail)
+
+    if (!userEmail || !userEmail.includes("@")) {
+      setEmailError("Please enter a valid email id");
+      setLoading(false)
+      setStep(1);
+      return
+    }
+
+    setEmailError("");
+
+    try {
+      const result = await sendOtpAction(userEmail, "loginotp")
+      if (result.success) {
+        setStep(2);
+        setOtpHash(result.hash)
+        return;
+      }
+      else {
+        setEmailError(result.error || "Failed to send otp");
+        setStep(1)
+        return;
+      }
+    } catch (error) {
+      setEmailError("Something went wrong while sending otp");
+      setStep(1);
+      return;
+    } finally {
+      setLoading(false);
     }
   }
+
 
   return (
     <div className="relative bg-black min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden">
@@ -97,7 +101,7 @@ export default function LoginWithOtpPage() {
           </p>
 
           {step === 1 && (
-            <form className="flex flex-col gap-6 w-full" onSubmit={handleSendOtp}>
+            <form className="flex flex-col gap-6 w-full" onSubmit={handleSendOtpUpgrade}>
               <div>
                 <label
                   htmlFor="email"
@@ -172,6 +176,9 @@ export default function LoginWithOtpPage() {
                   />
                 </div>
               </div>
+              
+              {/* SENDING OG OTP HASH VIA A INPUT FIELD */}
+              <input type="hidden" name="otphash" value={otpHash} readOnly/>
 
               <button
                 type="submit"

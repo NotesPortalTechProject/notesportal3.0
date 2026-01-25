@@ -4,6 +4,7 @@ import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { createSession, deleteSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
 import { redirect } from "next/navigation";
+import { verifyOtpAction } from "./otp-action";
 
 export async function signup(prevState, formData) {
     const firstname = formData.get('firstname');
@@ -109,26 +110,42 @@ export async function login_with_password(prevState, formData) {
 // LOGIN FUNCTION otp
 export async function login_with_otp(prevState, formData) {
     const emailId = formData.get('email');
-    const otp = formData.get('otp');
+    const userotp = formData.get('otp');
+    const otphash = formData.get('otphash');
     let errors = [];
 
     if (!emailId || !emailId.includes('@')) errors.push('Invalid email');
-    if (!otp) errors.push('OTP required');
+    if (!userotp) errors.push('OTP required');
 
     const userExists = await getUserDataByEmail(emailId);
     if (!userExists) errors.push('Email not found');
 
     if (errors.length > 0) return { errors };
 
-    const storedOtp = await getStoredOtp(emailId);
-    if (otp.trim() !== storedOtp.trim()) errors.push('Invalid OTP');
+    errors = [];
 
-    if (errors.length > 0) return { errors };
+    const result = await verifyOtpAction(userotp,otphash);
+    if(result.success){
+        await createSession(userExists.id);
+        redirect('/home');
+    }else{
+        errors.push(result.error)
+        return { errors }
+    }
 
-    await supabase.from("users").update({ otp: null }).eq('email', emailId);
+    try{
+        const result = await verifyOtpAction(userotp,otphash);
+        if(result.success){
+            await createSession(userExists.id)
+            redirect('/home')
+        }else{
+            errors.push('Invalid OTP')
+            return { errors }
+        }
+    }catch(error){
 
-    await createSession(userExists.id);
-    redirect(`/home`)
+        return { errors }
+    }
 }
 
 export async function logout() {
@@ -180,43 +197,5 @@ export async function signup45(prevState, formData) {
     redirect(`/home`)
 }
 
-export async function signupStage1(prevState, fromData) {
-    const firstname = formData.get('firstname');
-    const lastname = formData.get('lastname');
-    const username = formData.get('username');
 
-    let errors=[];
-    if (!firstname || firstname.length < 3) errors.push('First name too short');
-    if (!lastname || lastname.length < 3) errors.push('Last name too short');
-    if (/\d/.test(firstname)) errors.push('First name cannot contain numbers');
-    if (/\d/.test(lastname)) errors.push('Last name cannot contain numbers');
-    if (!username || username.length < 3) errors.push('Username too short');
-    if (firstname == lastname) errors.push('Firstname and lastname cannot be same');
 
-    const { data: usernameCheck } = await supabase.from('users').select('*').eq('username', username);
-    if (usernameCheck?.length > 0) errors.push('Username already exists');
-
-    if(errors.length>0){
-        return { errors };
-    }
-
-    return true;
-}
-
-export async function signupStage2(prevState,formData) {
-    const emailid = formData.get('email');
-    const password = formData.get('password');
-    const confirmpassword = formData.get('confirmpassword');
-
-    let errors = [];
-
-    if (!emailid || !emailid.includes('@')) errors.push('Invalid email');
-    if (!password || password.trim().length < 8) errors.push('Password too short');
-    if (password !== confirmpassword) errors.push('Passwords don’t match');
-
-    const { data: emailCheck } = await supabase.from('users').select('*').eq('email', emailid);
-    if (emailCheck?.length > 0) errors.push('Email already exists');
-
-    // VERIFYING EMAIL
-    
-}

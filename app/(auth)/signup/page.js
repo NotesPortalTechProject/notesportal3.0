@@ -130,7 +130,7 @@ export default function SignupPage() {
     setOtpError("");
 
     try {
-      const result = await sendOtpAction(email);
+      const result = await sendOtpAction(email,"signupAccVerification");
       if (result.success) {
         setOtpHash(result.hash);
         setOtpSent(true);
