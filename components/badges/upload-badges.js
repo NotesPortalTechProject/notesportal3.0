@@ -27,7 +27,7 @@ export default function UploadBadges({ noofuploads }) {
         <FiShield className="w-6 h-6 drop-shadow-md" />
         <span className="text-base font-bold tracking-wide">Uploader II</span>
         <span className="bg-white/90 text-pink-600 rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold shadow-md">
-          75+
+          50+
         </span>
       </div>
     );
@@ -39,7 +39,7 @@ export default function UploadBadges({ noofuploads }) {
         <FiStar className="w-6 h-6 drop-shadow-md" />
         <span className="text-base font-bold tracking-wide">Uploader III</span>
         <span className="bg-white/90 text-sky-600 rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold shadow-md">
-          50+
+          25+
         </span>
       </div>
     );
@@ -51,7 +51,7 @@ export default function UploadBadges({ noofuploads }) {
         <FiUpload className="w-6 h-6 drop-shadow-md" />
         <span className="text-base font-bold tracking-wide">Uploader IV</span>
         <span className="bg-white/90 text-green-600 rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold shadow-md">
-          25+
+          10+
         </span>
       </div>
     );
@@ -63,7 +63,7 @@ export default function UploadBadges({ noofuploads }) {
         <FiUpload className="w-6 h-6 drop-shadow-md" />
         <span className="text-base font-bold tracking-wide">Uploader V</span>
         <span className="bg-white/90 text-indigo-600 rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold shadow-md">
-          10+
+          3+
         </span>
       </div>
     );

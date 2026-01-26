@@ -14,6 +14,10 @@ export default function ResetPasswordModal({ id }) {
   const [otpState, setOtpState] = useState(" ");
   const [formState, formAction] = useActionState(setPassword, {});
 
+  async function handleSendOtpUpgrade(params) {
+    
+  }
+
   async function handleSendOtp(formData) {
     const emailId = formData.get('email');
     if (!emailId || emailId.length === 0) {
