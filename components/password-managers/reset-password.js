@@ -5,6 +5,7 @@ import { useActionState, useState } from 'react';
 import { EmailExists, setPassword } from "@/actions/other-actions";
 import OtpTemplateSetResetPass from "@/lib/email-templates/otp-template-pass";
 import { generateOtp } from "@/lib/gen-otp";
+import { sendOtpAction, verifyOtpAction } from "@/actions/otp-action";
 
 export default function ResetPasswordModal({ id }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,59 +15,59 @@ export default function ResetPasswordModal({ id }) {
   const [otpState, setOtpState] = useState(" ");
   const [formState, formAction] = useActionState(setPassword, {});
 
-  async function handleSendOtpUpgrade(params) {
-    
-  }
-
   async function handleSendOtp(formData) {
     const emailId = formData.get('email');
-    if (!emailId || emailId.length === 0) {
+    if(!emailId || emailId.length === 0){
       setEmailError('Please enter an email');
       setStep(1);
       return;
     }
 
     const doesNotExist = await EmailExists(emailId);
-    if (doesNotExist) {
+    if(doesNotExist){
       setEmailError('No account associated with this email');
       setStep(1);
       return;
     }
 
     setEmailError(" ");
-    const otp = generateOtp();
-    setOtpState(otp);
-    setStep(2);
-
-    await fetch('/api/sendOtpMail', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: emailId,
-        subject: 'OTP FOR RESETTING ACCOUNT PASSWORD',
-        html: OtpTemplateSetResetPass(otp, 'reset'),
-        otp: otp
-      })
-    });
-    console.log(res)
+    try{
+      const result = await sendOtpAction(emailId,"reset");
+      if(result.success){
+        setStep(2);
+        setOtpState(result.hash);
+        return;
+      }
+      else{
+        setEmailError(result.error||'Failed to send OTP');
+        setStep(1);
+        return;
+      }
+    }catch(error){
+      setEmailError("Something went wrong couldnt send otp");
+      setStep(1);
+      return;
+    }
   }
 
   async function handleVerifyOtp(formData) {
     const otpFromForm = formData.get('otp');
-    if (!otpFromForm || otpFromForm.length === 0) {
-      setOtpError('OTP is required');
+    if(!otpFromForm || otpFromForm.length === 0){
+      setOtpError('Otp is required');
       setStep(2);
       return;
     }
 
-    if (otpFromForm !== otpState) {
-      setOtpError('Invalid OTP, please try again');
+    const result =  await verifyOtpAction(otpFromForm,otpState)
+    if(result.success){
+      setOtpError(" ");
+      setStep(3);
+      return;
+    }else{
+      setOtpError("Invalid OTP");
       setStep(2);
       return;
     }
-
-    setOtpError(" ");
-    setStep(3);
   }
 
   return (
@@ -137,9 +138,6 @@ export default function ResetPasswordModal({ id }) {
                 ))}
               </div>
 
-              <p className="text-sm text-white/60 mb-4 text-center">
-                Use the same OTP throughout the process.
-              </p>
 
               {/* Step 1: Email */}
               {step === 1 && (
