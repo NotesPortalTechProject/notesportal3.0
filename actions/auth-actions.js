@@ -22,6 +22,7 @@ export async function signup(prevState, formData) {
     if (/\d/.test(firstname)) errors.push('First name cannot contain numbers');
     if (/\d/.test(lastname)) errors.push('Last name cannot contain numbers');
     if (!username || username.length < 3) errors.push('Username too short');
+    if(!/^[a-zA-Z0-9_]+$/.test(username)) errors.push('Username cannot contain special characters')
     if(firstname==lastname) errors.push('Firstname and lastname cannot be same');
     if (!emailid || !emailid.includes('@')) errors.push('Invalid email');
     if (!password || password.trim().length < 8) errors.push('Password too short');
