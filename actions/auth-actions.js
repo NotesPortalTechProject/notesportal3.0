@@ -38,10 +38,20 @@ export async function signup(prevState, formData) {
     for (let i = 0; i < nsubjects; i++) {
         let subjectcode = formData.get(`subject${i}`);
         if (!subjectcode || subjectcode.length > 10) {
-            errors.push('Invalid subject code');
+            errors.push('Subject code length should not be greater than 10');
             break;
         }
-        if (/\d/.test(subjectcode)) errors.push('Subject code cannot contain numbers');
+
+        if(subjectcode.length==1 || subjectcode.length<2){
+            errors.push('Subject code must atleast have 2 letters');
+            break;
+        }
+
+        if(!/^[a-zA-Z0-9_]+$/.test(subjectcode)){
+            errors.push('Subject code cannot contain special characters');
+            break;
+        }
+
         // CALCULUS FIX
         if(subjectcode=="CAL"||subjectcode=="cal"){
             subjectcode="CALCULUS"

@@ -12,24 +12,47 @@ export default function AddSubjectModal({ id, onAdd }) {
 
   async function HandleAddSub(e) {
     e.preventDefault();
-    setErrorState(" ");
+    setErrorState("");
     setLoading(true)
     const toastId = toast.loading("adding subject")
 
     const formData = new FormData(e.target);
     let sub_code;
-    const temp_sub_code = formData.get("sub_code").toUpperCase().trim();
+    let temp_sub_code = formData.get("sub_code").toUpperCase().trim();
     const id = formData.get("id");
     toast.loading("validating",{id:toastId})
 
     if (!temp_sub_code?.trim()) {
       setLoading(false)
       setErrorState("Subject name cannot be empty");
+      toast.dismiss(toastId)
       return;
     }
     if (!id?.trim()) {
       setLoading(false)
       setErrorState("Try again");
+      toast.dismiss(toastId)
+      return;
+    }
+
+    if(temp_sub_code.length > 10){
+      setLoading(false)
+      setErrorState("Length of subject code cannot be greater than 10");
+      toast.dismiss(toastId)
+      return;
+    }
+
+    if(temp_sub_code.length<2){
+      setLoading(false)
+      setErrorState("Subject code must contain atleast 2 letters");
+      toast.dismiss(toastId)
+      return;
+    }
+
+    if(!/^[a-zA-Z0-9_]+$/.test(temp_sub_code)){
+      setLoading(false)
+      setErrorState("Subject code cannot contain special characters");
+      toast.dismiss(toastId)
       return;
     }
 
