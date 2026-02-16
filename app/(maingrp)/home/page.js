@@ -5,6 +5,11 @@ import { getUserDataByUsername } from "@/lib/data-fetch-functions";
 import { Suspense } from "react";
 import { getCurrentUser } from "@/lib/session";
 
+
+export const metadata = {
+  title: "notesportal",
+};
+
 export default async function HomePage({ params }) {
   const userId = await getCurrentUser();
   return (
