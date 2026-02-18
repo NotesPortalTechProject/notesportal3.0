@@ -32,6 +32,19 @@ export async function POST(req) {
 
         const fileKey = `${subjectcode}_${filename}.${extension}`;
 
+        const fileNameWithoutExt = `${subjectcode}_${filename}`
+        const { data: exists2, error: selectError2 } = await supabase.from("notes").select("id").eq("filename", fileKey);
+        const { data: exists3, error: selectError3 } = await supabase.from("notes").select("id").eq("filename", fileNameWithoutExt);
+
+        if(selectError2 || selectError3){
+            return NextResponse.json({ success: false, error: { text: "Upload Failed" } }, { status: 500 });
+        }
+
+        if(exists2 || exists3){
+            return NextResponse.json({ success: false, error: { text: "Filename already in use, please try someting different" } }, { status: 409 });
+        }
+
+
         const command = new PutObjectCommand({
             Bucket: process.env.R2_BUCKET,
             Key: fileKey,
