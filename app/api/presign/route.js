@@ -33,14 +33,21 @@ export async function POST(req) {
         const fileKey = `${subjectcode}_${filename}.${extension}`;
 
         const fileNameWithoutExt = `${subjectcode}_${filename}`
+        console.log(fileNameWithoutExt)
+        console.log(fileKey)
         const { data: exists2, error: selectError2 } = await supabase.from("notes").select("id").eq("filename", fileKey);
         const { data: exists3, error: selectError3 } = await supabase.from("notes").select("id").eq("filename", fileNameWithoutExt);
-
+        console.log(exists2.length)
+        console.log(exists3.length)
         if(selectError2 || selectError3){
             return NextResponse.json({ success: false, error: { text: "Upload Failed" } }, { status: 500 });
         }
 
-        if(exists2 || exists3){
+        if(exists2 && exists2.length>0){
+            return NextResponse.json({ success: false, error: { text: "Filename already in use, please try someting different" } }, { status: 409 });
+        }
+
+        if(exists3 && exists3.length>0){
             return NextResponse.json({ success: false, error: { text: "Filename already in use, please try someting different" } }, { status: 409 });
         }
 
