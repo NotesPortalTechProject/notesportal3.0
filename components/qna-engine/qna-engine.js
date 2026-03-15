@@ -31,7 +31,6 @@ export default function QnaEngine({ userid, subjectList }) {
 
             if (!res.ok) throw new Error("Failed to fetch question");
             const data = await res.text();
-            // cleaning question to remove extra quotes and linebreaks
             const cleaneddata = data.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
             setQuestion(cleaneddata);
         } catch (err) {
@@ -61,8 +60,8 @@ export default function QnaEngine({ userid, subjectList }) {
             if (!res.ok) throw new Error("Failed to check answer");
 
             const data = await res.text();
-            // cleaning answer to remove extra quotes and linebreaks
             const cleaneddata = data.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
+
             if (/yes|correct|right/i.test(data)) {
                 setSuccess(cleaneddata);
             } else {
@@ -77,77 +76,86 @@ export default function QnaEngine({ userid, subjectList }) {
     };
 
     return (
-        <div className="min-h-screen w-full p-4 text-white flex flex-col gap-6">
+        <div className="min-h-screen w-full p-6 text-white flex flex-col gap-8">
+
             <div className="max-w-lg">
-                <h1 className="text-2xl font-semibold text-purple-300">Qna Engine</h1>
-                <p className="mt-1 text-gray-400 text-xs">
+                <h1 className="text-3xl font-semibold text-purple-400">
+                    QnA Engine
+                </h1>
+                <p className="mt-1 text-gray-400 text-sm">
                     Select any subject, get questions based on the files present, and prepare for that exam.
                 </p>
             </div>
 
             <div className="flex gap-4 items-center max-w-3xl">
+
                 <input
                     type="text"
                     list="subjects"
                     placeholder="Select subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="px-3 py-2 rounded-md text-black"
+                    className="flex-1 px-4 py-2 rounded-lg bg-black/40 border border-purple-500/40 text-purple-200 placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
+
                 <datalist id="subjects">
                     {subjectList.map((value, idx) => (
                         <option key={idx} value={value} />
                     ))}
                 </datalist>
+
                 <button
                     onClick={handleNext}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-md"
+                    className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 transition font-medium"
                 >
-                    Next
+                    {loading ? <LoadingDots text=""/>:"Next"}
                 </button>
             </div>
 
-            {loading && <LoadingDots text="" />}
-
             {question && (
-                <div className="bg-gray-800 p-4 rounded-lg max-w-3xl">
-                    <h2 className="text-lg font-semibold">Question:</h2>
-                    <div className="whitespace-pre-line mt-2">
-                        <ReactMarkdown >{question}</ReactMarkdown>
+                <div className="max-w-3xl p-6 rounded-xl border border-purple-600/40 bg-black/50 shadow-lg">
+
+                    <h2 className="text-xl font-semibold text-purple-300">
+                        Question
+                    </h2>
+
+                    <div className="whitespace-pre-line mt-3 text-gray-200 leading-relaxed">
+                        <ReactMarkdown>{question}</ReactMarkdown>
                     </div>
 
                     <textarea
                         value={answer}
                         onChange={(e) => setAnswer(e.target.value)}
                         placeholder="Write your answer here..."
-                        className="w-full mt-3 p-2 rounded-md text-black"
                         rows={4}
+                        className="w-full mt-5 p-3 rounded-lg bg-black/50 border border-purple-500/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
 
                     <button
                         onClick={handleSubmit}
-                        className="mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md"
+                        className="mt-4 px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 transition font-medium"
                     >
-                        Submit
+                        {loading ? <LoadingDots text="checking answer"/>:"Submit"}
                     </button>
                 </div>
             )}
 
             {success && (
-                <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-3xl">
+                <div className="max-w-3xl p-4 rounded-xl border border-green-500/40 bg-black/40 text-green-300">
                     <div className="whitespace-pre-line">
-                        <ReactMarkdown >{success}</ReactMarkdown>
+                        <ReactMarkdown>{success}</ReactMarkdown>
                     </div>
                 </div>
             )}
 
             {error && (
-                <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-3xl">
+                <div className="max-w-3xl p-4 rounded-xl border border-red-500/40 bg-black/40 text-red-400">
                     <div className="whitespace-pre-line">
-                        <ReactMarkdown >{error}</ReactMarkdown>
+                        <ReactMarkdown>{error}</ReactMarkdown>
                     </div>
                 </div>
             )}
+
         </div>
     );
 }

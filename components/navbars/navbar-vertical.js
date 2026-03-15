@@ -58,8 +58,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
           <NavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint="chatwithpdf" pathname={pathname} />
           <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint="smartsearch" pathname={pathname} />
-          {/* DISABLED QNA (desktop) */}
-          <DisabledNavItem icon={<FiCpu />} label="Qna Engine" />
+          <NavItem icon={<FiCpu />} label="Qna Engine" id={id} endpoint="qna" pathname={pathname} />
         </nav>
 
         <button
@@ -115,10 +114,14 @@ export default function VerticalSidebar({ id, subjectlist }) {
                 <FiSearch className="text-purple-300" /> Smart Search
               </Link>
 
-              {/* DISABLED */}
-              <div className="flex items-center gap-2 px-3 py-2 rounded-md text-white/40 cursor-not-allowed select-none">
-                <FiCpu className="text-purple-300/40" /> QnA Engine
-              </div>
+              
+              <Link
+                href={`/qna`}
+                onClick={() => setAiOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
+              >
+                <FiSearch className="text-purple-300" /> Qna Engine
+              </Link>
             </div>
           )}
         </div>
