@@ -102,7 +102,7 @@ export default function SmartSearch({ userid }) {
           {loading ? <LoadingDots text="Looking for files" /> : "Search"}
         </button>
       </div>
-        {loading && <LoadingDots text="This process may take some time. Thank you for your patience." />}
+        {loading && <p>This process may take some time. Thank you for your patience</p>}
 
       {/* Success Message */}
       {success && (
