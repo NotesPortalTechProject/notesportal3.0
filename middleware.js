@@ -19,6 +19,9 @@ export default async function middleware(req) {
         return NextResponse.redirect(new URL("/login", req.nextUrl))
     }
 
+    // RENDER LA UTHAVNYA SATHI
+    fetch(`https://${process.env.PYTHON_API_URL}/healthz`).catch(()=>{})
+
     if (isPublicRoute && session?.userId) {
         const now = new Date().toISOString(); 
         await supabase.from("users").update({"lastactive":now}).eq("id",session.userId);
