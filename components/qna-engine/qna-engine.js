@@ -1,5 +1,5 @@
 "use client";
-
+import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import LoadingDots from "../loadingDots";
 
@@ -31,7 +31,9 @@ export default function QnaEngine({ userid, subjectList }) {
 
             if (!res.ok) throw new Error("Failed to fetch question");
             const data = await res.text();
-            setQuestion(data);
+            // cleaning question to remove extra quotes and linebreaks
+            const cleaneddata = data.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
+            setQuestion(cleaneddata);
         } catch (err) {
             setError("Could not get question. Try again.");
             console.error(err);
@@ -57,13 +59,14 @@ export default function QnaEngine({ userid, subjectList }) {
             });
 
             if (!res.ok) throw new Error("Failed to check answer");
-            
-            const data = await res.text();
 
+            const data = await res.text();
+            // cleaning answer to remove extra quotes and linebreaks
+            const cleaneddata = data.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
             if (/yes|correct|right/i.test(data)) {
-                setSuccess(data);
+                setSuccess(cleaneddata);
             } else {
-                setError(data);
+                setError(cleaneddata);
             }
         } catch (err) {
             setError("Could not check answer. Try again.");
@@ -104,12 +107,14 @@ export default function QnaEngine({ userid, subjectList }) {
                 </button>
             </div>
 
-            {loading && <LoadingDots text=""/>}
+            {loading && <LoadingDots text="" />}
 
             {question && (
                 <div className="bg-gray-800 p-4 rounded-lg max-w-3xl">
                     <h2 className="text-lg font-semibold">Question:</h2>
-                    <p className="mt-2">{question}</p>
+                    <div className="whitespace-pre-line mt-2">
+                        <ReactMarkdown >{question}</ReactMarkdown>
+                    </div>
 
                     <textarea
                         value={answer}
@@ -130,13 +135,17 @@ export default function QnaEngine({ userid, subjectList }) {
 
             {success && (
                 <div className="border border-green-500/50 rounded-md p-3 text-green-400 text-sm max-w-3xl">
-                    {success}
+                    <div className="whitespace-pre-line">
+                        <ReactMarkdown >{success}</ReactMarkdown>
+                    </div>
                 </div>
             )}
 
             {error && (
                 <div className="border border-red-500/50 rounded-md p-3 text-red-400 text-sm max-w-3xl">
-                    {error}
+                    <div className="whitespace-pre-line">
+                        <ReactMarkdown >{error}</ReactMarkdown>
+                    </div>
                 </div>
             )}
         </div>
