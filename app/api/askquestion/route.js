@@ -3,6 +3,7 @@ export async function POST(req) {
     const body = await req.json();
 
     let apiUrl = process.env.PYTHON_API_URL+"/askquestion" || "http://127.0.0.1:8000/askquestion";
+    // apiUrl = "http://127.0.0.1:8000/askquestion"
 
     const res = await fetch(apiUrl, {
       method: "POST",

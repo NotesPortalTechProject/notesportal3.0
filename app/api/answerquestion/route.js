@@ -7,6 +7,7 @@ export async function POST(req) {
     console.log("changu")
     const res = await fetch(`${apiUrl}?${queryParams.toString()}`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
     });
     console.log("mangu")
