@@ -1,14 +1,22 @@
+import { cookies } from "next/headers";
+
 export async function POST(req) {
   try {
     const {answer}= await req.json();
-
-    let apiUrl = process.env.PYTHON_API_URL+"/answerquestion" || "http://127.0.0.1:8000/answerquestion";
+    const cookieStore = cookies();
+    const session = cookieStore.get("session");
+    let apiUrl = "http://127.0.0.1:8000/answerquestion";
     const queryParams = new URLSearchParams({answer})
     console.log("changu")
     const res = await fetch(`${apiUrl}?${queryParams.toString()}`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        ...(session && { 
+          "Cookie": `session=${session.value}`,
+         })
+      },
     });
     console.log("mangu")
     const text = await res.text();
