@@ -58,7 +58,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
           <NavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint="chatwithpdf" pathname={pathname} />
           <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint="smartsearch" pathname={pathname} />
-          <NavItem icon={<FiCpu />} label="Qna Engine" id={id} endpoint="qna" pathname={pathname} />
+          <NavItem icon={<FiCpu />} label="QnA Engine" id={id} endpoint="qna" pathname={pathname} />
         </nav>
 
         <button
