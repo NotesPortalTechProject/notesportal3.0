@@ -5,17 +5,15 @@ export async function POST(req) {
     const { answer, question, context } = await req.json();
     const cookieStore = await cookies();
     const session = cookieStore.get("session");
-    let apiUrl = "http://127.0.0.1:8000/answerquestion";
+    let apiUrl = process.env.PYTHON_API_URL+"/answerquestion" ||"http://127.0.0.1:8000/answerquestion";
     const queryParams = new URLSearchParams({ answer });
     const res = await fetch(`${apiUrl}?${queryParams.toString()}`, {
       method: "POST",
+      credentials: "include",
       headers: { 
         "Content-Type": "application/json",
-        ...(session && { 
-          "Cookie": `session=${session.value}`,
-         })
       },
-      body: JSON.stringify({ question, context }),
+      body: JSON.stringify({ answer,question, context }),
     });
     console.log("mangu")
     const text = await res.text();
