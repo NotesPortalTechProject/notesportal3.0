@@ -7,6 +7,7 @@ export default function QnaEngine({ userid, subjectList }) {
     const [subject, setSubject] = useState("");
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
+    const [context, setContext] = useState("");
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -30,9 +31,9 @@ export default function QnaEngine({ userid, subjectList }) {
             });
 
             if (!res.ok) throw new Error("Failed to fetch question");
-            const data = await res.text();
-            const cleaneddata = data.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
-            setQuestion(cleaneddata);
+            const data = await res.json();
+            setQuestion(data[0].replace(/\\n/g, "\n"));
+            setContext(data[1]);
         } catch (err) {
             setError("Could not get question. Try again.");
             console.error(err);
@@ -53,8 +54,9 @@ export default function QnaEngine({ userid, subjectList }) {
         try {
             const res = await fetch("/api/answerquestion", {
                 method: "POST",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ answer }),
+                body: JSON.stringify({ answer, question, context }),
             });
 
             if (!res.ok) throw new Error("Failed to check answer");
