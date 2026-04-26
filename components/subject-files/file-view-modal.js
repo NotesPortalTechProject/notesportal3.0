@@ -146,36 +146,19 @@ export default function FileViewModal({ data }) {
               </button>
             </div>
 
-            <button
-              className="w-full inline-flex items-center justify-center gap-3 min-h-[48px] px-4 sm:px-5 py-3 bg-[#C2692A] text-white rounded-md cursor-pointer text-[14px] sm:text-[15px] font-semibold tracking-[0.01em] transition-all duration-150 ease-in-out hover:bg-[#B05D24]  active:translate-y-0"
-              onClick={TasurLaaJaa}
-            >
-              <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap">
-
-                <span className="text-white text-sm sm:text-[15px] font-medium whitespace-nowrap">
-                  Study this with
-                </span>
-
-                <span
-                  className="inline-flex items-center gap-[1px] text-white leading-none"
-                  style={{
-                    fontFamily: "'Instrument Serif', Georgia, serif",
-                    fontSize: "clamp(17px, 2.5vw, 19px)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  Tas
-                  <Image
-                    src="/logo.svg"
-                    alt=""
-                    width={16}
-                    height={16}
-                    className="inline-block relative top-[-1px] shrink-0"
-                  />
-                  r
-                </span>
-
-              </div>
+            <button className="tasur-btn" onClick={TasurLaaJaa}>
+              <span className="tasur-label">Study this with</span>
+              <span className="tasur-wordmark">
+                Tas
+                <Image
+                  src="/logo.svg"
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="shrink-0"
+                />
+                r
+              </span>
             </button>
           </div>
 
