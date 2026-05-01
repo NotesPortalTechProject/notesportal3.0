@@ -56,7 +56,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
 
           <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-          <NavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint="chatwithpdf" pathname={pathname} />
+          <DisabledNavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint="chatwithpdf" pathname={pathname} />
           <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint="smartsearch" pathname={pathname} />
           <NavItem icon={<FiCpu />} label="QnA Engine" id={id} endpoint="qna" pathname={pathname} />
         </nav>
@@ -98,13 +98,13 @@ export default function VerticalSidebar({ id, subjectlist }) {
           {aiOpen && (
             <div className="absolute bottom-14 right-0 bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg p-3 w-48 z-50">
 
-              <Link
+              {/* <Link
                 href={`/chatwithpdf`}
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
                 <FiMessageSquare className="text-purple-300" /> Chat with PDF
-              </Link>
+              </Link> */}
 
               <Link
                 href={`/smartsearch`}
