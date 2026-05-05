@@ -33,15 +33,19 @@ export async function POST(req) {
                 { status: 500 }
             );
         }
+        console.log("LIST FROM BACKEND API")
+        console.log(fileLinkList)
 
         const { fileObjectList, state } = await getFileObjectsListByFileLinkList(fileLinkList);
-
         if (!state) {
             return NextResponse.json(
-                { error: "Failed to fetch one or more files from Supabase" },
+                { error: "Failed to fetch one or more files from database" },
                 { status: 500 }
             );
         }
+        
+        console.log("FILEOBJECT LIST LOADED IN RESPONSE IN NEXT API")
+        console.log(fileObjectList)
 
         return NextResponse.json({ filelist: fileObjectList });
     } catch (err) {
