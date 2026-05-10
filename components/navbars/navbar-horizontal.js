@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import ProfileModal from "../profile-modal";
+import AnimatedLogo from "./animated-logo";
 
 export default function HorizontalNavbar({ id }) {
   const [showSearch, setShowSearch] = useState(false);
@@ -21,8 +22,8 @@ export default function HorizontalNavbar({ id }) {
   ];
   const filteredSuggestions = query
     ? suggestions.filter((item) =>
-        item.toLowerCase().includes(query.toLowerCase())
-      )
+      item.toLowerCase().includes(query.toLowerCase())
+    )
     : [];
 
   // Handles click outside overlay (mobile)
@@ -51,9 +52,10 @@ export default function HorizontalNavbar({ id }) {
     <>
       {/* Navbar */}
       <div className="w-full px-6 py-3 flex items-center justify-between bg-[#1a1a1a] border-b border-purple-500/40 text-white relative z-50">
-        {/* Logo (left) */}
-        <div className="text-2xl font-bold bg-gradient-to-r from-purple-200 via-purple-500 to-purple-900 animate-gradient-wave bg-clip-text text-transparent">
-          notesportal
+
+        {/* Logo */}
+        <div className="flex-shrink-0 cursor-pointer select-none">
+          <AnimatedLogo/>
         </div>
 
         {/* Desktop Search (center) */}
