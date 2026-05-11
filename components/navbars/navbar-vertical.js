@@ -136,14 +136,14 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
   return (
     <Link href={`/${endpoint}`}>
       <div
-        className={`group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 ${
+        className={`group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-b-1 border-r-1 ${
           active
             ? "bg-white/5 text-purple-300 border-purple-500"
             : "hover:bg-white/5 text-white/80 hover:text-white border-transparent"
         }`}
       >
         <div className={`text-lg ${active ? "text-purple-300" : "text-purple-400"}`}>{icon}</div>
-        <span className="font-medium tracking-wide">{label}</span>
+        <span className="font-thin antialiased tracking-tight font-stretch-condensed">{label}</span>
       </div>
     </Link>
   );
@@ -154,7 +154,7 @@ function DisabledNavItem({ icon, label }) {
   return (
     <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg border-l-2 border-transparent opacity-40 cursor-not-allowed select-none">
       <div className="text-lg text-purple-400">{icon}</div>
-      <span className="font-medium tracking-wide">{label}</span>
+      <span className="font-thin tracking-tight">{label}</span>
     </div>
   );
 }
