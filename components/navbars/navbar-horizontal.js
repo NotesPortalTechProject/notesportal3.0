@@ -2,9 +2,8 @@
 import { useState, useRef, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import ProfileModal from "../profile-modal";
-import AnimatedLogo from "./animated-logo";
 
-export default function HorizontalNavbar({ id }) {
+export default function HorizontalNavbar({ id, userdata, noOfUploads }) {
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const searchRef = useRef(null);
@@ -53,9 +52,8 @@ export default function HorizontalNavbar({ id }) {
       {/* Navbar */}
       <div className="w-full px-6 py-3 flex items-center justify-between bg-[#1a1a1a] border-b border-purple-500/40 text-white relative z-50">
 
-        {/* Logo */}
-        <div className="flex-shrink-0 cursor-pointer select-none">
-          <AnimatedLogo/>
+        <div className="text-2xl font-bold bg-gradient-to-r from-purple-200 via-purple-500 to-purple-900 animate-gradient-wave bg-clip-text text-transparent">
+          notesportal
         </div>
 
         {/* Desktop Search (center) */}
@@ -94,12 +92,12 @@ export default function HorizontalNavbar({ id }) {
           >
             <FiSearch size={20} className="text-purple-400" />
           </button>
-          <ProfileModal id={id} />
+          <ProfileModal id={id} userinfo={userdata} noOfUploads={noOfUploads}/>
         </div>
 
         {/* Desktop Profile (right) */}
         <div className="hidden sm:flex">
-          <ProfileModal id={id} />
+          <ProfileModal id={id} userinfo={userdata} noOfUploads={noOfUploads}/>
         </div>
       </div>
 

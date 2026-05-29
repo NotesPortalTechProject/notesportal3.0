@@ -5,12 +5,11 @@ import Link from "next/link";
 import LoadingDots from "./loadingDots";
 import { logout } from "@/actions/auth-actions";
 import UploadBadges from "./badges/upload-badges";
+import Image from "next/image";
 
-export default function ProfileDropdown({ id }) {
+export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [userdata, setUserdata] = useState(null);
-  const [noOfUploads, setNoOfUploads] = useState(0); // new state
   const buttonRef = useRef(null);
 
   const calculatePosition = () => {
@@ -31,44 +30,49 @@ export default function ProfileDropdown({ id }) {
     setPosition({ top, left });
   };
 
-  const handleLogout = () => {
-    logout();
-    setIsOpen(false);
-  };
-
   useEffect(() => {
     if (isOpen) {
-      calculatePosition();
-
-      fetch('/api/getuserdata', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userid: id }),
-        cache: 'force-cache'
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            setUserdata(data.userdata);
-            setNoOfUploads(data.myFilesLength);
-          } else console.error('Failed to fetch user data');
-        })
-        .catch(err => console.error('Fetch error:', err));
-
+      calculatePosition()
       window.addEventListener('resize', calculatePosition);
       return () => window.removeEventListener('resize', calculatePosition);
     }
   }, [isOpen]);
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
+  };
 
   return (
     <>
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-10 h-10 bg-[#1a0a2d]/70 text-purple-300 border border-purple-500/20 hover:border-purple-500 rounded-full shadow-sm backdrop-blur-md transition"
         type="button"
+        className="
+    relative
+    w-10 h-10 sm:w-11 sm:h-11
+    rounded-full
+    overflow-hidden
+    border border-purple-500/30
+    hover:border-purple-400
+    shadow-md
+    transition-all duration-200
+    hover:scale-105
+    active:scale-95
+    bg-[#1a0a2d]/70
+    backdrop-blur-md
+    flex items-center justify-center
+  "
       >
-        <FiUser className="text-xl" />
+        <Image
+          src={`/profileicons/${userinfo.profile_icon}.jpg`}
+          alt="Profile Icon"
+          fill
+          sizes="44px"
+          className="object-cover"
+          priority
+        />
       </button>
 
       {isOpen && (
@@ -95,19 +99,19 @@ export default function ProfileDropdown({ id }) {
               </button>
             </div>
 
-            {userdata ? (
+            {userinfo ? (
               <div className="flex flex-col gap-4 flex-1">
                 <div className="text-sm bg-white/5 border border-purple-500/10 p-3 rounded-xl shadow-sm">
-                  <p className="text-purple-300 mb-1">Hello, {userdata.username}</p>
-                  <p>{userdata.firstname} {userdata.lastname}</p>
-                  <p className="text-white/70 text-sm">{userdata.email}</p>
+                  <p className="text-purple-300 mb-1">Hello, {userinfo.username}</p>
+                  <p>{userinfo.firstname} {userinfo.lastname}</p>
+                  <p className="text-white/70 text-sm">{userinfo.email}</p>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 text-sm">
                   <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10 text-center">
                     <p className="text-purple-300 text-sm">Subjects</p>
                     <p className="text-4xl font-semibold text-white">
-                      {JSON.parse(userdata.subjects).length}
+                      {JSON.parse(userinfo.subjects).length}
                     </p>
                   </div>
                 </div>
@@ -115,7 +119,7 @@ export default function ProfileDropdown({ id }) {
                 <div className="flex items-center justify-between gap-2 text-sm">
                   <div className="flex-1 p-3 rounded-xl bg-white/5 border border-purple-500/10">
                     <p className="text-purple-300 text-sm mb-3">Badges</p>
-                      <UploadBadges noofuploads={noOfUploads}/>
+                    <UploadBadges noofuploads={noOfUploads} />
                   </div>
                 </div>
 
