@@ -22,8 +22,8 @@ export async function signup(prevState, formData) {
     if (/\d/.test(firstname)) errors.push('First name cannot contain numbers');
     if (/\d/.test(lastname)) errors.push('Last name cannot contain numbers');
     if (!username || username.length < 3) errors.push('Username too short');
-    if(!/^[a-zA-Z0-9_]+$/.test(username)) errors.push('Username cannot contain special characters')
-    if(firstname==lastname) errors.push('Firstname and lastname cannot be same');
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) errors.push('Username cannot contain special characters')
+    if (firstname == lastname) errors.push('Firstname and lastname cannot be same');
     if (!emailid || !emailid.includes('@')) errors.push('Invalid email');
     if (!password || password.trim().length < 8) errors.push('Password too short');
     if (password !== confirmpassword) errors.push('Passwords don’t match');
@@ -43,19 +43,19 @@ export async function signup(prevState, formData) {
             break;
         }
 
-        if(subjectcode.length==1 || subjectcode.length<2){
+        if (subjectcode.length == 1 || subjectcode.length < 2) {
             errors.push('Subject code must atleast have 2 letters');
             break;
         }
 
-        if(!/^[a-zA-Z0-9_]+$/.test(subjectcode)){
+        if (!/^[a-zA-Z0-9_]+$/.test(subjectcode)) {
             errors.push('Subject code cannot contain special characters');
             break;
         }
 
         // CALCULUS FIX
-        if(subjectcode=="CAL"||subjectcode=="cal"){
-            subjectcode="CALCULUS"
+        if (subjectcode == "CAL" || subjectcode == "cal") {
+            subjectcode = "CALCULUS"
         }
         subjectslist.push(subjectcode.toUpperCase().trim());
     }
@@ -64,13 +64,26 @@ export async function signup(prevState, formData) {
 
     const hashedPassword = hashUserPassword(password);
 
+    // SETTING RANDOM PROFILEICON
+    const icons = [
+        'monster1',
+        'monster2',
+        'monster3',
+        'monster4',
+        'monster5',
+        'monster6'
+    ]
+
+    const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+
     const { error } = await supabase.from('users').insert([{
         firstname,
         lastname,
         username,
         email: emailid,
         subjects: subjectslist,
-        password: hashedPassword
+        password: hashedPassword,
+        profile_icon: randomIcon
     }]);
     if (error) throw new Error('Unexpected error: ' + error);
 
@@ -135,25 +148,25 @@ export async function login_with_otp(prevState, formData) {
 
     errors = [];
 
-    const result = await verifyOtpAction(userotp,otphash);
-    if(result.success){
+    const result = await verifyOtpAction(userotp, otphash);
+    if (result.success) {
         await createSession(userExists.id);
         redirect('/home');
-    }else{
+    } else {
         errors.push(result.error)
         return { errors }
     }
 
-    try{
-        const result = await verifyOtpAction(userotp,otphash);
-        if(result.success){
+    try {
+        const result = await verifyOtpAction(userotp, otphash);
+        if (result.success) {
             await createSession(userExists.id)
             redirect('/home')
-        }else{
+        } else {
             errors.push('Invalid OTP')
             return { errors }
         }
-    }catch(error){
+    } catch (error) {
 
         return { errors }
     }
