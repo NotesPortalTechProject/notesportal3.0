@@ -53,26 +53,33 @@ export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
     relative
     w-10 h-10 sm:w-11 sm:h-11
     rounded-full
-    overflow-hidden
-    border border-purple-500/30
-    hover:border-purple-400
-    shadow-md
-    transition-all duration-200
+    ring ring-purple-500/40
+    hover:ring-purple-400/80
+    hover:ring-offset
+    hover:ring-offset-transparent
+    shadow-[0_0_12px_rgba(168,85,247,0.3)]
+    hover:shadow-[0_0_20px_rgba(168,85,247,0.55)]
+    transition-all duration-300 ease-in-out
     hover:scale-105
     active:scale-95
-    bg-[#1a0a2d]/70
-    backdrop-blur-md
-    flex items-center justify-center
+    flex-shrink-0
+    cursor-pointer
   "
       >
-        <Image
-          src={`/profileicons/${userinfo.profile_icon}.jpg`}
-          alt="Profile Icon"
-          fill
-          sizes="44px"
-          className="object-cover"
-          priority
-        />
+        {/* Gradient border shell */}
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/20 to-indigo-500/10 z-10 pointer-events-none" />
+
+        {/* Profile image */}
+        <span className="absolute inset-[2px] rounded-full overflow-hidden z-0">
+          <Image
+            src={`/profileicons/${userinfo.profile_icon}.jpg`}
+            alt="Profile Icon"
+            fill
+            sizes="44px"
+            className="object-cover object-center rounded-full"
+            priority
+          />
+        </span>
       </button>
 
       {isOpen && (
