@@ -74,7 +74,7 @@ export default function ResetPasswordModal({ id }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="text-sm px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 transition text-white flex items-center gap-2"
+        className="text-xs px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 transition text-white flex items-center gap-2"
         type="button"
       >
         <FiLock className="text-lg" /> Reset Password

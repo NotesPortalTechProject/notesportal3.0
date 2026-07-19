@@ -190,3 +190,11 @@ export async function uploadFile(prevState, formData) {
 export async function revalidatePathCustom(path) {
     revalidatePath(path)
 }
+
+export async function setProfileIcon(prevState,userdata,formData) {
+    const newIcon = formData.get("icon")
+    console.log("Userdata:")
+    console.log(prevState)
+    console.log("Formdata:")
+    console.log(userdata)
+}
