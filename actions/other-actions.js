@@ -77,7 +77,7 @@ export async function setPassword(prevState, formData) {
 
     const hashedPassword = hashUserPassword(password);
     await setPasswordById(hashedPassword, userId);
-    revalidatePath(`/${userId}/profile`)
+    revalidatePath(`/profile`)
 }
 
 export async function ResetPassword(prevState, formData) {
@@ -111,12 +111,12 @@ export async function ResetPassword(prevState, formData) {
 
     const hashedPassword = hashUserPassword(password);
     await setPasswordById(hashedPassword, userId);
-    revalidatePath(`/${userId}/profile`)
+    revalidatePath(`/profile`)
 }
 
 export async function UpdateSubjects(id, sub_code) {
     await updateUserSubjectlist(id, sub_code);
-    revalidatePath(`/${id}/home`);
+    revalidatePath(`/home`);
 }
 
 export async function removeUserSubject(id, sub_code) {
@@ -141,7 +141,7 @@ export async function removeUserSubject(id, sub_code) {
 
 export async function RemoveSubject(id, sub_code) {
   await removeUserSubject(id, sub_code);
-  revalidatePath(`/${id}/home`);
+  revalidatePath(`/home`);
 }
 
 export async function uploadFile(prevState, formData) {
@@ -193,8 +193,25 @@ export async function revalidatePathCustom(path) {
 
 export async function setProfileIcon(prevState,userdata,formData) {
     const newIcon = formData.get("icon")
-    console.log("Userdata:")
-    console.log(prevState)
-    console.log("Formdata:")
-    console.log(userdata)
+    const oldIcon = prevState.profile_icon
+    let errors = []
+    if (newIcon==oldIcon){
+        errors.push("Please select a different icon (already in use)")
+    }
+    if (!newIcon){
+        errors.push("Please select a icon")
+    }
+    if (errors.length > 0){
+        return { errors };
+    }
+
+    const { error } = await supabase.from("users").update({profile_icon:newIcon}).eq("id",prevState.id)
+    if (error) {
+        errors.push("Failed to set profile icon, try again later")
+    }
+
+    if (errors.length>0){
+        return { errors };
+    }
+    revalidatePath(`/profile`)
 }
