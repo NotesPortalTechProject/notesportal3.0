@@ -14,17 +14,20 @@ export default async function middleware(req) {
     if (path.startsWith("/api/sendOtpMail")) {
         return NextResponse.next();
     }
+    if (path.startsWith("/api/smartsearchsubject")) {
+        return NextResponse.next();
+    }
 
     if (!isPublicRoute && !session?.userId) {
         return NextResponse.redirect(new URL("/login", req.nextUrl))
     }
 
     // RENDER LA UTHAVNYA SATHI
-    fetch(`https://${process.env.PYTHON_API_URL}/healthz`).catch(()=>{})
+    fetch(`${process.env.PYTHON_API_URL}/healthz`).catch(() => { })
 
     if (isPublicRoute && session?.userId) {
-        const now = new Date().toISOString(); 
-        await supabase.from("users").update({"lastactive":now}).eq("id",session.userId);
+        const now = new Date().toISOString();
+        await supabase.from("users").update({ "lastactive": now }).eq("id", session.userId);
         return NextResponse.redirect(new URL(`/home`, req.nextUrl));
     }
 

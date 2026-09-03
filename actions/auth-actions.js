@@ -7,8 +7,8 @@ import { redirect } from "next/navigation";
 import { verifyOtpAction } from "./otp-action";
 
 export async function signup(prevState, formData) {
-    const firstname = formData.get('firstname');
-    const lastname = formData.get('lastname');
+    let firstname = formData.get('firstname');
+    let lastname = formData.get('lastname');
     const username = formData.get('username');
     const emailid = formData.get('email');
     const password = formData.get('password');
@@ -42,6 +42,8 @@ export async function signup(prevState, formData) {
             errors.push('Subject code length should not be greater than 10');
             break;
         }
+        
+        subjectcode = subjectcode.trim()
 
         if (subjectcode.length == 1 || subjectcode.length < 2) {
             errors.push('Subject code must atleast have 2 letters');
@@ -75,6 +77,10 @@ export async function signup(prevState, formData) {
     ]
 
     const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+
+    // formatting firstname and lastname
+    firstname = firstname.toLowerCase().charAt(0).toUpperCase() + firstname.toLowerCase().slice(1);
+    lastname = lastname.toLowerCase().charAt(0).toUpperCase() + lastname.toLowerCase().slice(1);
 
     const { error } = await supabase.from('users').insert([{
         firstname,
