@@ -164,8 +164,8 @@ export default function UploadFileModal({ children, id, subjectlist }) {
       />
       <div
         className="fixed top-1/2 left-1/2 z-50 w-[90vw] sm:w-[420px] max-w-[95vw] p-6 rounded-2xl
-        backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
-        border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.1)] text-white
+        backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[var(--theme-panel-a)]/60
+        border border-white/5 shadow-[0_0_30px_rgb(var(--theme-glow-500)/0.1)] text-white
         -translate-x-1/2 -translate-y-1/2"
       >
         <div className="flex items-center justify-between mb-4">

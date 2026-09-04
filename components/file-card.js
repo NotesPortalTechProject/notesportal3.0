@@ -41,7 +41,7 @@ function FilePreview({ file, isMobile, isList }) {
           rounded-xl
           border border-purple-500/20
           bg-purple-500/10 backdrop-blur-md
-          shadow-[0_0_12px_rgba(168,85,247,0.25)]
+          shadow-[0_0_12px_rgb(var(--theme-glow-500)/0.25)]
           flex-shrink-0
         `}
       >
@@ -49,7 +49,7 @@ function FilePreview({ file, isMobile, isList }) {
           className={`
             ${isMobile ? "text-xl" : "text-2xl"}
             text-purple-300
-            drop-shadow-[0_0_6px_rgba(168,85,247,0.7)]
+            drop-shadow-[0_0_6px_rgb(var(--theme-glow-500)/0.7)]
           `}
         />
         <span className="mt-0.5 text-[10px] font-medium tracking-wider text-purple-300/80">
@@ -61,8 +61,8 @@ function FilePreview({ file, isMobile, isList }) {
 
   // GRID
   return (
-    <div className="flex flex-col items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.25)]">
-      <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+    <div className="flex flex-col items-center justify-center w-full h-36 rounded-xl border border-purple-500/20 bg-purple-500/10 backdrop-blur-md shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.25)]">
+      <Icon className="text-5xl text-purple-300 drop-shadow-[0_0_8px_rgb(var(--theme-glow-500)/0.8)]" />
       <span className="mt-2 text-xs font-semibold tracking-widest text-purple-200/80">
         {label}
       </span>
@@ -115,12 +115,12 @@ function GlassCard({ children, viewMode }) {
       <div
         className="absolute inset-0 pointer-events-none rounded-2xl"
         style={{
-          background: `radial-gradient(600px circle at ${coords.x}px ${coords.y}px, rgba(168,85,247,0.2), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${coords.x}px ${coords.y}px, rgb(var(--theme-glow-500) / 0.2), transparent 40%)`,
         }}
       />
 
       {/* Purple frosted glass base */}
-      <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]" />
+      <div className="absolute inset-0 bg-purple-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-[0_0_30px_rgb(var(--theme-glow-500)/0.15)]" />
 
       {/* Subtle purple-blue gradient for depth */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/20 via-transparent to-indigo-500/10" />

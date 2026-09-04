@@ -4,8 +4,11 @@ import Link from "next/link";
 import Particles from "../components/effects/particles";
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
 import Image from "next/image";
+import { useTheme } from "@/components/theme-provider";
+import { getParticleColors } from "@/lib/theme-colors";
 
 export default function Home() {
+  const { theme, customColor } = useTheme();
   const [dimensions, setDimensions] = useState({
     width: "100vw",
     height: "100vh",
@@ -71,7 +74,7 @@ export default function Home() {
           particleCount={900}
           particleSpread={12}
           speed={0.15}
-          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
+          particleColors={getParticleColors(theme, customColor)}
           moveParticlesOnHover={true}
           particleHoverFactor={4}
           alphaParticles={true}
@@ -89,13 +92,13 @@ export default function Home() {
       <div className="w-full flex justify-end px-6 pt-4 z-10 relative gap-3">
         <button
           onClick={() => scrollToSection(aboutRef)}
-          className="group px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:-rotate-1"
+          className="group px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgb(var(--theme-glow-violet-500)/0.5)] hover:scale-[1.03] hover:-rotate-1"
         >
           About Us
         </button>
         <button
           onClick={() => scrollToSection(teamRef)}
-          className="group px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:rotate-1"
+          className="group px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgb(var(--theme-glow-violet-500)/0.5)] hover:scale-[1.03] hover:rotate-1"
         >
           Our Team
         </button>
@@ -103,7 +106,7 @@ export default function Home() {
 
       {/* Foreground Content */}
       <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center px-4 py-10 sm:py-12 md:py-16">
-        <div className="relative border border-purple-400/10 shadow-[0_0_10px_rgba(139,92,246,0.2)] rounded-2xl p-6 md:p-8 text-center max-w-full before:absolute before:inset-0 before:rounded-2xl before:border before:border-purple-500/10 before:bg-gradient-to-tr before:from-purple-900/20 before:to-purple-600/10 before:blur-sm before:opacity-30 before:pointer-events-none">
+        <div className="relative border border-purple-400/10 shadow-[0_0_10px_rgb(var(--theme-glow-violet-500)/0.2)] rounded-2xl p-6 md:p-8 text-center max-w-full before:absolute before:inset-0 before:rounded-2xl before:border before:border-purple-500/10 before:bg-gradient-to-tr before:from-purple-900/20 before:to-purple-600/10 before:blur-sm before:opacity-30 before:pointer-events-none">
           <p className="relative text-5xl md:text-9xl font-semibold md:font-bold tracking-tight text-white">
             notesportal
           </p>
@@ -117,14 +120,14 @@ export default function Home() {
         <div className="mt-6 flex flex-col md:flex-row gap-3 md:gap-6 text-lg">
           <Link
             href="/signup"
-            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:-rotate-1 flex items-center justify-center text-center"
+            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgb(var(--theme-glow-violet-500)/0.5)] hover:scale-[1.03] hover:-rotate-1 flex items-center justify-center text-center"
           >
             sign up
           </Link>
 
           <Link
             href="/login"
-            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgba(139,92,246,0.5)] hover:scale-[1.03] hover:rotate-1 flex items-center justify-center text-center"
+            className="group relative px-6 py-2 rounded-xl text-purple-100 border border-purple-400/10 shadow-inner transition-all duration-300 hover:shadow-[0_0_12px_rgb(var(--theme-glow-violet-500)/0.5)] hover:scale-[1.03] hover:rotate-1 flex items-center justify-center text-center"
           >
             login
           </Link>
@@ -156,9 +159,9 @@ export default function Home() {
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="relative group border border-purple-400/10 rounded-3xl p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col items-center text-center transition-transform duration-500 hover:scale-105 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+              className="relative group border border-purple-400/10 rounded-3xl p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col items-center text-center transition-transform duration-500 hover:scale-105 hover:shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.4)]"
             >
-              <div className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 mb-4 border-2 border-purple-500/30 rounded-xl overflow-hidden shadow-[0_0_10px_rgba(168,85,247,0.2)] transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(168,85,247,0.5)]">
+              <div className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 mb-4 border-2 border-purple-500/30 rounded-xl overflow-hidden shadow-[0_0_10px_rgb(var(--theme-glow-500)/0.2)] transition-all duration-500 group-hover:shadow-[0_0_25px_rgb(var(--theme-glow-500)/0.5)]">
                 <Image src={member.img} alt={member.name} className="w-full h-full object-cover" width={150} height={150}/>
               </div>
               <h3 className="text-base sm:text-lg md:text-lg lg:text-xl font-bold text-white mb-1">

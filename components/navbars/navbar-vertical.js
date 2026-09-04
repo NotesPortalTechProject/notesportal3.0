@@ -71,7 +71,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
       </div>
 
       {/* Mobile Bottom Navbar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-between items-center bg-black/40 backdrop-blur-md border-t border-purple-500/20 text-white px-4 py-2 shadow-[0_0_10px_rgba(168,85,247,0.1)] lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-between items-center bg-black/40 backdrop-blur-md border-t border-purple-500/20 text-white px-4 py-2 shadow-[0_0_10px_rgb(var(--theme-glow-500)/0.1)] lg:hidden">
         <BottomNavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
         <BottomNavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
 

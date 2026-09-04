@@ -69,8 +69,8 @@ export default function FilesGrid({ data, id, src }) {
             <div
               className={`relative overflow-hidden rounded-xl px-4 py-2 
                 text-xs sm:text-sm md:text-base font-medium transition-all backdrop-blur-md ${filetype === ft
-                  ? "bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70 text-white border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]"
-                  : "bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]"
+                  ? "bg-gradient-to-r from-[var(--theme-panel-e)]/70 via-[var(--theme-panel-f)]/60 to-[var(--theme-panel-e)]/70 text-white border border-purple-400/30 shadow-[0_0_6px_rgb(var(--theme-glow-500)/0.25)]"
+                  : "bg-gradient-to-r from-[#1a1a1a]/50 via-[var(--theme-panel-a)]/30 to-[var(--theme-panel-d)]/30 text-purple-200 border border-purple-500/10 hover:border-purple-400/20 hover:text-white hover:shadow-[0_0_4px_rgb(var(--theme-glow-500)/0.15)]"
                 }`}
             >
               <p className="truncate relative z-10">{ft}</p>
@@ -110,7 +110,7 @@ export default function FilesGrid({ data, id, src }) {
                     absolute mt-2 
                     w-36 sm:w-44 
                     rounded-xl backdrop-blur-xl 
-                    bg-gradient-to-b from-[#1a1a1a]/70 to-[#2a1a3d]/60
+                    bg-gradient-to-b from-[#1a1a1a]/70 to-[var(--theme-panel-a)]/60
                     border border-purple-500/20 shadow-lg 
                     p-1 z-50
 
@@ -152,7 +152,7 @@ export default function FilesGrid({ data, id, src }) {
               className="
                 w-24 sm:w-32 
                 relative flex rounded-full overflow-hidden backdrop-blur-md
-                bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30
+                bg-gradient-to-r from-[#1a1a1a]/50 via-[var(--theme-panel-a)]/30 to-[var(--theme-panel-d)]/30
                 border border-purple-500/20 px-1 py-1 select-none
               "
             >
@@ -160,8 +160,8 @@ export default function FilesGrid({ data, id, src }) {
                 className={`
                   absolute top-1 bottom-1 w-1/2 rounded-full
                   transition-all duration-300 ease-out
-                  bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70
-                  border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]
+                  bg-gradient-to-r from-[var(--theme-panel-e)]/70 via-[var(--theme-panel-f)]/60 to-[var(--theme-panel-e)]/70
+                  border border-purple-400/30 shadow-[0_0_6px_rgb(var(--theme-glow-500)/0.25)]
                   ${viewMode === "grid" ? "left-1" : "left-1/2"}
                 `}
               ></div>

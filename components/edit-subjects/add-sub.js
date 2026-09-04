@@ -116,8 +116,8 @@ export default function AddSubjectModal({ id, onAdd }) {
             <motion.div
               className="
                 relative z-50 w-[20rem] sm:w-[22rem] p-5 rounded-2xl 
-                backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
-                border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white
+                backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[var(--theme-panel-a)]/60
+                border border-white/5 shadow-[0_0_30px_rgb(var(--theme-glow-500)/0.08)] text-white
               "
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -156,7 +156,7 @@ export default function AddSubjectModal({ id, onAdd }) {
                   disabled={loading}
                   className="
                     w-full py-2 text-sm font-semibold rounded-xl text-white
-                    bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_#9333ea40]
+                    bg-gradient-to-r from-purple-600 to-purple-700 shadow-[0_0_20px_rgb(var(--theme-glow-600)/0.25)]
                     transition-all hover:scale-105
                   "
                 >

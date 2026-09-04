@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
 import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
+import { useTheme } from "@/components/theme-provider";
+import { getParticleColors } from "@/lib/theme-colors";
 import {
   FaUser,
   FaEnvelope,
@@ -22,6 +24,7 @@ import {
 import Link from "next/link";
 
 export default function SignupPage() {
+  const { theme, customColor } = useTheme();
   const [step, setStep] = useState(1);
   const [formState, formAction, isPending] = useActionState(signup, {});
 
@@ -319,7 +322,7 @@ export default function SignupPage() {
     "text-xs text-purple-300/50 ml-1 mb-3";
 
   const primaryBtnStyle =
-    "min-h-11 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_18px_#9333ea35] text-sm font-semibold hover:scale-[1.015] active:scale-[0.98]";
+    "min-h-11 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_18px_rgb(var(--theme-glow-600)/0.21)] text-sm font-semibold hover:scale-[1.015] active:scale-[0.98]";
 
   const secondaryBtnStyle =
     "min-h-11 px-5 rounded-xl border border-purple-500/15 bg-white/[0.03] text-purple-300/80 hover:text-white hover:bg-white/[0.06] transition-all text-sm font-medium";
@@ -333,12 +336,7 @@ export default function SignupPage() {
           particleCount={200}
           particleSpread={15}
           speed={0.15}
-          particleColors={[
-            "#a855f7",
-            "#8b5cf6",
-            "#c084fc",
-            "#f5d0fe",
-          ]}
+          particleColors={getParticleColors(theme, customColor)}
           moveParticlesOnHover={true}
           particleHoverFactor={4}
           alphaParticles={true}
@@ -355,7 +353,7 @@ export default function SignupPage() {
 
         {/* Header */}
         <div className="mb-6 sm:mb-8 text-center">
-          <h1 className="inline-block text-2xl sm:text-3xl lg:text-4xl font-medium text-white tracking-tight px-6 sm:px-8 py-3 rounded-2xl shadow-[0_0_25px_rgba(168,85,247,0.25)] bg-gradient-to-br from-[#1a1a1a]/50 to-[#2a1a3d]/50 border border-purple-500/25 backdrop-blur-xl">
+          <h1 className="inline-block text-2xl sm:text-3xl lg:text-4xl font-medium text-white tracking-tight px-6 sm:px-8 py-3 rounded-2xl shadow-[0_0_25px_rgb(var(--theme-glow-500)/0.25)] bg-gradient-to-br from-[#1a1a1a]/50 to-[var(--theme-panel-a)]/50 border border-purple-500/25 backdrop-blur-xl">
             signup to notesportal
           </h1>
 
@@ -365,7 +363,7 @@ export default function SignupPage() {
         </div>
 
         {/* Main Card */}
-        <div className="w-full rounded-3xl bg-gradient-to-br from-[#151515]/70 to-[#241533]/55 backdrop-blur-xl border border-purple-500/15 shadow-[0_0_60px_rgba(168,85,247,0.12)] overflow-hidden">
+        <div className="w-full rounded-3xl bg-gradient-to-br from-[#151515]/70 to-[var(--theme-panel-c)]/55 backdrop-blur-xl border border-purple-500/15 shadow-[0_0_60px_rgb(var(--theme-glow-500)/0.12)] overflow-hidden">
 
           {/* Progress Header */}
           <div className="px-5 sm:px-10 lg:px-14 pt-7 sm:pt-9">
@@ -388,7 +386,7 @@ export default function SignupPage() {
 
                       <div
                         className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300 border ${step >= s
-                          ? "bg-purple-600 border-purple-400/60 text-white shadow-[0_0_18px_rgba(168,85,247,0.45)]"
+                          ? "bg-purple-600 border-purple-400/60 text-white shadow-[0_0_18px_rgb(var(--theme-glow-500)/0.45)]"
                           : "bg-[#111]/80 border-purple-500/15 text-purple-300/35"
                           }`}
                       >

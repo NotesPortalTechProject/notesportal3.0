@@ -94,7 +94,7 @@ export default function SetPasswordModal({ id }) {
             />
 
             <motion.div
-              className="relative z-10 w-full max-w-md p-6 rounded-2xl backdrop-blur-2xl bg-gradient-to-br from-[#1a1a1a]/90 via-[#2a1a3d]/70 to-[#3d1f5e]/60 border border-purple-500/20 shadow-[0_0_40px_rgba(168,85,247,0.15)] text-white"
+              className="relative z-10 w-full max-w-md p-6 rounded-2xl backdrop-blur-2xl bg-gradient-to-br from-[#1a1a1a]/90 via-[var(--theme-panel-a)]/70 to-[var(--theme-panel-d)]/60 border border-purple-500/20 shadow-[0_0_40px_rgb(var(--theme-glow-500)/0.15)] text-white"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}

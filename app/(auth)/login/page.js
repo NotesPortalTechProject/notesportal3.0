@@ -5,8 +5,11 @@ import Link from "next/link";
 import { useActionState } from "react";
 import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
+import { useTheme } from "@/components/theme-provider";
+import { getParticleColors } from "@/lib/theme-colors";
 
 export default function LoginPage() {
+  const { theme, customColor } = useTheme();
   const [formState, formAction, isPending] = useActionState(login_with_password, {});
 
   return (
@@ -17,7 +20,7 @@ export default function LoginPage() {
           particleCount={300} // Reduced to improve clarity and performance
           particleSpread={15} // Tighter grouping
           speed={0.15} // Slower, calming movement
-          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]} // Softer purples + lavender
+          particleColors={getParticleColors(theme, customColor)}
           moveParticlesOnHover={true}
           particleHoverFactor={4} // Slightly stronger response on hover
           alphaParticles={true}
@@ -30,13 +33,13 @@ export default function LoginPage() {
       </div>
 
       {/* Title */}
-      <h1 className="z-20 text-3xl sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-6 py-3 text-center rounded-2xl shadow-[0_0_12px_rgba(168,85,247,0.3)] bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20">
+      <h1 className="z-20 text-3xl sm:text-5xl font-medium text-white mb-6 sm:mt-8 mt-4 tracking-tight px-6 py-3 text-center rounded-2xl shadow-[0_0_12px_rgb(var(--theme-glow-500)/0.3)] bg-gradient-to-br from-[#1a1a1a]/10 to-[var(--theme-panel-a)]/30 border border-purple-500/20">
         welcome to notesportal
       </h1>
 
       <div className="z-20 w-full max-w-5xl flex flex-col items-center justify-center gap-8 px-4 py-6">
         {/* Login card (landing-page style) */}
-        <div className="relative w-full max-w-lg p-8 rounded-2xl bg-gradient-to-br from-[#1a1a1a]/10 to-[#2a1a3d]/30 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)] flex flex-col items-center justify-center text-white">
+        <div className="relative w-full max-w-lg p-8 rounded-2xl bg-gradient-to-br from-[#1a1a1a]/10 to-[var(--theme-panel-a)]/30 border border-purple-500/20 shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.1)] flex flex-col items-center justify-center text-white">
           {/* Info banner */}
           <div className="w-full mb-6 p-4 rounded-xl bg-[#1a1a1a]/80 border border-purple-500/20 text-center">
             <p className="text-center text-sm text-purple-200">
@@ -97,7 +100,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-2 rounded-xl shadow-[0_0_20px_#9333ea40] text-white font-semibold transition-all hover:scale-[1.03]"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-2 rounded-xl shadow-[0_0_20px_rgb(var(--theme-glow-600)/0.25)] text-white font-semibold transition-all hover:scale-[1.03]"
             >
               {isPending ? <LoadingDots text="verifying" /> : "Login"}
             </button>

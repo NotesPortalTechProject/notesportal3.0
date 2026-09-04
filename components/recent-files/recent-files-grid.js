@@ -28,7 +28,7 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
           className="
             w-36 sm:w-32 
             relative flex rounded-full overflow-hidden backdrop-blur-md
-            bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30
+            bg-gradient-to-r from-[#1a1a1a]/50 via-[var(--theme-panel-a)]/30 to-[var(--theme-panel-d)]/30
             border border-purple-500/20 px-1 py-1 select-none
           "
         >
@@ -37,8 +37,8 @@ export default function RecentFilesGrid({ data, weeks, userid, src }) {
             className={`
               absolute top-1 bottom-1 w-1/2 rounded-full
               transition-all duration-300 ease-out
-              bg-gradient-to-r from-[#2a0a3d]/70 via-[#4b0e63]/60 to-[#2a0a3d]/70
-              border border-purple-400/30 shadow-[0_0_6px_rgba(168,85,247,0.25)]
+              bg-gradient-to-r from-[var(--theme-panel-e)]/70 via-[var(--theme-panel-f)]/60 to-[var(--theme-panel-e)]/70
+              border border-purple-400/30 shadow-[0_0_6px_rgb(var(--theme-glow-500)/0.25)]
               ${viewMode === "grid" ? "left-1" : "left-1/2"}
             `}
           ></div>

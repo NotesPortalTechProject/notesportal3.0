@@ -4,6 +4,24 @@
   --background: #ffffff;
   --foreground: #171717;
   --font-poppins: 'Poppins', sans-serif;
+
+  /* Theme accent tokens (default = purple). Overriding --color-purple-*,
+     --color-indigo-500, --color-violet-*, --color-fuchsia-600 retints every
+     Tailwind purple/indigo/violet/fuchsia utility class app-wide, since
+     Tailwind v4 utilities read those variables at paint time. */
+  --theme-glow-500: 168 85 247;
+  --theme-glow-600: 147 51 234;
+  --theme-glow-violet-500: 139 92 246;
+  --theme-panel-a: #2a1a3d;
+  --theme-panel-b: #1e1228;
+  --theme-panel-c: #241533;
+  --theme-panel-d: #3d1f5e;
+  --theme-panel-e: #2a0a3d;
+  --theme-panel-f: #4b0e63;
+  --theme-panel-g: #0e0b1e;
+  --theme-panel-h: #1a0f2a;
+  --theme-panel-i: #221134;
+  --theme-toast-bg: #1a0a2d;
 }
 
 body {

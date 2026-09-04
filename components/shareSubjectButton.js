@@ -18,12 +18,12 @@ export default function ShareSubjectButton({ subjectName }) {
           relative overflow-hidden rounded-xl
           px-4 py-2 text-xs md:text-sm font-medium
           transition-all backdrop-blur-md
-          bg-gradient-to-r from-[#1a1a1a]/50 via-[#2a1a3d]/30 to-[#3d1f5e]/30
+          bg-gradient-to-r from-[#1a1a1a]/50 via-[var(--theme-panel-a)]/30 to-[var(--theme-panel-d)]/30
           text-purple-200
           border border-purple-500/10
           hover:border-purple-400/20
           hover:text-white
-          hover:shadow-[0_0_4px_rgba(168,85,247,0.15)]
+          hover:shadow-[0_0_4px_rgb(var(--theme-glow-500)/0.15)]
         "
       >
         <p className="truncate relative z-10">share subject</p>

@@ -43,7 +43,7 @@ export default function ProfileIconModal({ userdata }) {
 
                     {/* Modal */}
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                        <div className="w-full max-w-md p-4 rounded-2xl bg-gradient-to-br from-[#1c1c1c] to-[#1e1228] border border-purple-500/20 text-white">
+                        <div className="w-full max-w-md p-4 rounded-2xl bg-gradient-to-br from-[#1c1c1c] to-[var(--theme-panel-b)] border border-purple-500/20 text-white">
 
                             {/* Header */}
                             <div className="flex items-start justify-between mb-5">
