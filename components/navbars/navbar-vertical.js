@@ -137,12 +137,12 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
       <div
         className={`group relative flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer transition-all duration-200 ${
           active
-            ? "bg-white/10 text-[#b46dfa]"
+            ? "bg-white/10 text-[color-mix(in_srgb,var(--color-purple-400),var(--color-purple-500))]"
             : "hover:bg-white/5 text-white/80 hover:text-white"
         }`}
       >
-        {active && <span className="w-1 h-5 rounded-full bg-[#b46dfa] shrink-0" />}
-        <div className={`text-lg ${active ? "text-[#b46dfa]" : "text-white/80"}`}>{icon}</div>
+        {active && <span className="w-1 h-5 rounded-full bg-[color-mix(in_srgb,var(--color-purple-400),var(--color-purple-500))] shrink-0" />}
+        <div className={`text-lg ${active ? "text-[color-mix(in_srgb,var(--color-purple-400),var(--color-purple-500))]" : "text-white/80"}`}>{icon}</div>
         <span className="font-thin antialiased tracking-tight font-stretch-condensed">{label}</span>
       </div>
     </Link>
