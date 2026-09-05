@@ -7,7 +7,7 @@ export default async function FavouritesPage({params}){
     const userId = await getCurrentUser();
     return(
         <>
-        <p className="px-6">Favorite Files</p>
+        <p className="px-6 font-bold text-lg">Favorite Files</p>
         <Suspense fallback={<LoadingDots text="fetching favorite files"/>}>
             <FavFilesDisplay userid={userId} src={`/favorites`}/>
         </Suspense>

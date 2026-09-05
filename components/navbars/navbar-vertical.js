@@ -42,28 +42,27 @@ export default function VerticalSidebar({ id, subjectlist }) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex h-max-sc w-64 bg-[#1a1a1a] border-r border-purple-500/40 backdrop-blur-md text-white p-4 flex-col">
-        <nav className="flex flex-col gap-3 mt-6 overflow-y-auto flex-1">
+      <div className="hidden lg:flex h-max-sc w-64 bg-[#1a1a1a] backdrop-blur-md text-white p-4 flex-col">
+        <nav className="flex flex-col gap-3 mt-6 pr-3 overflow-y-auto overflow-x-visible flex-1">
           <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
-          <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
-
-          <UploadFileModal id={id} subjectlist={subjectlist}>
-            <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent">
-              <div className="text-lg text-purple-400"><FiUpload /></div>
-              <span className="font-medium tracking-wide">Upload</span>
-            </div>
-          </UploadFileModal>
-
-          <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
-          <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
-          <DisabledNavItem icon={<FiMessageSquare />} label="Chat with Pdf" id={id} endpoint="chatwithpdf" pathname={pathname} />
           <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint="smartsearch" pathname={pathname} />
           <NavItem icon={<FiCpu />} label="QnA Engine" id={id} endpoint="qna" pathname={pathname} />
+          <DisabledNavItem icon={<FiMessageSquare />} label="Chat with PDF" id={id} endpoint="chatwithpdf" pathname={pathname} />
+          <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
+          <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
+          <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
+
+          <UploadFileModal id={id} subjectlist={subjectlist}>
+            <div className="group relative flex items-center gap-3 px-4 py-2 mt-2 rounded-full cursor-pointer transition-all duration-200 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400">
+              <div className="text-lg"><FiUpload /></div>
+              <span className="font-thin antialiased tracking-tight font-stretch-condensed">Upload</span>
+            </div>
+          </UploadFileModal>
         </nav>
 
         <button
           onClick={handleLogout}
-          className="mb-0 group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-l-2 hover:bg-white/5 text-white/80 hover:text-white border-transparent"
+          className="mb-0 group relative flex items-center gap-3 px-4 py-2 rounded-r-lg cursor-pointer transition-all duration-200 hover:bg-white/5 text-white/80 hover:text-white"
         >
           <div className="text-lg text-purple-400 group-hover:text-purple-300"><FiLogOut /></div>
           <span className="font-medium tracking-wide">Logout</span>
@@ -103,7 +102,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
-                <FiMessageSquare className="text-purple-300" /> Chat with PDF
+                <FiMessageSquare className="text-purple-400" /> Chat with PDF
               </Link> */}
 
               <Link
@@ -111,7 +110,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
-                <FiSearch className="text-purple-300" /> Smart Search
+                <FiSearch className="text-purple-400" /> Smart Search
               </Link>
 
               
@@ -120,7 +119,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
-                <FiSearch className="text-purple-300" /> Qna Engine
+                <FiSearch className="text-purple-400" /> Qna Engine
               </Link>
             </div>
           )}
@@ -136,13 +135,14 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
   return (
     <Link href={`/${endpoint}`}>
       <div
-        className={`group relative flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-b-1 border-r-1 ${
+        className={`group relative flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer transition-all duration-200 ${
           active
-            ? "bg-white/5 text-purple-300 border-purple-500"
-            : "hover:bg-white/5 text-white/80 hover:text-white border-transparent"
+            ? "bg-white/10 text-[#b46dfa]"
+            : "hover:bg-white/5 text-white/80 hover:text-white"
         }`}
       >
-        <div className={`text-lg ${active ? "text-purple-300" : "text-purple-400"}`}>{icon}</div>
+        {active && <span className="w-1 h-5 rounded-full bg-[#b46dfa] shrink-0" />}
+        <div className={`text-lg ${active ? "text-[#b46dfa]" : "text-white/80"}`}>{icon}</div>
         <span className="font-thin antialiased tracking-tight font-stretch-condensed">{label}</span>
       </div>
     </Link>
@@ -152,8 +152,8 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
 /* Disabled Desktop Item */
 function DisabledNavItem({ icon, label }) {
   return (
-    <div className="group relative flex items-center gap-3 px-4 py-2 rounded-lg border-l-2 border-transparent opacity-40 cursor-not-allowed select-none">
-      <div className="text-lg text-purple-400">{icon}</div>
+    <div className="group relative flex items-center gap-3 px-4 py-2 rounded-r-lg opacity-40 cursor-not-allowed select-none">
+      <div className="text-lg text-white/80">{icon}</div>
       <span className="font-thin tracking-tight">{label}</span>
     </div>
   );

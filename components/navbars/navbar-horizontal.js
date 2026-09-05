@@ -50,7 +50,8 @@ export default function HorizontalNavbar({ id, userdata, noOfUploads }) {
   return (
     <>
       {/* Navbar */}
-      <div className="w-full px-6 py-3 flex items-center justify-between bg-[#1a1a1a] border-b border-purple-500/40 text-white relative z-50">
+      <div className="w-full px-6 py-3 flex items-center justify-between bg-[#1a1a1a] text-white relative z-50">
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-200 via-purple-500 to-purple-900 animate-gradient-wave" />
 
         <div className="text-2xl font-bold bg-gradient-to-r from-purple-200 via-purple-500 to-purple-900 animate-gradient-wave bg-clip-text text-transparent">
           notesportal

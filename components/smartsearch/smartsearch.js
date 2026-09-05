@@ -62,8 +62,8 @@ export default function SmartSearch({ userid }) {
 
       {/* Title & Subtitle */}
       <div className="max-w-full sm:max-w-2xl">
-        <h1 className="text-lg sm:text-xl font-bold text-purple-300">
-          SmartSearch
+        <h1 className="text-3xl font-semibold text-purple-400">
+          Smart Search
         </h1>
         <p className="mt-1 text-gray-400 text-xs sm:text-sm">
           Search for any TOPIC and SmartSearch will fetch the most relevant PDF files from the database.
