@@ -1,4 +1,4 @@
-<h1 align="center">📘 NotesPortal</h1>
+<h1 align="center">📘 notesportal</h1>
 
 <p align="center">
   <b>A collaborative note-sharing platform built by students, for students.</b><br/>
