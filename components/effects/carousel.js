@@ -134,7 +134,7 @@ export default function Carousel({
             <motion.div
               key={index}
               onClick={() => router.push(item.href || "#")} // ✅ Whole card clickable
-              className="shrink-0 flex flex-col justify-between bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60 backdrop-blur-md rounded-2xl border border-white/10 cursor-pointer active:cursor-grabbing"
+              className="shrink-0 flex flex-col justify-between bg-gradient-to-br from-[#1a1a1a]/80 to-[var(--theme-panel-a)]/60 backdrop-blur-md rounded-2xl border border-white/10 cursor-pointer active:cursor-grabbing"
               style={{ width: "100%" }}
               animate={{
                 rotateY: isActive ? 0 : isLeft ? 90 : -90,

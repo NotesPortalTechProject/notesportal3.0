@@ -15,7 +15,7 @@ export default async function HomePage({ params }) {
   return (
     <>
       <div>
-        <p className="px-6">My Subjects</p>
+        <p className="px-6 font-bold text-lg">My Subjects</p>
         <Suspense fallback={<LoadingDots text="fetching your subjects" />}>
           <SubjectCardsDisplay id={userId} />
         </Suspense>

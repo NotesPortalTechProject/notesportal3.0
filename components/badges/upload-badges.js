@@ -2,7 +2,7 @@ import { FiUpload, FiStar, FiAward, FiShield } from "react-icons/fi";
 
 export default function UploadBadges({ noofuploads }) {
   const baseClasses =
-    "relative flex items-center justify-center gap-2 px-5 py-3 rounded-2xl shadow-[0_0_25px_rgba(168,85,247,0.15)]  backdrop-blur-xl transition-all duration-300 transform hover:scale-101  text-sm font-semibold text-center";
+    "relative flex items-center justify-center gap-2 px-5 py-3 rounded-2xl shadow-[0_0_25px_rgb(var(--theme-glow-500)/0.15)]  backdrop-blur-xl transition-all duration-300 transform hover:scale-101  text-sm font-semibold text-center";
 
   const shimmer =
     "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:translate-x-[-200%] hover:before:animate-[shimmer_1.5s_infinite] overflow-hidden";

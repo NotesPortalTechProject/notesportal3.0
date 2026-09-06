@@ -62,8 +62,8 @@ export default function SmartSearch({ userid }) {
 
       {/* Title & Subtitle */}
       <div className="max-w-full sm:max-w-2xl">
-        <h1 className="text-lg sm:text-xl font-bold text-purple-300">
-          SmartSearch
+        <h1 className="text-3xl font-semibold text-purple-400">
+          Smart Search
         </h1>
         <p className="mt-1 text-gray-400 text-xs sm:text-sm">
           Search for any TOPIC and SmartSearch will fetch the most relevant PDF files from the database.
@@ -84,7 +84,7 @@ export default function SmartSearch({ userid }) {
             flex-1 p-4 rounded-2xl bg-white/5 backdrop-blur-xl
             border border-purple-500/20 text-white placeholder:text-gray-400
             focus:ring-2 focus:ring-purple-500 focus:outline-none
-            transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.15)]
+            transition-all duration-200 shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.15)]
           "
         />
 
@@ -94,7 +94,7 @@ export default function SmartSearch({ userid }) {
           className="
             w-full sm:w-auto px-6 py-4 rounded-2xl
             bg-purple-700 hover:bg-purple-600 text-white font-semibold
-            shadow-[0_0_25px_rgba(168,85,247,0.25)]
+            shadow-[0_0_25px_rgb(var(--theme-glow-500)/0.25)]
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-all duration-200
           "

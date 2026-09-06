@@ -6,9 +6,17 @@ import LoadingDots from "./loadingDots";
 import { logout } from "@/actions/auth-actions";
 import UploadBadges from "./badges/upload-badges";
 import Image from "next/image";
+import { useTheme } from "./theme-provider";
+import ColorPicker from "./color-picker";
+
+const THEME_SWATCHES = [
+  { key: "purple", label: "Purple", color: "#a855f7" },
+];
 
 export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
+  const { theme, customColor, setTheme, setCustomColor } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef(null);
 
@@ -57,8 +65,8 @@ export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
     hover:ring-purple-400/80
     hover:ring-offset
     hover:ring-offset-transparent
-    shadow-[0_0_12px_rgba(168,85,247,0.3)]
-    hover:shadow-[0_0_20px_rgba(168,85,247,0.55)]
+    shadow-[0_0_12px_rgb(var(--theme-glow-500)/0.3)]
+    hover:shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.55)]
     transition-all duration-300 ease-in-out
     hover:scale-105
     active:scale-95
@@ -85,14 +93,14 @@ export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 backdrop-blur-sm"
+            className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
 
           <div
             className="absolute z-50 w-[90vw] max-w-[320px] p-5 rounded-2xl
-              backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[#2a1a3d]/60
-              border border-white/5 shadow-[0_0_30px_rgba(168,85,247,0.08)] text-white
+              backdrop-blur-xl bg-gradient-to-br from-[#1a1a1a]/80 to-[var(--theme-panel-a)]/60
+              border border-white/5 shadow-[0_0_30px_rgb(var(--theme-glow-500)/0.08)] text-white
               overflow-y-auto max-h-[80vh] flex flex-col"
             style={{ top: position.top, left: position.left }}
           >
@@ -104,6 +112,56 @@ export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
               >
                 Close
               </button>
+            </div>
+
+            <div className="mb-4 relative">
+              <p className="text-xs text-white/50 mb-2">Theme</p>
+              <div className="flex items-center gap-3">
+                {THEME_SWATCHES.map((t) => (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => setTheme(t.key)}
+                    title={t.label}
+                    aria-label={t.label}
+                    className={`w-7 h-7 rounded-full transition-all duration-200 cursor-pointer ${
+                      theme === t.key
+                        ? "ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110"
+                        : "ring-1 ring-white/20 hover:scale-105"
+                    }`}
+                    style={{ backgroundColor: t.color }}
+                  />
+                ))}
+                <button
+                  type="button"
+                  title="Custom color"
+                  aria-label="Custom color"
+                  onClick={() => setPickerOpen((v) => !v)}
+                  className={`relative w-7 h-7 rounded-full cursor-pointer transition-all duration-200 flex items-center justify-center ${
+                    theme === "custom"
+                      ? "ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110"
+                      : "ring-1 ring-white/20 hover:scale-105"
+                  }`}
+                  style={{
+                    background:
+                      theme === "custom"
+                        ? customColor
+                        : "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
+                  }}
+                >
+                  {theme !== "custom" && (
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#161018]/80" />
+                  )}
+                </button>
+              </div>
+
+              {pickerOpen && (
+                <ColorPicker
+                  initialColor={customColor}
+                  onChange={setCustomColor}
+                  onClose={() => setPickerOpen(false)}
+                />
+              )}
             </div>
 
             {userinfo ? (

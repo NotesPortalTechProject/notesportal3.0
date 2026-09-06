@@ -10,7 +10,7 @@ export default function SubjectCard({ subject, onRemove, id }) {
 
   return (
     <SpotlightCard
-      spotlightColor="rgba(168, 85, 247, 0.15)"
+      spotlightColor="rgb(var(--theme-glow-500) / 0.15)"
       className="w-full h-36 sm:h-40 max-w-[13rem] sm:max-w-[15rem] cursor-pointer"
     >
       <div
@@ -30,8 +30,8 @@ export default function SubjectCard({ subject, onRemove, id }) {
 
           {showOptions && (
             <div className="absolute top-9 right-0 min-w-[7rem] sm:min-w-[8rem] md:min-w-[9rem] 
-              bg-[#1a0a2d]/90 border border-purple-500/20 backdrop-blur-md rounded-xl z-30 p-1 
-              shadow-[0_0_6px_rgba(168,85,247,0.05)]"
+              bg-[var(--theme-toast-bg)]/90 border border-purple-500/20 backdrop-blur-md rounded-xl z-30 p-1
+              shadow-[0_0_6px_rgb(var(--theme-glow-500)/0.05)]"
             >
               <button
                 onClick={(e) => {

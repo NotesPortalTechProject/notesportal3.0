@@ -175,7 +175,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-10 mt-1 w-full bg-white/10 backdrop-blur-md border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
+              className="absolute z-10 mt-1 w-full bg-white/10 backdrop-blur-md border border-purple-500/30 rounded-xl shadow-[0_0_20px_rgb(var(--theme-glow-500)/0.15)] max-h-60 overflow-y-auto hide-scrollbar text-sm sm:text-base"
             >
               {options.map((opt, idx) => (
                 <div

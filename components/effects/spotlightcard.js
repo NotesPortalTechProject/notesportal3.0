@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 const SpotlightCard = ({
   children,
   className = "",
-  spotlightColor = "rgba(168, 85, 247, 0.45)", 
+  spotlightColor = "rgb(var(--theme-glow-500) / 0.45)",
 }) => {
   const divRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -39,7 +39,7 @@ const SpotlightCard = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`relative rounded-3xl overflow-hidden border border-purple-500/20
-        bg-gradient-to-br from-[#0e0b1e]/90 via-[#1a0f2a]/80 to-[#221134]/70
+        bg-gradient-to-br from-[var(--theme-panel-g)]/90 via-[var(--theme-panel-h)]/80 to-[var(--theme-panel-i)]/70
         backdrop-blur-xl shadow-[inset_0_0_1px_rgba(255,255,255,0.02),0_4px_12px_rgba(0,0,0,0.4)]
         transition-all duration-300 ease-in-out hover:scale-[1.015] ${className}`}
     >

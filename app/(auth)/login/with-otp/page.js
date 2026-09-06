@@ -9,8 +9,11 @@ import { generateOtp } from "@/lib/gen-otp";
 import Particles from "@/components/effects/particles";
 import LoadingDots from "@/components/loadingDots";
 import { sendOtpAction } from "@/actions/otp-action";
+import { useTheme } from "@/components/theme-provider";
+import { getParticleColors } from "@/lib/theme-colors";
 
 export default function LoginWithOtpPage() {
+  const { theme, customColor } = useTheme();
   const [formState, formAction, isPending] = useActionState(login_with_otp, {});
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -75,7 +78,7 @@ export default function LoginWithOtpPage() {
           particleCount={300}
           particleSpread={10}
           speed={0.12}
-          particleColors={["#a855f7", "#8b5cf6", "#c084fc", "#f5d0fe"]}
+          particleColors={getParticleColors(theme, customColor)}
           moveParticlesOnHover
           particleHoverFactor={3.5}
           alphaParticles
