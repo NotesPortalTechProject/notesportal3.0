@@ -1,57 +1,62 @@
 <h1 align="center">📘 notesportal</h1>
 
 <p align="center">
-  <b>A collaborative note-sharing platform built by students, for students.</b><br/>
-  Access, upload, and share notes with ease — organized by subject codes.  
+  <b>An AI-powered, collaborative note-sharing platform built by students, for students.</b><br/>
+  Upload, organize, and search notes by subject — with AI helping you find and understand them faster.
 </p>
 
 <p align="center">
-  🔗 <a href="https://notesportal.tech" target="_blank"><b>Visit NotesPortal</b></a>
+  🔗 <a href="https://notesportal.tech" target="_blank"><b>Visit notesportal</b></a>
 </p>
 
 ---
 
-## 🎨 About NotesPortal  
+## 🎨 About
 
-NotesPortal is designed to make **academic resources accessible, organized, and collaborative**.  
-Students can contribute by uploading their notes, and others can view, download, and manage content effortlessly.  
+notesportal makes academic resources **accessible, organized, and collaborative**. Students upload their notes, and everyone else can browse, search, favorite, and download them — organized by subject.
 
-Built with a focus on **simplicity, speed, and usability**, NotesPortal ensures that knowledge flows freely between learners.  
-
----
-
-## 🚀 Features  
-
-- 📂 **Upload & Share Notes** – Anyone can contribute their notes.  
-- 🔎 **Subject Code Access** – Quick and organized retrieval by subject code.  
-- 📥 **View & Download** – Fast and reliable access to study materials.  
-- ⭐ **Favorites Section** – Save frequently used notes in one place.  
-- 📚 **Manage Subjects** – Add or remove subjects based on your needs.  
+On top of that, notesportal layers a few AI features (smart subject search, a QnA engine, and an in-progress "chat with PDF" tool) to help students get straight to the answer instead of digging through files.
 
 ---
 
-## 🛠️ Tech Stack  
+## 🚀 Features
 
-- **Frontend:** Next.js  
-- **Backend & Database:** Supabase  
+- 📂 **Upload & Share Notes** – Contribute notes tied to a subject, stored securely in S3.
+- 🔎 **Smart Search** – AI-assisted search across subjects to surface the most relevant notes.
+- 🧠 **QnA Engine** – Ask a question and get an AI-generated answer sourced from uploaded notes.
+- 💬 **Chat with PDF** *(in progress)* – Conversational Q&A directly against a PDF's contents.
+- ⭐ **Favorites** – Save frequently used notes for quick access.
+- 📚 **My Files & Subject Management** – Manage your own uploads and add/remove subjects.
+- 🔐 **Email OTP Auth** – Simple signup/login flow with one-time-password email verification.
+- 🎨 **Dynamic Theming** – Switch between preset and custom accent colors, applied instantly and persisted across sessions.
 
 ---
 
-## 👥 Founders  
+## 🛠️ Tech Stack
 
-**Arya Chawan · Arhaan Bhiwandkar · Bevin Johnson · Sharvil Gharkar**  
+- **Frontend:** Next.js 15 (App Router), React 19, Tailwind CSS 4, Framer Motion
+- **Auth:** JWT (`jose`) + email OTP via Nodemailer
+- **Database:** Supabase
+- **File Storage:** AWS S3 (presigned uploads/downloads)
+- **Analytics:** Vercel Analytics & Speed Insights
 
 ---
 
-## 🎯 Vision  
+## 👥 Founders
 
-To empower students with a **centralized hub of academic resources**,  
-fostering collaboration and smarter learning within the student community.  
+**Arya Chawan · Arhaan Bhiwandkar · Bevin Johnson · Sharvil Gharkar**
+
+---
+
+## 🎯 Vision
+
+To give students a **centralized, AI-assisted hub of academic resources** — making it easier to find, share, and actually learn from each other's notes.
 
 ---
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-NotesPortal-purple?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Next.js-notesportal-purple?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Supabase-Powered-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/AWS%20S3-File%20Storage-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Student-Collaboration-6C63FF?style=for-the-badge" />
 </p>
