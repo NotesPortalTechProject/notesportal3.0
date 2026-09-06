@@ -183,7 +183,7 @@ export default function AddSubjectModal({
 
       setSubjectSearchError(
         error?.message ||
-          "Unable to find matching subjects"
+        "Unable to find matching subjects"
       );
     } finally {
       setIsSearchingSubjects(false);
@@ -246,14 +246,14 @@ export default function AddSubjectModal({
       if (!response.ok) {
         throw new Error(
           result?.error ||
-            "Failed to update subjects"
+          "Failed to update subjects"
         );
       }
 
       if (result?.success !== true) {
         throw new Error(
           result?.error ||
-            "Failed to update subjects"
+          "Failed to update subjects"
         );
       }
 
@@ -291,7 +291,7 @@ export default function AddSubjectModal({
 
       toast.error(
         error?.message ||
-          "Failed to update subjects",
+        "Failed to update subjects",
         {
           id: toastId,
           duration: 5000,
@@ -329,12 +329,19 @@ export default function AddSubjectModal({
   return (
     <>
       <button
+        onClick={() => setIsOpen(true)}
         type="button"
-        onClick={openModal}
-        className={`flex items-center justify-center gap-2.5 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/20 ${buttonClass}`}
+        className="
+        w-full h-24 sm:h-28 md:h-40 md:w-full lg:w-full  flex flex-col items-center justify-center
+        rounded-2xl border-2 border-dashed border-white/30
+        backdrop-blur-md bg-[#1a1a1a]/60 text-white font-medium shadow-sm
+        transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
+      "
       >
-        <FaPlus className="text-xs" />
-        Edit Subjects
+        <span className="text-4xl sm:text-5xl font-bold text-white">+</span>
+        <span className="text-sm font-light text-white/80 mt-1">
+          add subject
+        </span>
       </button>
 
       <AnimatePresence>
@@ -510,8 +517,8 @@ export default function AddSubjectModal({
                               typeof suggestion === "string"
                                 ? suggestion
                                 : suggestion?.subject ||
-                                  suggestion?.code ||
-                                  "";
+                                suggestion?.code ||
+                                "";
 
                             const alreadyAdded =
                               subjectList.some(
