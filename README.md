@@ -33,68 +33,13 @@ On top of that, notesportal layers a few AI features (smart subject search, a Qn
 
 ---
 
-## 🏗️ System Architecture
-
-notesportal is split into a Next.js frontend and a backend API that handles indexing, search, and AI. Each feature flows into its own combination of storage and AI services:
-
-```mermaid
-flowchart LR
-    subgraph Frontend["Frontend App (notesportal.tech)"]
-        U[Student]
-    end
-
-    subgraph Backend["Backend API"]
-        Upload["Upload File"]
-        Index["Index File"]
-        Search["Smart Search"]
-        Practice["Practice Q&A"]
-        Chat["Chat with PDF"]
-        Subjects["Manage Subjects"]
-    end
-
-    R2[(Cloudflare R2\nPDF files)]
-    Mongo[(MongoDB\ntext chunks)]
-    Qdrant[(Qdrant\nvector embeddings)]
-    Gemini[[Gemini AI]]
-    Supabase[(Supabase\nfiles & users)]
-
-    U -- "1. uploads a PDF" --> Upload
-    U -- "2. searches" --> Search
-    U -- "3. practices" --> Practice
-    U -- "4. chats with a file" --> Chat
-    U -- "5. organizes subjects" --> Subjects
-
-    Upload -- saves the file --> R2
-    Upload -- saves file info --> Supabase
-    Upload -. triggers indexing .-> Index
-    Index -- stores text chunks --> Mongo
-    Index -- stores vector embeddings --> Qdrant
-
-    Search -- hybrid search --> Qdrant
-    Practice -- pulls a relevant chunk --> Mongo
-    Practice -- generates question / grades answer --> Gemini
-    Chat -- fetches the file --> R2
-    Chat -- answers questions about it --> Gemini
-    Subjects -- saves changes --> Supabase
-```
-
-- **Upload flow** – file bytes go to R2, metadata to Supabase, then indexing kicks off automatically.
-- **Search flow** – Smart Search runs hybrid (keyword + semantic) lookups against Qdrant.
-- **Practice flow** – a stored chunk is pulled from MongoDB and handed to Gemini to generate/grade Q&A.
-- **Chat with PDF flow** – the source file is fetched from R2 and answered against by Gemini.
-- **Subject management flow** – adding, removing, and favoriting subjects is saved straight to Supabase.
-
----
-
 ## 🛠️ Tech Stack
 
 - **Frontend:** Next.js 15 (App Router), React 19, Tailwind CSS 4, Framer Motion
 - **Auth:** JWT (`jose`) + email OTP via Nodemailer
-- **Backend API:** Separate service handling upload indexing, search, and AI orchestration
-- **File Storage:** Cloudflare R2 (S3-compatible, presigned uploads/downloads)
-- **Database:** Supabase (files & user records), MongoDB (extracted text chunks)
-- **Vector Search:** Qdrant (embeddings powering hybrid search)
-- **AI:** Gemini (question generation, answer grading, PDF chat)
+- **Database:** Supabase
+- **File Storage:** Cloudflare R2 (presigned uploads/downloads)
+- **AI:** Gemini-powered search, Q&A, and PDF chat
 - **Analytics:** Vercel Analytics & Speed Insights
 
 ---
