@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -317,29 +318,29 @@ export default function AddSubjectModal({
   };
 
   const inputStyle =
-    "w-full rounded-xl border border-purple-500/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-purple-300/45 focus:border-purple-500/25 focus:bg-black/30";
+    "w-full rounded-xl border border-purple-500/10 bg-black/20 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-purple-300/45 focus:border-purple-500/25 focus:bg-black/30";
 
   const labelStyle =
-    "mb-2 block text-sm font-semibold text-white";
+    "mb-1.5 block text-xs font-semibold text-white";
 
   const primaryBtnStyle =
-    "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:from-purple-500 hover:to-purple-600 disabled:cursor-not-allowed disabled:opacity-50";
+    "flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-2.5 text-xs font-semibold text-white transition-all duration-200 hover:from-purple-500 hover:to-purple-600 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
     <>
       <button
         type="button"
         onClick={openModal}
-        className={`flex items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/10 px-6 py-4 font-semibold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/20 ${buttonClass}`}
+        className={`flex items-center justify-center gap-2.5 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/20 ${buttonClass}`}
       >
-        <FaPlus />
+        <FaPlus className="text-xs" />
         Edit Subjects
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -357,49 +358,38 @@ export default function AddSubjectModal({
               transition={{
                 duration: 0.25,
               }}
-              className="relative max-h-[84vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-purple-500/10 bg-black/40 p-5 shadow-2xl backdrop-blur-xl sm:p-6"
+              className="relative max-h-[88vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-purple-500/10 bg-black/40 p-4 shadow-2xl backdrop-blur-md sm:p-5"
             >
               <button
                 type="button"
                 onClick={closeModal}
                 disabled={loading}
-                className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-lg bg-red-600 text-white transition hover:bg-red-700 disabled:opacity-50"
+                className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-lg bg-red-600 text-xs text-white transition hover:bg-red-700 disabled:opacity-50"
               >
                 <FaTimes />
               </button>
 
-              <div className="mb-8 pr-12">
-                <h2 className="text-xl font-semibold text-white sm:text-2xl">
-                  Edit your subjects
+              <div className="mb-5 pr-10">
+                <h2 className="text-lg font-semibold text-white sm:text-xl">
+                  Edit Subjects
                 </h2>
 
-                <p className="mt-1.5 text-sm text-purple-300/45">
-                  Add subject codes from your timetable, or
-                  find a code using a short description.
+                <p className="mt-1 text-xs text-purple-300/45">
+                  Add or remove subjects and save your
+                  changes.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr]">
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                <div className="flex flex-col gap-4">
+                  <div className="rounded-2xl border border-purple-500/10 bg-black/20 p-4">
+                    <label className={labelStyle}>
+                      Add Subject Code
+                    </label>
 
-                <div className="flex flex-col gap-6">
-
-                  <div className="rounded-2xl border border-purple-500/10 bg-black/20 p-5 sm:p-6">
-                    <div className="mb-4">
-                      <label className={labelStyle}>
-                        Subject Code
-                      </label>
-
-                      <p className="ml-1 text-xs text-purple-300/45">
-                        Enter the code directly from your
-                        timetable.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 sm:flex-row">
+                    <div className="flex flex-col gap-2 sm:flex-row">
                       <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-4 flex items-center text-sm text-purple-400">
-                          <FaList />
-                        </span>
+                        <FaPlus className="absolute inset-y-0 left-3.5 my-auto text-xs text-purple-400" />
 
                         <input
                           type="text"
@@ -414,8 +404,8 @@ export default function AddSubjectModal({
                               addSubject();
                             }
                           }}
-                          className={`${inputStyle} pl-11`}
                           placeholder="e.g. DBMS"
+                          className={`${inputStyle} pl-9`}
                           disabled={loading}
                         />
                       </div>
@@ -424,47 +414,36 @@ export default function AddSubjectModal({
                         type="button"
                         onClick={() => addSubject()}
                         disabled={loading}
-                        className={`${primaryBtnStyle} whitespace-nowrap sm:px-6`}
+                        className={`${primaryBtnStyle} min-w-[76px] sm:px-5 sm:whitespace-nowrap`}
                       >
-                        <FaPlus className="text-xs" />
-                        Add Subject
+                        <FaPlus className="text-[10px]" />
+                        Add
                       </button>
                     </div>
 
                     {subjectError && (
-                      <p className="ml-1 mt-3 text-xs text-red-400">
+                      <p className="mt-2 text-[11px] text-red-400">
                         {subjectError}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <div className="h-px flex-1 bg-purple-500/10" />
-
-                    <span className="text-xs font-medium text-purple-300/30">
+                    <span className="text-[10px] font-medium text-purple-300/30">
                       OR
                     </span>
-
                     <div className="h-px flex-1 bg-purple-500/10" />
                   </div>
 
-                  <div className="rounded-2xl border border-purple-500/10 bg-black/20 p-5 sm:p-6">
-                    <div className="mb-4">
-                      <label className={labelStyle}>
-                        Find Subject Code
-                      </label>
+                  <div className="rounded-2xl border border-purple-500/10 bg-black/20 p-4">
+                    <label className={labelStyle}>
+                      Find Subject Code
+                    </label>
 
-                      <p className="ml-1 text-xs text-purple-300/45">
-                        Describe the subject in a few words
-                        and we’ll find matching codes.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 sm:flex-row">
+                    <div className="flex flex-col gap-2 sm:flex-row">
                       <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-4 flex items-center text-sm text-purple-400">
-                          <FaSearch />
-                        </span>
+                        <FaSearch className="absolute inset-y-0 left-3.5 my-auto text-xs text-purple-400" />
 
                         <input
                           type="text"
@@ -479,8 +458,8 @@ export default function AddSubjectModal({
                               findSubjects();
                             }
                           }}
-                          className={`${inputStyle} pl-11`}
-                          placeholder="e.g. Data structures"
+                          placeholder="Describe a concept..."
+                          className={`${inputStyle} pl-9`}
                           disabled={
                             loading ||
                             isSearchingSubjects
@@ -495,13 +474,15 @@ export default function AddSubjectModal({
                           loading ||
                           isSearchingSubjects
                         }
-                        className={`${primaryBtnStyle} whitespace-nowrap sm:px-6`}
+                        className={`${primaryBtnStyle} min-w-[76px] sm:px-5 sm:whitespace-nowrap`}
                       >
                         {isSearchingSubjects ? (
-                          <LoadingDots />
+                          <span className="flex h-3 items-center justify-center">
+                            <LoadingDots />
+                          </span>
                         ) : (
                           <>
-                            <FaSearch className="text-xs" />
+                            <FaSearch className="text-[10px]" />
                             Find
                           </>
                         )}
@@ -509,7 +490,7 @@ export default function AddSubjectModal({
                     </div>
 
                     {subjectSearchError && (
-                      <p className="ml-1 mt-3 text-xs text-red-400">
+                      <p className="mt-2 text-[11px] text-red-400">
                         {subjectSearchError}
                       </p>
                     )}
@@ -517,11 +498,12 @@ export default function AddSubjectModal({
 
                   {subjectSuggestions.length > 0 && (
                     <div>
-                      <p className="mb-3 ml-1 text-sm text-purple-300/70">
-                        Matching subject codes
-                      </p>
+                      <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-purple-300/70">
+                        <FaSearch className="text-[10px]" />
+                        Suggested Subjects
+                      </div>
 
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      <div className="grid max-h-36 grid-cols-1 gap-1.5 overflow-y-auto rounded-xl border border-purple-500/10 bg-black/20 p-2 sm:grid-cols-2">
                         {subjectSuggestions.map(
                           (suggestion, index) => {
                             const suggestionCode =
@@ -545,9 +527,9 @@ export default function AddSubjectModal({
                             return (
                               <div
                                 key={`${suggestionCode}-${index}`}
-                                className="flex items-center justify-between rounded-xl border border-purple-500/10 bg-[#111]/70 px-4 py-3 transition hover:border-purple-500/25"
+                                className="flex items-center justify-between gap-2 rounded-lg border border-purple-500/10 bg-[#111]/70 px-3 py-2"
                               >
-                                <span className="text-sm font-medium text-white">
+                                <span className="text-xs font-medium text-white">
                                   {suggestionCode}
                                 </span>
 
@@ -562,7 +544,7 @@ export default function AddSubjectModal({
                                     loading ||
                                     alreadyAdded
                                   }
-                                  className="text-xs font-medium text-purple-300 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                                  className="text-[11px] font-medium text-purple-300 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                   {alreadyAdded
                                     ? "Added"
@@ -577,47 +559,44 @@ export default function AddSubjectModal({
                   )}
                 </div>
 
-                <div className="flex min-h-[360px] flex-col rounded-2xl border border-purple-500/10 bg-[#101010]/75 p-5 sm:p-6">
-                  <div className="mb-5 flex items-start justify-between">
+                <div className="flex min-h-0 flex-col rounded-2xl border border-purple-500/10 bg-[#101010]/75 p-4">
+                  <div className="mb-3 flex items-start justify-between">
                     <div>
-                      <h3 className="text-base font-semibold text-white">
+                      <h3 className="text-sm font-semibold text-white">
                         Your Subjects
                       </h3>
 
-                      <p className="mt-1 text-xs text-purple-300/45">
-                        {subjectList.length}{" "}
-                        {subjectList.length === 1
-                          ? "subject"
-                          : "subjects"}{" "}
+                      <p className="mt-0.5 text-[10px] text-purple-300/45">
+                        {subjectList.length} subject
+                        {subjectList.length !== 1
+                          ? "s"
+                          : ""}{" "}
                         added
                       </p>
                     </div>
 
-                    <div className="rounded-lg border border-purple-500/15 bg-purple-500/10 px-2.5 py-1">
-                      <span className="text-xs text-purple-300">
-                        {subjectList.length}
-                      </span>
-                    </div>
+                    <span className="rounded-lg border border-purple-500/15 bg-purple-500/10 px-2 py-0.5 text-[10px] text-purple-300">
+                      {subjectList.length}
+                    </span>
                   </div>
 
-                  <div className="mb-4 h-px bg-purple-500/10" />
+                  <div className="mb-3 h-px bg-purple-500/10" />
 
                   {subjectList.length === 0 ? (
-                    <div className="flex min-h-[220px] flex-1 items-center justify-center px-6 text-center">
+                    <div className="flex min-h-[150px] flex-1 items-center justify-center text-center">
                       <div>
-                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-purple-500/10 bg-purple-500/[0.06]">
-                          <FaList className="text-purple-400/40" />
+                        <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-purple-500/10 bg-purple-500/[0.06]">
+                          <FaList className="text-sm text-purple-400/70" />
                         </div>
 
-                        <p className="text-sm leading-relaxed text-purple-300/45">
-                          No subjects added yet.
-                          <br />
-                          Add your first subject to continue.
+                        <p className="max-w-[220px] text-xs leading-relaxed text-purple-300/45">
+                          Add subjects using the options
+                          on the left.
                         </p>
                       </div>
                     </div>
                   ) : (
-                    <div className="flex max-h-[340px] flex-col gap-2.5 overflow-y-auto pr-1 custom-scrollbar">
+                    <div className="flex max-h-[260px] flex-col gap-1.5 overflow-y-auto pr-1 custom-scrollbar">
                       {subjectList.map(
                         (subject, index) => (
                           <motion.div
@@ -630,14 +609,14 @@ export default function AddSubjectModal({
                               opacity: 1,
                               y: 0,
                             }}
-                            className="group flex items-center justify-between rounded-xl border border-purple-500/10 bg-[#181818]/80 px-4 py-3 transition-all hover:border-purple-500/25"
+                            className="group flex items-center justify-between rounded-xl border border-purple-500/10 bg-[#181818]/80 px-3 py-2"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-500/10">
-                                <FaList className="text-[10px] text-purple-400/70" />
-                              </div>
+                            <div className="flex items-center gap-2.5">
+                              <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-purple-500/10 text-[10px] font-medium text-purple-300">
+                                {index + 1}
+                              </span>
 
-                              <span className="text-sm font-medium text-white">
+                              <span className="text-xs font-medium text-white">
                                 {subject}
                               </span>
                             </div>
@@ -651,13 +630,9 @@ export default function AddSubjectModal({
                                 loading ||
                                 subjectList.length <= 1
                               }
-                              className="flex items-center gap-1.5 text-xs text-red-400/50 opacity-70 transition hover:text-red-400 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-30"
+                              className="flex h-7 w-7 items-center justify-center rounded-lg text-[10px] text-red-400/50 transition hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-30 sm:opacity-70 sm:group-hover:opacity-100"
                             >
                               <FaTimes />
-
-                              <span className="hidden sm:inline">
-                                Remove
-                              </span>
                             </button>
                           </motion.div>
                         )
@@ -667,12 +642,12 @@ export default function AddSubjectModal({
                 </div>
               </div>
 
-              <div className="mt-7 flex justify-end border-t border-purple-500/10 pt-5">
+              <div className="mt-5 flex justify-end border-t border-purple-500/10 pt-4">
                 <button
                   type="button"
                   onClick={saveChanges}
                   disabled={loading}
-                  className="flex min-w-[160px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3.5 text-sm font-bold text-white transition-all duration-200 hover:from-purple-500 hover:to-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex min-w-[140px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-2.5 text-xs font-semibold text-white transition-all duration-200 hover:from-purple-500 hover:to-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? (
                     <LoadingDots />
@@ -689,7 +664,7 @@ export default function AddSubjectModal({
       <AnimatePresence>
         {showChangeSummary && (
           <motion.div
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-xl"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-3 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -711,29 +686,29 @@ export default function AddSubjectModal({
                 opacity: 0,
               }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-md rounded-2xl border border-white/20 bg-black/50 p-6 shadow-2xl backdrop-blur-xl"
+              className="w-full max-w-sm rounded-2xl border-2 border-purple-500/8 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-md"
             >
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-lg font-semibold text-white">
                 Subjects Updated
               </h2>
 
-              <p className="mt-1 text-sm text-white/60">
+              <p className="mt-1 text-xs text-purple-300/45">
                 Your subject list has been updated
                 successfully.
               </p>
 
               {changeSummary.added.length > 0 && (
-                <div className="mt-5">
-                  <p className="mb-2 text-sm font-semibold text-green-400">
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-semibold text-green-400">
                     Subjects Added
                   </p>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {changeSummary.added.map(
                       (subject, index) => (
                         <span
                           key={`${subject}-${index}`}
-                          className="rounded-lg border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-300"
+                          className="rounded-lg border border-green-500/20 bg-green-500/10 px-2.5 py-1 text-[11px] font-semibold text-green-300"
                         >
                           {subject}
                         </span>
@@ -744,17 +719,17 @@ export default function AddSubjectModal({
               )}
 
               {changeSummary.removed.length > 0 && (
-                <div className="mt-5">
-                  <p className="mb-2 text-sm font-semibold text-red-400">
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-semibold text-red-400">
                     Subjects Removed
                   </p>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {changeSummary.removed.map(
                       (subject, index) => (
                         <span
                           key={`${subject}-${index}`}
-                          className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-300"
+                          className="rounded-lg border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-300"
                         >
                           {subject}
                         </span>
@@ -770,7 +745,7 @@ export default function AddSubjectModal({
                   setShowChangeSummary(false);
                   window.location.reload();
                 }}
-                className="mt-6 w-full rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-3.5 text-sm font-bold text-white transition hover:from-purple-500 hover:to-purple-600"
+                className="mt-5 w-full rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-2.5 text-xs font-semibold text-white transition hover:from-purple-500 hover:to-purple-600"
               >
                 Continue
               </button>
