@@ -21,8 +21,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <head>
-        <script
+        <Script
           id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `try {
               var stored = JSON.parse(localStorage.getItem('np-theme') || 'null');
