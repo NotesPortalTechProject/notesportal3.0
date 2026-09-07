@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import LoadingDots from "../loadingDots";
 import {
+  FaEdit,
   FaList,
   FaPlus,
   FaSearch,
@@ -338,9 +339,9 @@ export default function AddSubjectModal({
         transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
       "
       >
-        <span className="text-4xl sm:text-5xl font-bold text-white">+</span>
+        <FaEdit className="text-4xl sm:text-5xl font-bold text-white"/>
         <span className="text-sm font-light text-white/80 mt-1">
-          add subject
+          Edit subject
         </span>
       </button>
 
@@ -506,7 +507,6 @@ export default function AddSubjectModal({
                   {subjectSuggestions.length > 0 && (
                     <div>
                       <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-purple-300/70">
-                        <FaSearch className="text-[10px]" />
                         Suggested Subjects
                       </div>
 
@@ -659,7 +659,7 @@ export default function AddSubjectModal({
                   {loading ? (
                     <LoadingDots />
                   ) : (
-                    "Save Changes"
+                    "save changes"
                   )}
                 </button>
               </div>
