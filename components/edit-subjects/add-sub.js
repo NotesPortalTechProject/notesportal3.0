@@ -339,7 +339,7 @@ export default function AddSubjectModal({
         transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
       "
       >
-        <FaPen className="text-4xl sm:text-5xl font-bold text-white"/>
+        <FaPen className="text-2xl sm:text-3xl font-medium text-white"/>
         <span className="text-sm font-light text-white/80 mt-1">
           Edit subject
         </span>
