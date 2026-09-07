@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import LoadingDots from "../loadingDots";
 import {
-  FaEdit,
+  FaRegEdit,
   FaList,
   FaPlus,
   FaSearch,
@@ -339,7 +339,7 @@ export default function AddSubjectModal({
         transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
       "
       >
-        <FaEdit className="text-4xl sm:text-5xl font-bold text-white"/>
+        <FaRegEdit className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white" />
         <span className="text-sm font-light text-white/80 mt-1">
           Edit subject
         </span>
