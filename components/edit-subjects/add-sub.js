@@ -10,6 +10,7 @@ import {
   FaPlus,
   FaSearch,
   FaTimes,
+  FaSlidersH
 } from "react-icons/fa";
 
 export default function AddSubjectModal({
@@ -339,9 +340,9 @@ export default function AddSubjectModal({
         transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
       "
       >
-        <FaPen className="text-2xl sm:text-3xl font-medium text-white"/>
+        <FaSlidersH className="text-2xl sm:text-3xl font-thinner text-white"/>
         <span className="text-sm font-light text-white/80 mt-1">
-          Edit subject
+          edit subjects
         </span>
       </button>
 
