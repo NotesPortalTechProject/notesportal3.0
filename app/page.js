@@ -64,6 +64,13 @@ export default function Home() {
       linkedin:"https://www.linkedin.com/in/tushita-shetty/",
       insta:"",
       github:"",
+    },
+    {
+      name:"Khushi Shah",
+      img:"/avatar/Khushi_Shah.jpeg",
+      linkedin:"https://www.linkedin.com/in/khushishah9014/",
+      insta:"",
+      github:"",
     }
   ];
 
