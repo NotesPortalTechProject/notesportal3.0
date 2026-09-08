@@ -5,18 +5,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import LoadingDots from "../loadingDots";
 import {
-  FaPen,
   FaList,
   FaPlus,
   FaSearch,
   FaTimes,
+  FaSlidersH
 } from "react-icons/fa";
 
 export default function AddSubjectModal({
   id,
   subjectList: initialSubjectList,
   buttonClass = "",
-  iconClass = "text-2xl sm:text-3xl font-medium text-white",
+  iconClass = "text-2xl sm:text-3xl font-thinner text-white",
   labelClass = "text-sm font-light text-white/80 mt-1",
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -343,9 +343,9 @@ export default function AddSubjectModal({
       `
         }
       >
-        <FaPen className={iconClass}/>
+        <FaSlidersH className={iconClass}/>
         <span className={labelClass}>
-          Edit subject
+          edit subjects
         </span>
       </button>
 
