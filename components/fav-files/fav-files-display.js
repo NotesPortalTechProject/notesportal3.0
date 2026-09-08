@@ -3,6 +3,7 @@ import FavFilesGrid from "./fav-files-grid";
 
 export default async function FavFilesDisplay({ userid, src }) {
   const favFiles = await getFavFiles(userid);
+  if(favFiles)
   return (
     <>
     <FavFilesGrid data={favFiles} userid={userid} src={src}/>

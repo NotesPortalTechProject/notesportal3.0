@@ -1,15 +1,17 @@
 "use client";
 import SubjectCard from "../subject-card";
 import AddSubjectModal from "../edit-subjects/add-sub";
-import { RemoveSubject } from "@/actions/other-actions";
-import toast from "react-hot-toast";
+import { useSubjectListState } from "./use-subject-list-state";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 const Carousel = dynamic(() => import("../effects/carousel"), { ssr: false });
 
-export default function SubjectCards({ subjects:initialSubjects , id }) {
-  const [subjects,setSubjects] = useState(initialSubjects)
+export default function SubjectCards({ subjects: subjectsProp, id, onRemove: onRemoveProp }) {
+  const isControlled = onRemoveProp !== undefined;
+  const internal = useSubjectListState(subjectsProp, id);
+  const subjects = isControlled ? subjectsProp : internal.subjects;
+  const handleRemove = isControlled ? onRemoveProp : internal.handleRemove;
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -18,26 +20,6 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const handleRemove = async (subject) =>{
-    const toastId = toast.loading("removing subject")
-    if(subjects.length<=1){
-      toast.error("You must keep atleast one subject",{id:toastId});
-      return;
-    }
-    const prevSubjects = subjects;
-    const updatedSubjects = subjects.filter((s)=>s!==subject);
-    setSubjects(updatedSubjects);
-
-    try{
-      toast.success(`Removed subject: ${subject}`,{id:toastId});
-      await RemoveSubject(id,subject);
-    }catch(err){
-      console.error(err);
-      setSubjects(prevSubjects);
-      toast.error(`Failed to remove subject: ${subject}`,{id:toastId});
-    }
-  }
 
   const carouselItems = subjects.map((subject, index) => ({
     title: subject,
@@ -51,14 +33,14 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
     return (
       <div className="text-center text-white mt-10">
         <p className="text-lg font-semibold">No subjects found.</p>
-        <AddSubjectModal id={id} subjectList={subjects}/>
+        {!isControlled && <AddSubjectModal id={id} subjectList={subjects}/>}
       </div>
     );
   }
 
   if (isMobile) {
     return (
-      <div className="w-full px-2 pt-4 flex flex-col">
+      <div className={`w-full pt-4 flex flex-col ${isControlled ? "" : "px-2"}`}>
         <Carousel
           key={subjects.length}
           items={carouselItems}
@@ -69,19 +51,23 @@ export default function SubjectCards({ subjects:initialSubjects , id }) {
           round={false}
           onRemove={handleRemove}
         />
-        <div className="mt-6 px-4">
-          <AddSubjectModal id={id} subjectList={subjects} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700"/>
-        </div>
+        {!isControlled && (
+          <div className="mt-6 px-4">
+            <AddSubjectModal id={id} subjectList={subjects} buttonClass="w-full py-4 text-3xl rounded-xl bg-gradient-to-r from-purple-600 to-purple-700"/>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 sm:p-6">
+    <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 ${isControlled ? "py-4 sm:py-6" : "p-4 sm:p-6"}`}>
       {subjects.map((subject, index) => (
         <SubjectCard key={index} subject={subject} id={id} onRemove={() => handleRemove(subject)} />
       ))}
-      <AddSubjectModal id={id} subjectList={subjects} buttonClass="w-full h-36 sm:h-40 text-4xl"/>
+      {!isControlled && (
+        <AddSubjectModal id={id} subjectList={subjects} buttonClass="w-full h-36 sm:h-40 max-w-[13rem] sm:max-w-[15rem] text-4xl"/>
+      )}
     </div>
   );
 }
