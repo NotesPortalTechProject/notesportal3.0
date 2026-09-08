@@ -18,19 +18,27 @@ export async function POST(req) {
     const response = await fetch(`${apiUrl}?${queryParams.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filearray }) 
+      body: JSON.stringify({ filearray }),
+      signal: req.signal,
     });
 
-    if (!response.ok) {
-      const text = await response.text();
+    if (!response.ok || !response.body) {
+      const text = await response.text().catch(() => "");
       console.error("PDF API Error Response:", text);
-      return NextResponse.json({error:"An unexpected error occured, failed to get answer."});
+      return new Response("An unexpected error occurred, failed to get answer.", {
+        status: response.status || 500,
+      });
     }
 
-    const data = await response.json();
-    return NextResponse.json({ answer: data });
+    return new Response(response.body, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+      },
+    });
   } catch (err) {
     console.error("PDF Chat Error:", err);
-    return NextResponse.json({ error: err.message || "Something went wrong" }, { status: 500 });
+    return new Response(err.message || "Something went wrong", { status: 500 });
   }
 }

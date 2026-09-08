@@ -5,6 +5,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "react-markdown";
 import { FiArrowUp, FiFile, FiPlus, FiX, FiCheck } from "react-icons/fi";
 
+const STREAM_DONE_SENTINEL = "\n[[PDFCHAT_STREAM_DONE]]";
+
+// The sentinel can arrive split across chunks (or whole, in a single chunk),
+// so hold back any trailing slice of `text` that matches the sentinel or a
+// prefix of it before showing it to the user.
+function visibleStreamLength(text, sentinel) {
+  const maxOverlap = Math.min(sentinel.length, text.length);
+  for (let len = maxOverlap; len > 0; len--) {
+    if (text.endsWith(sentinel.slice(0, len))) return text.length - len;
+  }
+  return text.length;
+}
+
 export default function ChatWithPdf({ userId, subjectList }) {
   const [step, setStep] = useState(1);
   const [subjectState, setSubjectState] = useState("");
@@ -22,6 +35,15 @@ export default function ChatWithPdf({ userId, subjectList }) {
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
   const pickerRef = useRef(null);
+  const streamRef = useRef({ controller: null, reader: null });
+
+  // Cancel any in-flight stream if the user navigates away mid-answer.
+  useEffect(() => {
+    return () => {
+      streamRef.current.controller?.abort();
+      streamRef.current.reader?.cancel().catch(() => {});
+    };
+  }, []);
 
   // Close picker on outside click
   useEffect(() => {
@@ -95,25 +117,90 @@ export default function ChatWithPdf({ userId, subjectList }) {
     setQuestion("");
     textareaRef.current.style.height = "auto";
 
+    const controller = new AbortController();
+    streamRef.current.controller = controller;
+    streamRef.current.reader = null;
+
+    setLoadingAnswer(true);
+    setErrorAnswer("");
+
+    let placeholderAdded = false;
+    let full = "";
+
     try {
-      setLoadingAnswer(true);
-      setErrorAnswer("");
       const fileLinks = selectedFiles.map((f) => f.file.filelink);
       const res = await fetch(`/api/pdfchat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filearray: fileLinks, prompt: userQuestion }),
+        signal: controller.signal,
       });
-      const data = await res.json();
-      if (res.ok && data.answer) {
-        setAnswer((prev) => [...prev, { type: "bot", text: data.answer }]);
+
+      if (!res.ok || !res.body) {
+        throw new Error("Failed to fetch answer.");
+      }
+
+      const reader = res.body.getReader();
+      streamRef.current.reader = reader;
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        if (!placeholderAdded) {
+          placeholderAdded = true;
+          setLoadingAnswer(false);
+          setAnswer((prev) => [...prev, { type: "bot", text: "" }]);
+        }
+
+        full += decoder.decode(value, { stream: true });
+        const visibleText = full.slice(
+          0,
+          visibleStreamLength(full, STREAM_DONE_SENTINEL)
+        );
+        setAnswer((prev) => {
+          const next = [...prev];
+          next[next.length - 1] = { ...next[next.length - 1], text: visibleText };
+          return next;
+        });
+      }
+
+      const completed = full.endsWith(STREAM_DONE_SENTINEL);
+      const displayText = completed
+        ? full.slice(0, -STREAM_DONE_SENTINEL.length)
+        : full;
+
+      const isEmpty = completed && displayText.trim().length === 0;
+
+      if (placeholderAdded) {
+        setAnswer((prev) => {
+          const next = [...prev];
+          next[next.length - 1] = {
+            ...next[next.length - 1],
+            text: isEmpty
+              ? "_The backend didn't return an answer for this question. Please try again._"
+              : completed
+              ? displayText
+              : `${displayText}\n\n_Response was cut off before it finished generating._`,
+          };
+          return next;
+        });
       } else {
+        // Stream ended without ever sending a chunk.
         setAnswer((prev) => [
           ...prev,
           { type: "bot", text: " Failed to fetch answer." },
         ]);
       }
+
+      if (!completed) {
+        setErrorAnswer("The answer was cut off before it finished generating.");
+      } else if (isEmpty) {
+        setErrorAnswer("The backend returned an empty answer.");
+      }
     } catch (err) {
+      if (err.name === "AbortError") return;
       setAnswer((prev) => [
         ...prev,
         {
@@ -123,6 +210,7 @@ export default function ChatWithPdf({ userId, subjectList }) {
       ]);
     } finally {
       setLoadingAnswer(false);
+      streamRef.current = { controller: null, reader: null };
     }
   };
 

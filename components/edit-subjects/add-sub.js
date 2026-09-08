@@ -16,6 +16,8 @@ export default function AddSubjectModal({
   id,
   subjectList: initialSubjectList,
   buttonClass = "",
+  iconClass = "text-2xl sm:text-3xl font-medium text-white",
+  labelClass = "text-sm font-light text-white/80 mt-1",
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -332,15 +334,17 @@ export default function AddSubjectModal({
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className="
-        w-full h-24 sm:h-28 md:h-40 md:w-full lg:w-full  flex flex-col items-center justify-center
+        className={
+          buttonClass ||
+          `w-full h-24 sm:h-28 md:h-40 md:w-full lg:w-full  flex flex-col items-center justify-center
         rounded-2xl border-2 border-dashed border-white/30
         backdrop-blur-md bg-[#1a1a1a]/60 text-white font-medium shadow-sm
         transition-all duration-200 hover:bg-[#1a1a1a]/80 hover:shadow-md hover:scale-[1.03]
-      "
+      `
+        }
       >
-        <FaPen className="text-2xl sm:text-3xl font-medium text-white"/>
-        <span className="text-sm font-light text-white/80 mt-1">
+        <FaPen className={iconClass}/>
+        <span className={labelClass}>
           Edit subject
         </span>
       </button>
