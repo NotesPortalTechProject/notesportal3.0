@@ -150,7 +150,12 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
           <p className="text-sm text-purple-200/80 mb-4 truncate">{file.description}</p>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-purple-300/80 truncate">{file.uploaded_by}</span>
+            <a
+              href={`/profile/${file.uploaded_by}`}
+              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200"
+            >
+              {file.uploaded_by}
+            </a>
             <FileViewModal data={file} />
           </div>
         </div>
@@ -163,7 +168,12 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
             <div className="min-w-0">
               <h2 className="text-lg font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
               <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
-              <span className="text-xs text-purple-300/80 truncate">{file.uploaded_by}</span>
+              <a
+                href={`/profile/${file.uploaded_by}`}
+                className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200"
+              >
+                {file.uploaded_by}
+              </a>
             </div>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
@@ -193,7 +203,12 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
           <p className="text-xs text-purple-200/80 mb-4 truncate">{file.description}</p>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-purple-300/80 truncate">{file.uploaded_by}</span>
+            <a
+              href={`/profile/${file.uploaded_by}`}
+              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200"
+            >
+              {file.uploaded_by}
+            </a>
             <FileViewModal data={file} />
           </div>
         </div>
@@ -202,11 +217,16 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
       {viewMode === "list" && (
         <div className="flex flex-row items-center justify-between w-full space-x-4 text-white">
           <div className="flex items-center space-x-4 flex-1 min-w-0">
-            <FilePreview file={file} isMobile={false} isList={true}/>
+            <FilePreview file={file} isMobile={false} isList={true} />
             <div className="min-w-0">
               <h2 className="text-md font-bold tracking-wide truncate text-purple-100">{file.filename}</h2>
               <p className="text-xs text-purple-200/80 truncate">{file.description}</p>
-              <span className="text-xs text-purple-300/80 truncate">{file.uploaded_by}</span>
+              <a
+                href={`/profile/${file.uploaded_by}`}
+                className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200"
+              >
+                {file.uploaded_by}
+              </a>
             </div>
           </div>
           <div className="flex items-center space-x-6 flex-shrink-0">
