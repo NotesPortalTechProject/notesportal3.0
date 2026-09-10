@@ -1,17 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useActionState } from "react";
-import { FiUser } from "react-icons/fi";
-import { FiChevronDown } from "react-icons/fi";
+import { useEffect, useState, useActionState } from "react";
+import {
+    FiUser,
+    FiChevronLeft,
+    FiChevronRight,
+} from "react-icons/fi";
+import toast from "react-hot-toast";
 import { setProfileIcon } from "@/actions/other-actions";
 
 export default function ProfileIconModal({ userdata }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [icon, setIcon] = useState(userdata.profile_icon);
-
-    const action = setProfileIcon.bind(null,userdata)
-    const [formState,formAction] = useActionState(action,null)
 
     const profileIcons = [
         "monster1",
@@ -22,10 +22,83 @@ export default function ProfileIconModal({ userdata }) {
         "monster6",
     ];
 
+    const availableIcons = profileIcons.filter(
+        (profileIcon) => profileIcon !== userdata.profile_icon
+    );
+
+    const [icon, setIcon] = useState(availableIcons[0]);
+
+    const action = setProfileIcon.bind(null, userdata);
+
+    const [formState, formAction, isPending] = useActionState(
+        action,
+        null
+    );
+
+    useEffect(() => {
+        if (formState?.success) {
+            toast.success("Profile icon updated successfully");
+            setIsOpen(false);
+        }
+
+        if (formState?.errors?.length > 0) {
+            formState.errors.forEach((error) => {
+                toast.error(error);
+            });
+        }
+    }, [formState]);
+
+    const currentIndex = availableIcons.indexOf(icon);
+
+    const changeIcon = (direction) => {
+        if (availableIcons.length === 0) return;
+
+        if (direction === "next") {
+            const nextIndex =
+                (currentIndex + 1) % availableIcons.length;
+
+            setIcon(availableIcons[nextIndex]);
+        } else {
+            const previousIndex =
+                (currentIndex - 1 + availableIcons.length) %
+                availableIcons.length;
+
+            setIcon(availableIcons[previousIndex]);
+        }
+    };
+
+    const [touchStart, setTouchStart] = useState(null);
+
+    const handleTouchStart = (e) => {
+        if (isPending) return;
+
+        setTouchStart(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = (e) => {
+        if (touchStart === null || isPending) return;
+
+        const touchEnd = e.changedTouches[0].clientX;
+        const difference = touchStart - touchEnd;
+
+        if (Math.abs(difference) >= 50) {
+            if (difference > 0) {
+                changeIcon("next");
+            } else {
+                changeIcon("previous");
+            }
+        }
+
+        setTouchStart(null);
+    };
+
     return (
         <>
             <button
-                onClick={() => setIsOpen(true)}
+                onClick={() => {
+                    setIcon(availableIcons[0]);
+                    setIsOpen(true);
+                }}
                 className="text-xs px-3 py-2 rounded-lg bg-purple-700 hover:bg-purple-700 transition text-white flex items-center gap-2 font-medium tracking-wide"
                 type="button"
             >
@@ -35,110 +108,125 @@ export default function ProfileIconModal({ userdata }) {
 
             {isOpen && (
                 <>
-                    {/* Overlay */}
                     <div
                         className="fixed inset-0 z-40 backdrop-blur-sm bg-black/50"
-                        onClick={() => setIsOpen(false)}
+                        onClick={() =>
+                            !isPending && setIsOpen(false)
+                        }
                     />
 
-                    {/* Modal */}
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
                         <div className="w-full max-w-md p-4 rounded-2xl bg-gradient-to-br from-[#1c1c1c] to-[var(--theme-panel-b)] border border-purple-500/20 text-white">
-
-                            {/* Header */}
                             <div className="flex items-start justify-between mb-5">
                                 <div>
                                     <h2 className="text-[15px] font-medium text-purple-400 tracking-wide">
                                         Change profile icon
                                     </h2>
+
                                     <p className="text-[11px] text-white/35 mt-0.5 uppercase tracking-widest">
                                         Choose your profile icon
                                     </p>
                                 </div>
 
                                 <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="text-[11px] font-medium bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition mt-0.5"
+                                    onClick={() =>
+                                        !isPending &&
+                                        setIsOpen(false)
+                                    }
+                                    className="text-[11px] font-medium bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition mt-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    type="button"
+                                    disabled={isPending}
                                 >
                                     Close
                                 </button>
                             </div>
 
-                            {/* Body */}
                             <div className="rounded-xl bg-white/[0.04] border border-purple-500/10 p-4 space-y-4">
-
-                                {/* Selected Icon Preview */}
                                 <div className="space-y-1">
                                     <p className="text-[10px] tracking-[0.08em] text-white/30">
                                         Selected icon
                                     </p>
-                                    <p className="text-sm font-medium text-white">
+
+                                    <p className="text-sm font-medium text-white text-center">
                                         {icon}
                                     </p>
 
-                                    <div className="flex justify-center pt-1">
-                                        <Image
-                                            src={`/profileicons/${icon}.jpg`}
-                                            height={120}
-                                            width={120}
-                                            alt="profile icon"
-                                            className="rounded-2xl border border-white/10 object-cover"
-                                        />
-                                    </div>
-                                </div>
+                                    <div
+                                        className="flex items-center justify-center gap-4 pt-1 touch-pan-y"
+                                        onTouchStart={handleTouchStart}
+                                        onTouchEnd={handleTouchEnd}
+                                    >
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                changeIcon("previous")
+                                            }
+                                            disabled={isPending}
+                                            className="w-9 h-9 flex-shrink-0 rounded-lg bg-black/30 border border-purple-500/20 hover:border-purple-500/45 hover:bg-purple-900/30 transition flex items-center justify-center text-purple-400 disabled:opacity-40 disabled:cursor-not-allowed"
+                                            aria-label="Previous profile icon"
+                                        >
+                                            <FiChevronLeft className="text-lg" />
+                                        </button>
 
-                                {/* Divider */}
-                                <div className="border-t border-purple-500/10" />
-
-                                {/* Form */}
-                                <form action={formAction}>
-                                    <div className="space-y-3">
-                                        <div>
-                                            <label className="block text-xs text-purple-400 mb-1">
-                                                Select new icon
-                                            </label>
-                                            <p className="text-[10px] uppercase tracking-[0.06em] text-white/25 mb-2">
-                                                Available presets
-                                            </p>
-
-                                            {/* Custom Select Wrapper */}
-                                            <div className="relative">
-                                                <select
-                                                    className="w-full appearance-none bg-black/30 border border-purple-500/20 hover:border-purple-500/45 focus:border-purple-500/70 rounded-xl px-3 py-2.5 pr-9 text-[13px] text-white outline-none transition cursor-pointer"
-                                                    value={icon}
-                                                    onChange={(e) => setIcon(e.target.value)}
-                                                >
-                                                    {profileIcons.map((profileIcon) => (
-                                                        <option
-                                                            key={profileIcon}
-                                                            value={profileIcon}
-                                                            className="bg-[#1a1a1a] text-white text-[13px]"
-                                                        >
-                                                            {profileIcon}
-                                                        </option>
-                                                    ))}
-                                                </select>
-
-                                                {/* Chevron Icon */}
-                                                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-400/50 text-sm pointer-events-none" />
-                                            </div>
+                                        <div className="flex justify-center">
+                                            <Image
+                                                src={`/profileicons/${icon}.jpg`}
+                                                height={120}
+                                                width={120}
+                                                alt="profile icon"
+                                                className="rounded-2xl border border-white/10 object-cover select-none"
+                                                draggable={false}
+                                            />
                                         </div>
-                                        <input type="hidden" name="icon" value={icon} readOnly/>
 
                                         <button
-                                            type="submit"
-                                            className="w-full py-2.5 rounded-xl bg-purple-800 hover:bg-purple-700 transition text-[13px] font-medium text-white tracking-wide"
+                                            type="button"
+                                            onClick={() =>
+                                                changeIcon("next")
+                                            }
+                                            disabled={isPending}
+                                            className="w-9 h-9 flex-shrink-0 rounded-lg bg-black/30 border border-purple-500/20 hover:border-purple-500/45 hover:bg-purple-900/30 transition flex items-center justify-center text-purple-400 disabled:opacity-40 disabled:cursor-not-allowed"
+                                            aria-label="Next profile icon"
                                         >
-                                            save changes
+                                            <FiChevronRight className="text-lg" />
                                         </button>
                                     </div>
+
+                                    <p className="text-[10px] text-white/25 text-center pt-1">
+                                        Swipe or use the arrows to choose
+                                    </p>
+                                </div>
+
+                                <div className="border-t border-purple-500/10" />
+
+                                <form action={formAction}>
+                                    <input
+                                        type="hidden"
+                                        name="icon"
+                                        value={icon}
+                                        readOnly
+                                    />
+
+                                    <button
+                                        type="submit"
+                                        disabled={isPending}
+                                        className="w-full py-2.5 rounded-xl bg-purple-800 hover:bg-purple-700 transition text-[13px] font-medium text-white tracking-wide disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    >
+                                        {isPending ? (
+                                            <>
+                                                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                Saving...
+                                            </>
+                                        ) : (
+                                            "save changes"
+                                        )}
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </>
-            )
-            }
+            )}
         </>
     );
 }

@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentSession } from "@/lib/session";
 
 export async function GET(req) {
   try {
+    const currSesh = await getCurrentSession();
+    if (!currSesh) {
+      return NextResponse.json({error:"Unauthorized Access"}, { status: 401 })
+    }
     const { searchParams } = new URL(req.url);
     const filename = searchParams.get("filename");
     if (!filename) throw new Error("Filename is required");
@@ -15,7 +20,7 @@ export async function GET(req) {
 
     if (error) throw error;
 
-    return NextResponse.json({ file:data});
+    return NextResponse.json({ file: data });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message || "Failed to fetch file data" }, { status: 500 });

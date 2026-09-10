@@ -1,7 +1,12 @@
+import { getCurrentSession } from "@/lib/session";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
+    const currSesh = await getCurrentSession();
+    if(!currSesh){
+      return NextResponse.json({error:"Unauthorized Access"},{status:401})
+    }
     const { filearray, prompt } = await req.json();
 
     if (!filearray || !Array.isArray(filearray) || !prompt || typeof prompt !== "string") {

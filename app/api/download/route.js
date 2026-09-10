@@ -1,4 +1,10 @@
+import { getCurrentSession } from "@/lib/session";
+
 export async function GET(req) {
+  const currSesh = await getCurrentSession();
+  if (!currSesh) {
+    return new Response("Unauthorized Access", { status: 401 })
+  }
   const { searchParams } = new URL(req.url);
   const fileUrl = searchParams.get('url');
   const filename = searchParams.get('name') || 'download';

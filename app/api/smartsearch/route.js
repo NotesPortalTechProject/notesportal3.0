@@ -1,8 +1,13 @@
 import { getFileObjectsListByFileLinkList } from "@/lib/data-fetch-functions";
+import { getCurrentSession } from "@/lib/session";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
+        const currSesh = await getCurrentSession();
+        if(!currSesh){
+            return NextResponse.json({error:"Unauthorized Accesss"},{status:401});
+        }
         const { prompt } = await req.json();
         if (!prompt || typeof prompt !== "string" || prompt.trim().length < 3) {
             return NextResponse.json(

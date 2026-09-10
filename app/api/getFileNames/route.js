@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentSession } from "@/lib/session";
 
 export async function GET(req) {
   try {
+    const currSesh = await getCurrentSession();
+    if (!currSesh) {
+      return NextResponse.json({error:"Unauthorized Access"}, { status: 401 })
+    }
     const { searchParams } = new URL(req.url);
     const subject = searchParams.get("subject");
     if (!subject) throw new Error("Subject is required");

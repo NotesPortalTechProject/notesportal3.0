@@ -1,10 +1,12 @@
-import { cookies } from "next/headers";
+import { getCurrentSession } from "@/lib/session";
 
 export async function POST(req) {
   try {
+    const currSesh = await getCurrentSession();
+    if(!currSesh){
+      return new Response("Unauthorized Access",{status:401})
+    }
     const { answer, question, context } = await req.json();
-    const cookieStore = await cookies();
-    const session = cookieStore.get("session");
     let apiUrl = process.env.PYTHON_API_URL+"/answerquestion" ||"http://127.0.0.1:8000/answerquestion";
     const queryParams = new URLSearchParams({ answer });
     const res = await fetch(`${apiUrl}?${queryParams.toString()}`, {

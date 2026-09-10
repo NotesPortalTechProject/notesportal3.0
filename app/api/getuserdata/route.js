@@ -1,8 +1,15 @@
 import { getMyFiles, getUserData } from "@/lib/data-fetch-functions";
+import { getCurrentSession } from "@/lib/session";
 
 export async function POST(req) {
   try {
-    const { userid } = await req.json();
+    const currSesh = await getCurrentSession();
+    if(!currSesh){
+      return Response.json({success:false,error:"Unauthorized Access"},{status:401})
+    }
+    const userid = currSesh.userId;
+    // not using the chindi chor id received from req body not secure
+    const { timepassid } = await req.json();
     if (!userid) return Response.json({ success: false, error: "Missing userid" }, { status: 400 });
 
     const userdata = await getUserData(userid);

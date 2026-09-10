@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { updateUserSubjectlist } from "@/lib/data-push-functions";
 import { getUserData } from "@/lib/data-fetch-functions";
 
+
 export async function ToggleFiletoFavourites(fileid, userid, src) {
     const { data, error } = await supabase.from('users').select('favorites_new').eq('id', userid).single();
     if (error) {
@@ -191,13 +192,10 @@ export async function revalidatePathCustom(path) {
     revalidatePath(path)
 }
 
-export async function setProfileIcon(prevState,userdata,formData) {
+export async function setProfileIcon(userdata,prevState,formData) {
     const newIcon = formData.get("icon")
-    const oldIcon = prevState.profile_icon
     let errors = []
-    if (newIcon==oldIcon){
-        errors.push("Please select a different icon (already in use)")
-    }
+
     if (!newIcon){
         errors.push("Please select a icon")
     }
@@ -205,13 +203,15 @@ export async function setProfileIcon(prevState,userdata,formData) {
         return { errors };
     }
 
-    const { error } = await supabase.from("users").update({profile_icon:newIcon}).eq("id",prevState.id)
+    const { error } = await supabase.from("users").update({profile_icon:newIcon}).eq("id",userdata.id)
     if (error) {
-        errors.push("Failed to set profile icon, try again later")
+        errors.push("Failed to set profile icon")
     }
 
     if (errors.length>0){
         return { errors };
     }
     revalidatePath(`/profile`)
+
+    return { success: true }
 }
