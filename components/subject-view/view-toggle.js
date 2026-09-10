@@ -9,7 +9,7 @@ export default function ViewToggle() {
     <div
       role="tablist"
       aria-label="Subject view mode"
-      className="inline-flex h-9 items-center gap-1 rounded-full p-1 border border-white/10 bg-[var(--theme-toast-bg)]/70 backdrop-blur-md"
+      className="hidden md:inline-flex h-9 items-center gap-1 rounded-full p-1 border border-white/10 bg-[var(--theme-toast-bg)]/70 backdrop-blur-md"
     >
       <button
         type="button"
