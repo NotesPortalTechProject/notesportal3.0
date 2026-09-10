@@ -3,13 +3,13 @@ import { LayoutGrid, Sparkles } from "lucide-react";
 import { useSubjectViewMode } from "./subject-view-mode-context";
 
 export default function ViewToggle() {
-  const { mode, setMode, isMobile } = useSubjectViewMode();
+  const { mode, setMode } = useSubjectViewMode();
 
   return (
     <div
       role="tablist"
       aria-label="Subject view mode"
-      className="inline-flex h-9 items-center gap-1 rounded-full p-1 border border-white/10 bg-[var(--theme-toast-bg)]/70 backdrop-blur-md"
+      className="hidden md:inline-flex h-9 items-center gap-1 rounded-full p-1 border border-white/10 bg-[var(--theme-toast-bg)]/70 backdrop-blur-md"
     >
       <button
         type="button"
@@ -29,13 +29,9 @@ export default function ViewToggle() {
         type="button"
         role="tab"
         aria-selected={mode === "fun"}
-        disabled={isMobile}
-        title={isMobile ? "Fun view isn't available on mobile" : undefined}
         onClick={() => setMode("fun")}
         className={`flex h-7 items-center justify-center gap-1.5 px-2.5 sm:px-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 ${
-          isMobile
-            ? "text-white/30 cursor-not-allowed"
-            : mode === "fun"
+          mode === "fun"
             ? "bg-[rgb(var(--theme-glow-500))] text-white shadow-[0_0_10px_rgb(var(--theme-glow-500)/0.5)]"
             : "text-white/60 hover:text-white"
         }`}
