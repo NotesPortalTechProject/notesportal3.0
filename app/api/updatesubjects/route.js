@@ -1,10 +1,16 @@
+import { getCurrentSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server"
 
 export async function PUT(req) {
     try{
-        const {id,subjects} = await req.json()
-
+        const currSesh = await getCurrentSession();
+        if(!currSesh){
+            return NextResponse.json({error:"Unauthorized Access"},{status:401});
+        }
+        const id = currSesh.userId;
+        // not using nalla id from req body
+        const {timepassid,subjects} = await req.json()
         if(!id||!subjects||!Array.isArray(subjects)){
             return NextResponse.json(
                 {error:"Inavid Request Data"},

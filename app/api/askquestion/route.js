@@ -1,8 +1,13 @@
+import { getCurrentSession } from "@/lib/session";
+
 export async function POST(req) {
   try {
+    const currSesh = await getCurrentSession();
+    if (!currSesh) {
+      return new Response("Unauthorized Access", { status: 401 })
+    }
     const body = await req.json();
-
-    let apiUrl = process.env.PYTHON_API_URL+"/askquestion" || "http://127.0.0.1:8000/askquestion";
+    let apiUrl = process.env.PYTHON_API_URL + "/askquestion" || "http://127.0.0.1:8000/askquestion";
     // apiUrl = "http://127.0.0.1:8000/askquestion"
 
     const res = await fetch(apiUrl, {

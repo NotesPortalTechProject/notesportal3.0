@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from "next/server";
-import crypto from "crypto";
+import { getCurrentSession } from "@/lib/session";
 
 const s3 = new S3Client({
     region: "auto",
@@ -15,7 +15,13 @@ const s3 = new S3Client({
 
 export async function POST(req) {
     try {
-        const { subjectcode, filename, description, userid, type, hash, extension } = await req.json();
+        const currSesh = await getCurrentSession();
+        if(!currSesh){
+            return NextResponse.json({success:false,error:{text:"Unauthorized Access"}},{status:401})
+        }
+        const userid = currSesh.userId;
+        // not using req body nakli user id
+        const { subjectcode, filename, description, timepassid, type, hash, extension } = await req.json();
 
         if (!subjectcode || !filename || !type || !userid || !description) {
             return NextResponse.json({ success: false, error: { text: "Missing fields" } }, { status: 400 });

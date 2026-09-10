@@ -1,10 +1,17 @@
 import { getUserData } from "@/lib/data-fetch-functions";
+import { getCurrentSession } from "@/lib/session";
 import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try{
-    const { subjectcode, filename, description, userid, fileKey, filetype, hash } = await req.json();
+    const currSesh = await getCurrentSession();
+    if(!currSesh){
+      return NextResponse.json({success:false,error:{text:"Unauthorized Access"}},{status:401});
+    }
+    const userid = currSesh.userId;
+    // not using the id received from req body not secure
+    const { subjectcode, filename, description, timepassid, fileKey, filetype, hash } = await req.json();
 
     const userdata = await getUserData(userid);
     const username = userdata?.username || "Notesportal";
