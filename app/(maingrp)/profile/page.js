@@ -21,7 +21,7 @@ export default async function ProfilePage({ params }) {
 
         <div className="w-full md:w-auto flex-shrink-0">
           <Image
-            src={`/profileicons/${userdata.profile_icon}.jpg`}
+            src={`/profileicons/${userdata.profile_icon}.png`}
             height={180}
             width={180}
             alt="profile icon"

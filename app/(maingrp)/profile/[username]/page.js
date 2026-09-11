@@ -4,8 +4,13 @@ import LoadingDots from "@/components/loadingDots";
 import MyFilesDisplay from "@/components/my-files/my-files-display";
 import { Suspense } from "react";
 import Image from "next/image";
+import { getCurrentUser } from "@/lib/session";
 export default async function otherUserProfilePage({ params }) {
+    const currUserId = await getCurrentUser();
     const username = await params.username;
+    if(username===currUserId){
+        return Rout
+    }
     const userdata = await getUserDataByUsername(username)
     const subjectlist = JSON.parse(userdata.subjects);
     const userfiles = await getMyFiles(userdata.id);
@@ -16,7 +21,7 @@ export default async function otherUserProfilePage({ params }) {
 
                 <div className="w-full md:w-auto flex-shrink-0">
                     <Image
-                        src={`/profileicons/${userdata.profile_icon}.jpg`}
+                        src={`/profileicons/${userdata.profile_icon}.png`}
                         height={150}
                         width={150}
                         alt="profile icon"

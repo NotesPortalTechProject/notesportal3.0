@@ -14,12 +14,20 @@ export default function ProfileIconModal({ userdata }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const profileIcons = [
-        "monster1",
-        "monster2",
-        "monster3",
-        "monster4",
-        "monster5",
-        "monster6",
+        "aanchal",
+        "arya",
+        "mehta",
+        "tia",
+        "kumar",
+        "sharvil",
+        "aashi",
+        "dev",
+        "vora",
+        "bevin",
+        "tushita",
+        "ranveer",
+        "khushi",
+        "arhaan"
     ];
 
     const availableIcons = profileIcons.filter(
@@ -170,7 +178,7 @@ export default function ProfileIconModal({ userdata }) {
 
                                         <div className="flex justify-center">
                                             <Image
-                                                src={`/profileicons/${icon}.jpg`}
+                                                src={`/profileicons/${icon}.png`}
                                                 height={120}
                                                 width={120}
                                                 alt="profile icon"

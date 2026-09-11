@@ -152,7 +152,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
           <div className="flex items-center justify-between">
             <a
               href={`/profile/${file.uploaded_by}`}
-              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4"
+              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4 px-2 py-1 bg-white/5 rounded-md border border-purple-500/20"
             >
               {file.uploaded_by}
             </a>
@@ -170,7 +170,7 @@ function MobileFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
               <p className="text-sm text-purple-200/80 truncate">{file.description}</p>
               <a
                 href={`/profile/${file.uploaded_by}`}
-                className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4"
+                className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4 px-2 py-1 bg-white/5 rounded-md border border-purple-500/20"
               >
                 {file.uploaded_by}
               </a>
@@ -205,7 +205,7 @@ function DesktopFileCard({ file, userid, src, viewMode, isFav, setIsFav }) {
           <div className="flex items-center justify-between">
             <a
               href={`/profile/${file.uploaded_by}`}
-              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4"
+              className="text-sm text-purple-300/80 truncate hover:text-purple-200 transition-colors duration-200 hover:underline underline-offset-4 px-2 py-1 bg-white/5 rounded-md border border-purple-500/20"
             >
               {file.uploaded_by}
             </a>

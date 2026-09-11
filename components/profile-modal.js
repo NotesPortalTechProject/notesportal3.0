@@ -80,7 +80,7 @@ export default function ProfileDropdown({ id, userinfo, noOfUploads }) {
         {/* Profile image */}
         <span className="absolute inset-[2px] rounded-full overflow-hidden z-0">
           <Image
-            src={`/profileicons/${userinfo.profile_icon}.jpg`}
+            src={`/profileicons/${userinfo.profile_icon}.png`}
             alt="Profile Icon"
             fill
             sizes="44px"
