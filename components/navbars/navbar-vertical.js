@@ -47,7 +47,7 @@ export default function VerticalSidebar({ id, subjectlist }) {
           <NavItem icon={<FiHome />} label="Home" id={id} endpoint="home" pathname={pathname} />
           <NavItem icon={<FiSearch />} label="Smart Search" id={id} endpoint="smartsearch" pathname={pathname} />
           <NavItem icon={<FiCpu />} label="QnA Engine" id={id} endpoint="qna" pathname={pathname} />
-          <DisabledNavItem icon={<FiMessageSquare />} label="Chat with PDF" id={id} endpoint="chatwithpdf" pathname={pathname} />
+          <NavItem icon={<FiMessageSquare />} label="Chat with PDF" id={id} endpoint="chatwithpdf" pathname={pathname} />
           <NavItem icon={<FiStar />} label="Favorites" id={id} endpoint="favorites" pathname={pathname} />
           <NavItem icon={<FiFile />} label="My Files" id={id} endpoint="myfiles" pathname={pathname} />
           <NavItem icon={<FiUser />} label="Profile" id={id} endpoint="profile" pathname={pathname} />
@@ -97,13 +97,13 @@ export default function VerticalSidebar({ id, subjectlist }) {
           {aiOpen && (
             <div className="absolute bottom-14 right-0 bg-[#1a1a1a] border border-purple-500/30 rounded-xl shadow-lg p-3 w-48 z-50">
 
-              {/* <Link
+              <Link
                 href={`/chatwithpdf`}
                 onClick={() => setAiOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition"
               >
                 <FiMessageSquare className="text-purple-400" /> Chat with PDF
-              </Link> */}
+              </Link>
 
               <Link
                 href={`/smartsearch`}
@@ -146,16 +146,6 @@ function NavItem({ icon, label, id, endpoint, pathname }) {
         <span className="font-thin antialiased tracking-tight font-stretch-condensed">{label}</span>
       </div>
     </Link>
-  );
-}
-
-/* Disabled Desktop Item */
-function DisabledNavItem({ icon, label }) {
-  return (
-    <div className="group relative flex items-center gap-3 px-4 py-2 rounded-r-lg opacity-40 cursor-not-allowed select-none">
-      <div className="text-lg text-white/80">{icon}</div>
-      <span className="font-thin tracking-tight">{label}</span>
-    </div>
   );
 }
 
