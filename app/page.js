@@ -58,20 +58,6 @@ export default function Home() {
       insta: "https://www.instagram.com/sharvilgharkar_/",
       github: "https://github.com/Sharvil0769",
     },
-    {
-      name:"Tushita Shetty",
-      img:"/avatar/Tushita_Shetty.jpeg",
-      linkedin:"https://www.linkedin.com/in/tushita-shetty/",
-      insta:"",
-      github:"",
-    },
-    {
-      name:"Khushi Shah",
-      img:"/avatar/Khushi_Shah.jpeg",
-      linkedin:"https://www.linkedin.com/in/khushishah9014/",
-      insta:"",
-      github:"",
-    }
   ];
 
   const scrollToSection = (ref) => {
